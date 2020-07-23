@@ -1,0 +1,60 @@
+.exam-list {
+  background: var(--bg-page);
+
+  &__title {
+    display: flex;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: bold;
+  }
+
+  &__action {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+
+    &-right {
+      display: flex;
+
+      .exam-select-state {
+        margin-right: 30px;
+
+        & > span {
+          margin-right: 10px;
+        }
+      }
+
+      input {
+        margin-right: 15px;
+      }
+    }
+  }
+
+  &__table {
+    .coach-delete {
+      font-weight: bold;
+      color: rgba(255, 0, 0, 1);
+      cursor: pointer;
+    }
+  }
+}
+
+.exam-qrcode {
+  &__content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    &-title {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    &-code {
+      width: 380px;
+      height: 380px;
+    }
+  }
+}

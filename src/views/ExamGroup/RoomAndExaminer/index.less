@@ -1,0 +1,33 @@
+.room-examiner {
+  background: var(--bg-page);
+
+  &__title {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+
+  &__action {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+
+    &-right {
+      display: flex;
+
+      input {
+        margin-right: 15px;
+      }
+    }
+  }
+
+  &__table {
+    .ant-table-footer {
+      font-size: 13px;
+      padding: 4px 8px !important;
+    }
+  }
+}
