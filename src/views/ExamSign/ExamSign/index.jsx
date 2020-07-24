@@ -182,7 +182,7 @@ const ExamSign = ({ match, history, form }) => {
         </Form.Item>
         <Form.Item label="家长关系">
           {getFieldDecorator('relationship', {
-            initialValue: isEdit ? 0 : '',
+            initialValue: isEdit ? signInEdit?.relationship : '',
             rules: [{ required: true }],
           })(
             <Select placeholder="请选择与家长关系">
