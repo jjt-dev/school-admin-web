@@ -7,7 +7,7 @@ import { getDomain, chineseDate } from 'src/utils/common'
 import api from 'src/utils/api'
 import ResultItems from '../ResultItems'
 import ReactToPrint from 'react-to-print'
-import { mapReportValue } from '../helper'
+import { mapReportValue, reorderBasicInfos } from '../helper'
 import { BasicInfoPositions } from 'src/views/Certificate/helper'
 class ReportVertical extends React.Component {
   constructor(props) {
@@ -31,7 +31,7 @@ class ReportVertical extends React.Component {
       this.setState({
         ...this.state,
         template: result,
-        basicInfos: JSON.parse(result.content).basicInfos,
+        basicInfos: reorderBasicInfos(JSON.parse(result.content).basicInfos),
       })
     }
     fetchData()

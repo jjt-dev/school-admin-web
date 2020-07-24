@@ -5,7 +5,7 @@ import api from 'src/utils/api'
 import { getDomain, chineseDate } from 'src/utils/common'
 import ReactToPrint from 'react-to-print'
 import ResultItems from '../ResultItems'
-import { mapReportValue } from '../helper'
+import { mapReportValue, reorderBasicInfos } from '../helper'
 import { BasicInfoPositions } from 'src/views/Certificate/helper'
 
 class ReportHoriz extends React.Component {
@@ -29,7 +29,7 @@ class ReportHoriz extends React.Component {
       this.setState({
         ...this.state,
         template: result,
-        basicInfos: JSON.parse(result.content).basicInfos,
+        basicInfos: reorderBasicInfos(JSON.parse(result.content).basicInfos),
       })
     }
     fetchData()

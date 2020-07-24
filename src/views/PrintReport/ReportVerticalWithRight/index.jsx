@@ -8,7 +8,7 @@ import api from 'src/utils/api'
 import ResultItems from '../ResultItems'
 import ReactToPrint from 'react-to-print'
 import UplaodImg from 'src/components/UploadImg'
-import { mapReportValue } from '../helper'
+import { mapReportValue, reorderBasicInfos } from '../helper'
 import { BasicInfoPositions } from 'src/views/Certificate/helper'
 
 class ReportVerticalWithRight extends React.Component {
@@ -33,7 +33,7 @@ class ReportVerticalWithRight extends React.Component {
       this.setState({
         ...this.state,
         template: result,
-        basicInfos: JSON.parse(result.content).basicInfos,
+        basicInfos: reorderBasicInfos(JSON.parse(result.content).basicInfos),
       })
     }
     fetchData()
