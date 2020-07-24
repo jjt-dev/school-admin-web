@@ -8,7 +8,7 @@ export const examSignListColumns = (
   examId,
   history,
   confirmDeleteSign,
-  updateSignToPaid
+  confirmPaySignExam
 ) => [
   {
     title: '序号',
@@ -76,7 +76,7 @@ export const examSignListColumns = (
           <>
             <span
               className="table-action"
-              onClick={() => updateSignToPaid(record)}
+              onClick={() => confirmPaySignExam(record)}
             >
               支付考试报名
             </span>

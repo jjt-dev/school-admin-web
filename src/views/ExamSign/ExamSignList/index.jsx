@@ -51,10 +51,19 @@ const ExamSignList = ({ match, history }) => {
     })
   }
 
-  const updateSignToPaid = async (sign) => {
-    await api.post(`/exam/sign/payOffline?signId=${sign.signId}`)
-    message.success('支付考试报名成功')
-    fetchSignList()
+  const confirmPaySignExam = (sign) => {
+    confirm({
+      title: '请问您确认要支付该报名吗?',
+      content: `考生名: ${sign.name}`,
+      onOk: async () => {
+        await api.post(`/exam/sign/payOffline?signId=${sign.signId}`)
+        message.success('支付考试报名成功')
+        fetchSignList()
+      },
+      onCancel() {
+        console.log('Cancel')
+      },
+    })
   }
 
   return (
@@ -73,7 +82,7 @@ const ExamSignList = ({ match, history }) => {
           examId,
           history,
           confirmDeleteExamSign,
-          updateSignToPaid
+          confirmPaySignExam
         )}
         dataSource={examSignList}
         rowKey="signId"
