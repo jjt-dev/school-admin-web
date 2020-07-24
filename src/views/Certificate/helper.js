@@ -13,7 +13,7 @@ export const certificateListColumns = (history, confirmDeleteCertif) => [
     dataIndex: 'type',
     key: 'type',
     render: (text, record) => (
-      <span>{CertificateTypes[record.type]?.title}</span>
+      <span>{CertificateTypes[record.type]?.fullTitle}</span>
     ),
   },
   {
@@ -52,9 +52,24 @@ export const certificateListColumns = (history, confirmDeleteCertif) => [
 ]
 
 export const CertificateTypes = {
-  0: { id: 0, key: 'reportVertical', title: '考试成绩单' },
-  1: { id: 1, key: 'reportHoriz', title: '考试成绩单' },
-  2: { id: 2, key: 'examCertificate', title: '准考证' },
+  0: {
+    id: 0,
+    key: 'reportVertical',
+    title: '考试成绩单',
+    fullTitle: '考试成绩单(竖版)',
+  },
+  1: {
+    id: 1,
+    key: 'reportHoriz',
+    title: '考试成绩单',
+    fullTitle: '考试成绩单(横板)',
+  },
+  2: {
+    id: 2,
+    key: 'examCertificate',
+    title: '准考证',
+    fullTitle: '准考证',
+  },
 }
 
 export const BasicInfoPositions = [1, 2, 3, 4, 5, 6, 7, 8]
