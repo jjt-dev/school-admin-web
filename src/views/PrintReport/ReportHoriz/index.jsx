@@ -122,7 +122,9 @@ class ReportHoriz extends React.Component {
                       考官评语
                     </div>
                     {examResult?.commnent}
-                    <div className="examiner-comment__sign">考官签字:</div>
+                    <div className="examiner-comment__sign">
+                      考官签字: <span>{examResult?.examinerName}</span>
+                    </div>
                   </div>
                 </div>
                 <div className="results__remark">
