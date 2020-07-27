@@ -62,7 +62,7 @@ export const Relationships = {
   7: '哥哥',
 }
 
-export const NumberByGroup = [6, 7, 8, 9, 10]
+export const NumberByGroup = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
 export const GroupType = {
   0: '按照等级分组',
