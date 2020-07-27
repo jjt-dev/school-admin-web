@@ -148,3 +148,22 @@ export const domToImage = (element, options, callback) => {
     callback && callback()
   })
 }
+
+const toDataURL = (url) => {
+  return fetch(url)
+    .then((response) => {
+      return response.blob()
+    })
+    .then((blob) => {
+      return URL.createObjectURL(blob)
+    })
+}
+
+export const downloadImg = async (url) => {
+  const a = document.createElement('a')
+  a.href = await toDataURL(getDomain() + url)
+  a.download = ''
+  document.body.appendChild(a)
+  a.click()
+  document.body.removeChild(a)
+}

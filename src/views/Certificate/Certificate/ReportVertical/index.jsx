@@ -14,6 +14,7 @@ import { getDomain } from 'src/utils/common'
 import { useHistory } from 'react-router'
 import UploadBgImage from '../UploadBgImage'
 import { DefaultImgs } from 'src/utils/const'
+import BgImgPrint from '../BgImgPrint'
 
 const ReportVertical = ({
   certificateType,
@@ -22,6 +23,7 @@ const ReportVertical = ({
   updateBasicInfo,
 }) => {
   const history = useHistory()
+  const [showBgImgModal, setShowBgImgModal] = useState(false)
   const { basicInfos, certificateInEdit } = useSelector(
     (state) => state.certificate
   )
@@ -48,10 +50,21 @@ const ReportVertical = ({
     history.push(`/certificates`)
   }
 
+  const hideModal = () => {
+    setShowBgImgModal(false)
+  }
+
   return (
     <div className="report-vertical">
       <div className="report-vertical__action">
         <UploadBgImage callback={setImgUrl} />
+        <Button
+          onClick={() => {
+            setShowBgImgModal(true)
+          }}
+        >
+          打印背景图片
+        </Button>
         <Button type="primary" onClick={updateTemplate}>
           保存
         </Button>
@@ -138,6 +151,9 @@ const ReportVertical = ({
           </div>
         </div>
       </div>
+      {showBgImgModal && (
+        <BgImgPrint hideModal={hideModal} url={imgUrl} type="vertical" />
+      )}
     </div>
   )
 }

@@ -12,6 +12,7 @@ import { getDomain } from 'src/utils/common'
 import { useHistory } from 'react-router'
 import UploadBgImage from '../UploadBgImage'
 import { DefaultImgs } from 'src/utils/const'
+import BgImgPrint from '../BgImgPrint'
 
 const ReportHoriz = ({
   certificateType,
@@ -20,6 +21,7 @@ const ReportHoriz = ({
   updateBasicInfo,
 }) => {
   const history = useHistory()
+  const [showBgImgModal, setShowBgImgModal] = useState(false)
   const { basicInfos, certificateInEdit } = useSelector(
     (state) => state.certificate
   )
@@ -46,10 +48,21 @@ const ReportHoriz = ({
     history.push(`/certificates`)
   }
 
+  const hideModal = () => {
+    setShowBgImgModal(false)
+  }
+
   return (
     <div className="report-horiz">
       <div className="report-horiz__action">
         <UploadBgImage callback={setImgUrl} />
+        <Button
+          onClick={() => {
+            setShowBgImgModal(true)
+          }}
+        >
+          打印背景图片
+        </Button>
         <Button type="primary" onClick={updateTemplate}>
           保存
         </Button>
@@ -137,6 +150,9 @@ const ReportHoriz = ({
           </div>
         </div>
       </div>
+      {showBgImgModal && (
+        <BgImgPrint hideModal={hideModal} url={imgUrl} type="horiz" />
+      )}
     </div>
   )
 }
