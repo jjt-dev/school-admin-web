@@ -16,6 +16,7 @@ const ActionBar = ({
   printExamCertifs,
 }) => {
   const [search, setSearch] = useState('')
+  const [selectedClasses, setSelectedClasses] = useState([])
 
   const handleSearch = () => {
     fetchSignList({ keyword: search })
@@ -23,7 +24,8 @@ const ActionBar = ({
 
   const clearSearch = () => {
     setSearch('')
-    fetchSignList({ keyword: '' })
+    setSelectedClasses([])
+    fetchSignList({ coachId: '', coachClassId: '', keyword: '' })
   }
 
   const handleChangeSignState = (signState) => {
@@ -65,6 +67,8 @@ const ActionBar = ({
           <CoachClassSelect
             allCoaches={allCoaches}
             fetchSignList={fetchSignList}
+            selectedClasses={selectedClasses}
+            setSelectedClasses={setSelectedClasses}
           />
         )}
         <Input

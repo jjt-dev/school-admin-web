@@ -5,11 +5,14 @@ import { useHistory } from 'react-router'
 import { NumberByGroup, GroupType } from 'src/utils/const'
 import api from 'src/utils/api'
 import { debounce } from 'lodash'
+import { useDispatch } from 'react-redux'
+import * as appAction from 'src/actions/app'
 
 const { Option } = Select
 
 const ActionBar = ({ updateFilter, exam, getGroupStudentList }) => {
   const history = useHistory()
+  const dispatch = useDispatch()
   const [search, setSearch] = useState('')
   const [groupNum, setGroupNum] = useState(exam.groupNum)
   const [groupType, setGroupType] = useState(exam.groupType)
@@ -36,10 +39,15 @@ const ActionBar = ({ updateFilter, exam, getGroupStudentList }) => {
   }, 1000)
 
   const saveChange = async (newGroupNum, newGroupType) => {
-    await api.post(
-      `/examination/examinationStudentGroup?examinationId=${examId}&groupAmount=${newGroupNum}&type=${newGroupType}`
-    )
-    message.success('修改成功')
+    try {
+      dispatch(appAction.showLoadingBar())
+      await api.post(
+        `/examination/examinationStudentGroup?examinationId=${examId}&groupAmount=${newGroupNum}&type=${newGroupType}`
+      )
+      message.success('修改成功')
+    } finally {
+      dispatch(appAction.closeLoadingBar())
+    }
     getGroupStudentList()
   }
 

@@ -64,7 +64,7 @@ const StudentExamGroup = ({ match, form, history }) => {
             <Form.Item label="考评级别">
               <Input disabled value={studExamGroup.levelName} />
             </Form.Item>
-            <Form.Item label="场次">
+            <Form.Item label="组号">
               {getFieldDecorator('toRoundNum', {
                 initialValue: examRoundInfo.find(
                   (round) => round.roundNum === studExamGroup.currRoundNum

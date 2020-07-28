@@ -5,12 +5,18 @@ import api from 'src/utils/api'
 import { formatCascaderCoaches } from './helper'
 import set from 'lodash/fp/set'
 
-const CoachClassSelect = ({ allCoaches, fetchSignList }) => {
+const CoachClassSelect = ({
+  allCoaches,
+  fetchSignList,
+  selectedClasses,
+  setSelectedClasses,
+}) => {
   const [cascaderCoaches, setCascaderCoaches] = useState(
     formatCascaderCoaches(allCoaches)
   )
 
   const onChange = (value) => {
+    setSelectedClasses(value)
     const [coachId, coachClassId] = Object.values(value)
     fetchSignList({ coachId, coachClassId })
   }
@@ -40,6 +46,7 @@ const CoachClassSelect = ({ allCoaches, fetchSignList }) => {
 
   return (
     <Cascader
+      value={selectedClasses}
       placeholder="请选择教练班级"
       options={cascaderCoaches}
       loadData={loadData}
