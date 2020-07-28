@@ -2,7 +2,7 @@ import React, { useEffect, useMemo } from 'react'
 import { Spin } from 'antd'
 import Header from 'src/components/Header'
 import { parseSearches } from 'src/utils/common'
-import { SERVICE_CODE, session } from 'src/utils/storage'
+import { local, SCHOOL_CODE } from 'src/utils/storage'
 import { useSelector, useDispatch } from 'react-redux'
 import * as appAction from 'src/actions/app'
 import SideMenu from 'src/views/App/SideMenu'
@@ -34,12 +34,12 @@ const App = () => {
   const hasBreadcrumb = activeRoute && activeRoute.back
 
   /**
-   * 从用户输入的url中拿到serviceCode
+   * 从用户输入的url中拿到schoolCode
    */
   useDidMount(() => {
-    const { serviceCode } = parseSearches(location)
-    if (serviceCode) {
-      session.setItem(SERVICE_CODE, serviceCode)
+    const { schoolCode } = parseSearches(location)
+    if (schoolCode) {
+      local.setItem(SCHOOL_CODE, schoolCode)
     }
   })
 

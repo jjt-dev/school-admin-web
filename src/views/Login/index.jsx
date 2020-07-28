@@ -4,7 +4,7 @@ import loginLogo from 'src/images/login_logo.png'
 import { Form, Icon, Input, Button, Divider } from 'antd'
 import * as FA from 'react-fontawesome'
 import api from 'src/utils/api'
-import { local, TOKEN, SERVICE_CODE, session } from 'src/utils/storage'
+import { local, TOKEN, SCHOOL_CODE } from 'src/utils/storage'
 import * as appAction from 'src/actions/app'
 import { useDispatch } from 'react-redux'
 
@@ -16,14 +16,12 @@ const Login = ({ form, history }) => {
     e.preventDefault()
     form.validateFields(async (err, values) => {
       if (!err) {
-        const { username, password, serviceCode } = values
-        let serviceCodeUsed = session.getItem(SERVICE_CODE)
-        if (!serviceCodeUsed) {
-          serviceCodeUsed = serviceCode
-        }
+        const { username, password } = values
         try {
           const result = await api.post(
-            `/common/login?username=${username}&password=${password}&serviceCode=${serviceCodeUsed}`
+            `/common/login?username=${username}&password=${password}&schoolCode=${local.getItem(
+              SCHOOL_CODE
+            )}`
           )
           local.setItem(TOKEN, result)
           dispatch(appAction.getUserInfo())
@@ -65,16 +63,6 @@ const Login = ({ form, history }) => {
                   prefix={<Icon type="lock" />}
                   type="password"
                   placeholder="请输入密码"
-                />
-              )}
-            </Form.Item>
-            <Form.Item>
-              <span className="login-item-title">服务码</span>
-              {getFieldDecorator('serviceCode')(
-                <Input
-                  prefix={<Icon type="lock" />}
-                  type="text"
-                  placeholder="请输入服务码"
                 />
               )}
             </Form.Item>

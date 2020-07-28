@@ -55,7 +55,7 @@ class Api {
           reject(data)
           goToLogin()
         }
-        // serviceCode无效返回404, 其他错误返回0
+        // schoolCode无效返回404, 其他错误返回0
         else if ([0, 404].includes(data.status)) {
           reject(data)
           message.error(data.msg)

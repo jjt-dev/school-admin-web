@@ -1,5 +1,5 @@
 export const TOKEN = 'token'
-export const SERVICE_CODE = 'serviceCode'
+export const SCHOOL_CODE = 'schoolCode'
 
 const local = {
   setItem(key, val) {
