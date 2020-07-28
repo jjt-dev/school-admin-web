@@ -74,3 +74,8 @@ export const DefaultImgs = {
   reportVertical: '/images/jjt/config/report-vertical-template.jpg',
   reportHoriz: '/images/jjt/config/report-horiz-template.jpg',
 }
+
+export const ExamResultMode = {
+  score: 0,
+  grade: 1,
+}

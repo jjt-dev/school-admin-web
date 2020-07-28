@@ -9,6 +9,7 @@ import ResultItems from '../ResultItems'
 import ReactToPrint from 'react-to-print'
 import { mapReportValue, reorderBasicInfos } from '../helper'
 import { BasicInfoPositions } from 'src/views/Certificate/helper'
+import { ExamResultMode } from 'src/utils/const'
 class ReportVertical extends React.Component {
   constructor(props) {
     super(props)
@@ -116,7 +117,9 @@ class ReportVertical extends React.Component {
               <div className="result-level">
                 <img src={certificateIc1} alt="" />
                 <span className="result-level__title">
-                  {examResult?.gradeName}
+                  {examResult?.scoreMode === ExamResultMode.score
+                    ? examResult?.score
+                    : examResult?.gradeName}
                 </span>
                 <img src={certificateIc2} alt="" />
               </div>
