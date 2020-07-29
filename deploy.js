@@ -7,11 +7,21 @@ const printBanner = async (title, color) => {
 }
 
 const EnvDomain = {
-  test: { host: '182.61.139.115', user: 'yangsh', password: '2^Jw$#2Qb5', short:'test' },
-  production: { host: '182.61.4.137', user: 'yangsh', password: 'b%RU470!', short:'prod' },
+  test: {
+    host: '182.61.139.115',
+    user: 'yangsh',
+    password: '2^Jw$#2Qb5',
+    short: 'test',
+  },
+  production: {
+    host: '182.61.4.137',
+    user: 'yangsh',
+    password: 'b%RU470!',
+    short: 'prod',
+  },
 }
 const env = EnvDomain[process.env.NODE_ENV]
-const { user, host, password,short } = env
+const { user, host, password, short } = env
 printBanner(`Deploying ${short}`, 'yellow')
 
 const config = {
