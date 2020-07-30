@@ -15,9 +15,10 @@ import {
   Select,
 } from 'antd'
 import * as examAction from 'src/actions/exam'
-import { updateExam, getExamItemValue } from '../helper'
+import { updateExam } from '../helper'
 import moment from 'moment'
 import api from 'src/utils/api'
+import { validateItems } from './helper'
 
 const { TextArea } = Input
 const { RangePicker } = DatePicker
@@ -25,10 +26,10 @@ const { Option } = Select
 
 const Exam = ({ match, history, form }) => {
   const dispatch = useDispatch()
-  const [itemsValid, setItemsValid] = useState(true)
   const { examItemList, examLevelList, examInEdit } = useSelector(
     (state) => state.exam
   )
+  const checkedLevels = examLevelList.filter((level) => level.items)
   const examId = match.params.id
   const isEdit = !!examId
   const status = isEdit ? EntityStatus.EDIT : EntityStatus.CREATE
@@ -64,9 +65,8 @@ const Exam = ({ match, history, form }) => {
     fetchData()
   }, [dispatch, examId])
 
-  const handleItemRatioChange = (itemId, ratio) => {
-    validateItems()
-    dispatch(examAction.updateItemRatio({ itemId, ratio }))
+  const updateItemRatio = (levelId, itemId, ratio) => {
+    dispatch(examAction.updateItemRatio({ levelId, itemId, ratio }))
   }
 
   const selectItems = (levelId, selectedItems) => {
@@ -79,31 +79,15 @@ const Exam = ({ match, history, form }) => {
     )
   }
 
-  const validateItems = () => {
-    let result
-    const selectedItems = examItemList.filter((item) => item.checked)
-    if (selectedItems.length === 0) {
-      result = false
-    } else {
-      let totalRatio = 0
-      selectedItems.map((item) => (totalRatio += item.ratio ?? 0))
-      result = totalRatio === 100
-    }
-    setItemsValid(result)
-    return result
-  }
-
   const handleSubmit = (e) => {
     e.preventDefault()
-    const itemsValid = validateItems()
+    const itemsValid = validateItems(checkedLevels)
     form.validateFields(async (err, values) => {
       if (!err && itemsValid) {
-        updateExam(history, status, examId, values, examItemList, examLevelList)
+        updateExam(history, status, examId, values, checkedLevels)
       }
     })
   }
-
-  const checkedLevels = examLevelList.filter((item) => item.checked)
 
   // 如果编辑考试，需要等到获取到该考试后，再渲染考试。这样可以解决form初始值的问题
   if (isEdit && !examInEdit) {
@@ -207,6 +191,7 @@ const Exam = ({ match, history, form }) => {
             level={level}
             examItemList={examItemList}
             selectItems={selectItems}
+            updateItemRatio={updateItemRatio}
           />
         ))}
         <Form.Item label="启用">
@@ -249,12 +234,13 @@ const LevelExamItems = ({
   level,
   examItemList,
   selectItems,
+  updateItemRatio,
 }) => {
-  const selectedItems = level.items || []
+  const selectedItems = level.items
   return (
     <Form.Item label={`${level.name}考项`} className="exam__edit-form--item">
       {getFieldDecorator(`examItems${level.id}`, {
-        rules: [{ required: true }],
+        rules: [{ required: false }],
       })(
         <>
           <Select
@@ -275,8 +261,8 @@ const LevelExamItems = ({
               )
             })}
           </Select>
-          {selectedItems.map((itemId, index) => {
-            const item = examItemList.find((item) => item.id === itemId)
+          {Object.keys(selectedItems).map((itemId, index) => {
+            const item = examItemList.find((item) => item.id === Number(itemId))
             return (
               <Row
                 key={`selected-items-${level.id}-${item.id}`}
@@ -290,7 +276,9 @@ const LevelExamItems = ({
                     max={100}
                     formatter={(value) => `${value}%`}
                     parser={(value) => value.replace('%', '')}
-                    // onChange={(e) => handleItemRatioChange(item.id, e)}
+                    onChange={(value) =>
+                      updateItemRatio(level.id, item.id, value)
+                    }
                   />
                 </Col>
               </Row>

@@ -29,6 +29,11 @@ export const findById = (arrs, id) => {
   return result ?? {}
 }
 
+export const findIndexById = (arrs, id) => {
+  const result = arrs.findIndex((item) => item.id === id)
+  return result ?? {}
+}
+
 export const getApiRootImg = () => process.env.REACT_APP_API_IMAGE
 
 export const getDomain = () => process.env.REACT_APP_DOMAIN

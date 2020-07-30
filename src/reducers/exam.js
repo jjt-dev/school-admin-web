@@ -1,6 +1,7 @@
 import { handleActions } from 'redux-actions'
 import set from 'lodash/fp/set'
 import flow from 'lodash/fp/flow'
+import { findIndexById } from 'src/utils/common'
 import {
   GET_EXAM_LIST,
   EXAM_UPDATE_FILTER,
@@ -59,21 +60,25 @@ const exam = handleActions(
       return set(`filter[${payload.field}]`, payload.value, state)
     },
     [EXAM_UPDATE_ITEM_RATIO]: (state, { payload }) => {
-      const { itemId, ratio } = payload
-      const index = state.examItemList.findIndex((item) => item.id === itemId)
-      return set(`examItemList[${index}].ratio`, ratio, state)
+      const { levelId, itemId, ratio } = payload
+      const index = findIndexById(state.examLevelList, levelId)
+      return set(`examLevelList[${index}].items[${itemId}]`, ratio, state)
     },
     [EXAM_SELECT_LEVEL_ITEM]: (state, { payload }) => {
-      const { levelId, selectedItems } = payload
-      const index = state.examLevelList.findIndex((item) => item.id === levelId)
-      return set(`examLevelList[${index}].items`, selectedItems, state)
+      const { levelId, selectedItems: selectedItemIds } = payload
+      const { examLevelList } = state
+      const index = findIndexById(examLevelList, levelId)
+      const newItems = {}
+      const currentItems = examLevelList[index].items
+      selectedItemIds.forEach((itemId) => {
+        newItems[itemId] = currentItems[itemId] || 0
+      })
+      return set(`examLevelList[${index}].items`, newItems, state)
     },
     [EXAM_UPDATE_LEVEL_CEHCK]: (state, { payload }) => {
       const { levelId, checked } = payload
-      const index = state.examLevelList.findIndex(
-        (level) => level.id === levelId
-      )
-      return set(`examLevelList[${index}].checked`, checked, state)
+      const index = findIndexById(state.examLevelList, levelId)
+      return set(`examLevelList[${index}].items`, checked ? {} : null, state)
     },
     [EXAM_RESET_STORE]: () => {
       return initState
