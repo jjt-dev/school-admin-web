@@ -18,7 +18,7 @@ import * as examAction from 'src/actions/exam'
 import { updateExam } from '../helper'
 import moment from 'moment'
 import api from 'src/utils/api'
-import { validateItems } from './helper'
+import { enforceLevelList, validateItems } from './helper'
 
 const { TextArea } = Input
 const { RangePicker } = DatePicker
@@ -42,22 +42,7 @@ const Exam = ({ match, history, form }) => {
       if (examId) {
         const exam = await api.get(`/examination/item?id=${examId}`)
         dispatch(examAction.getExam(exam))
-
-        exam.itemes.forEach((item) => {
-          const index = examItemList.findIndex((i) => i.id === item.examItemId)
-          if (index > -1) {
-            examItemList[index].checked = true
-            examItemList[index].ratio = item.ratio * 100
-          }
-        })
-        exam.levelsCanSign.split('').forEach((levelId) => {
-          const index = examLevelList.findIndex(
-            (level) => level.id === Number(levelId)
-          )
-          if (index > -1) {
-            examLevelList[index].checked = true
-          }
-        })
+        examLevelList = enforceLevelList(exam, examLevelList)
       }
       dispatch(examAction.getExamItemList(examItemList))
       dispatch(examAction.getExamLevelList(examLevelList))
@@ -187,7 +172,6 @@ const Exam = ({ match, history, form }) => {
         {checkedLevels.map((level) => (
           <LevelExamItems
             key={level.id}
-            getFieldDecorator={getFieldDecorator}
             level={level}
             examItemList={examItemList}
             selectItems={selectItems}
@@ -229,63 +213,54 @@ const Exam = ({ match, history, form }) => {
 export default Form.create()(Exam)
 
 const LevelExamItems = ({
-  getFieldDecorator,
-  isEdit,
   level,
   examItemList,
   selectItems,
   updateItemRatio,
 }) => {
-  const selectedItems = level.items
+  const itemIds = Object.keys(level.items).map((i) => Number(i))
   return (
     <Form.Item label={`${level.name}考项`} className="exam__edit-form--item">
-      {getFieldDecorator(`examItems${level.id}`, {
-        rules: [{ required: false }],
-      })(
-        <>
-          <Select
-            mode="multiple"
-            style={{ width: '100%' }}
-            placeholder={`请选择${level.name}的考项`}
-            defaultValue={[]}
-            onChange={(value) => selectItems(level.id, value)}
-          >
-            {examItemList.map((item) => {
-              return (
-                <Option
-                  key={`all-items-${level.id}-${item.id}`}
-                  value={item.id}
-                >
-                  {item.name}
-                </Option>
-              )
-            })}
-          </Select>
-          {Object.keys(selectedItems).map((itemId, index) => {
-            const item = examItemList.find((item) => item.id === Number(itemId))
+      <>
+        <Select
+          mode="multiple"
+          style={{ width: '100%' }}
+          placeholder={`请选择${level.name}的考项`}
+          defaultValue={itemIds}
+          onChange={(value) => selectItems(level.id, value)}
+        >
+          {examItemList.map((item) => {
             return (
-              <Row
-                key={`selected-items-${level.id}-${item.id}`}
-                className={`selected-items-${index}`}
-              >
-                <Col>
-                  <span>{item.name}</span>
-                  <InputNumber
-                    // defaultValue={getExamItemValue(examInEdit, item)}
-                    min={0}
-                    max={100}
-                    formatter={(value) => `${value}%`}
-                    parser={(value) => value.replace('%', '')}
-                    onChange={(value) =>
-                      updateItemRatio(level.id, item.id, value)
-                    }
-                  />
-                </Col>
-              </Row>
+              <Option key={`all-items-${level.id}-${item.id}`} value={item.id}>
+                {item.name}
+              </Option>
             )
           })}
-        </>
-      )}
+        </Select>
+        {itemIds.map((itemId, index) => {
+          const item = examItemList.find((item) => item.id === itemId)
+          return (
+            <Row
+              key={`selected-items-${level.id}-${item.id}`}
+              className={`selected-items-${index}`}
+            >
+              <Col>
+                <span>{item.name}</span>
+                <InputNumber
+                  defaultValue={level.items[itemId]}
+                  min={0}
+                  max={100}
+                  formatter={(value) => `${value}%`}
+                  parser={(value) => value.replace('%', '')}
+                  onChange={(value) =>
+                    updateItemRatio(level.id, item.id, value)
+                  }
+                />
+              </Col>
+            </Row>
+          )
+        })}
+      </>
     </Form.Item>
   )
 }
