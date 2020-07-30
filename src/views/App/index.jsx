@@ -67,7 +67,7 @@ const App = () => {
         'login-page': isLoginPage,
       })}
     >
-      {/* <Header user={user} /> */}
+      <Header user={user} />
       <main>
         <SideMenu history={history} location={location} />
         <ErrorBoundary>
