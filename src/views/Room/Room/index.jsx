@@ -8,12 +8,13 @@ import { useDispatch, useSelector } from 'react-redux'
 import { EntityStatus, formItemLayout } from 'src/utils/const'
 import { buildParameters } from 'src/utils/common'
 
-const Room = ({ match, history, form }) => {
+const Room = ({ match, history }) => {
   const dispatch = useDispatch()
   const { roomInEdit } = useSelector((state) => state.room)
   const roomId = match.params.id
   const isEdit = !!roomId
   const status = isEdit ? EntityStatus.EDIT : EntityStatus.CREATE
+  const [form] = Form.useForm()
   const { getFieldDecorator } = form
 
   useEffect(() => {
@@ -53,6 +54,7 @@ const Room = ({ match, history, form }) => {
         onSubmit={handleSubmit}
         {...formItemLayout}
         className="room__edit-form"
+        form={form}
       >
         <Form.Item label="考场">
           {getFieldDecorator('name', {
@@ -79,4 +81,4 @@ const Room = ({ match, history, form }) => {
   )
 }
 
-export default Form.create()(Room)
+export default Room

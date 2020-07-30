@@ -4,8 +4,9 @@ import './ChangePassword.less'
 import api from 'src/utils/api'
 import { formItemLayout } from 'src/utils/const'
 
-const ChangePassword = ({ setVisible, form, user }) => {
+const ChangePassword = ({ setVisible, user }) => {
   const [confirmDirty, setConfirmDirty] = useState(false)
+  const [form] = Form.useForm()
   const { getFieldDecorator } = form
 
   const compareToFirstPassword = (rule, value, callback) => {
@@ -53,7 +54,7 @@ const ChangePassword = ({ setVisible, form, user }) => {
         cancelText="取消"
         okText="确定"
       >
-        <Form {...formItemLayout} className="change-password-form">
+        <Form {...formItemLayout} className="change-password-form" form={form}>
           <Form.Item label="用户名称">
             <span>{user?.username}</span>
           </Form.Item>
@@ -107,4 +108,4 @@ const ChangePassword = ({ setVisible, form, user }) => {
   )
 }
 
-export default Form.create()(ChangePassword)
+export default ChangePassword

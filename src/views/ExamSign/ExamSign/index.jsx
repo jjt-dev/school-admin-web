@@ -12,7 +12,8 @@ import api from 'src/utils/api'
 const { TextArea } = Input
 const { Option } = Select
 
-const ExamSign = ({ match, history, form }) => {
+const ExamSign = ({ match, history }) => {
+  const [form] = Form.useForm()
   const { getFieldDecorator } = form
   const coachId = form.getFieldValue('coachId')
   const [coachClasses, setCoachClasses] = useState([])
@@ -94,6 +95,7 @@ const ExamSign = ({ match, history, form }) => {
         onSubmit={handleSubmit}
         {...formItemLayout}
         className="sign__edit-form"
+        form={form}
       >
         <Form.Item label="教练">
           {getFieldDecorator('coachId', {
@@ -265,4 +267,4 @@ const ExamSign = ({ match, history, form }) => {
   )
 }
 
-export default Form.create()(ExamSign)
+export default ExamSign

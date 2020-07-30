@@ -13,9 +13,10 @@ const defaultLogo = {
   logoUrl: '',
 }
 
-const School = ({ form }) => {
+const School = () => {
   const [school, setSchool] = useState()
   const [logo, setLogo] = useState(defaultLogo)
+  const [form] = Form.useForm()
   const { getFieldDecorator } = form
 
   useEffect(() => {
@@ -55,6 +56,7 @@ const School = ({ form }) => {
           onSubmit={handleSubmit}
           {...formItemLayout}
           className="school__edit-form"
+          form={form}
         >
           <Form.Item label="名称">
             {getFieldDecorator('name', {
@@ -110,4 +112,4 @@ const School = ({ form }) => {
   )
 }
 
-export default Form.create()(School)
+export default School

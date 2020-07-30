@@ -21,7 +21,7 @@ import api from 'src/utils/api'
 const { TextArea } = Input
 const { RangePicker } = DatePicker
 
-const Exam = ({ match, history, form }) => {
+const Exam = ({ match, history }) => {
   const dispatch = useDispatch()
   const [itemsValid, setItemsValid] = useState(true)
   const { examItemList, examLevelList, examInEdit } = useSelector(
@@ -30,6 +30,7 @@ const Exam = ({ match, history, form }) => {
   const examId = match.params.id
   const isEdit = !!examId
   const status = isEdit ? EntityStatus.EDIT : EntityStatus.CREATE
+  const [form] = Form.useForm()
   const { getFieldDecorator } = form
 
   useEffect(() => {
@@ -114,6 +115,7 @@ const Exam = ({ match, history, form }) => {
         onSubmit={handleSubmit}
         {...formItemLayout}
         className="exam__edit-form"
+        form={form}
       >
         <Form.Item label="名称">
           {getFieldDecorator('title', {
@@ -266,4 +268,4 @@ const Exam = ({ match, history, form }) => {
   )
 }
 
-export default Form.create()(Exam)
+export default Exam

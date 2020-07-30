@@ -1,3 +1,23 @@
+export const formLayoutLogin = {
+  labelCol: {
+    span: 8,
+  },
+  wrapperCol: {
+    span: 16,
+  },
+}
+
+export const formItemLayout = {
+  labelCol: {
+    xs: { span: 24 },
+    sm: { span: 5 },
+  },
+  wrapperCol: {
+    xs: { span: 24 },
+    sm: { span: 16 },
+  },
+}
+
 /**
  * 分页默认配置
  */
@@ -35,17 +55,6 @@ export const EntityStatus = {
 export const Genders = {
   0: ' 女',
   1: '男',
-}
-
-export const formItemLayout = {
-  labelCol: {
-    xs: { span: 24 },
-    sm: { span: 5 },
-  },
-  wrapperCol: {
-    xs: { span: 24 },
-    sm: { span: 16 },
-  },
 }
 
 export const timeFormat = 'YYYY-MM-DD HH:mm'

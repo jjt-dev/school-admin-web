@@ -9,13 +9,14 @@ import useMutation from 'src/hooks/useMutation'
 
 const { TextArea } = Input
 
-const Coach = ({ match, history, form }) => {
+const Coach = ({ match, history }) => {
   const dispatch = useDispatch()
   const { postApi } = useMutation()
   const { coachInEdit } = useSelector((state) => state.coach)
   const coachId = match.params.id
   const isEdit = !!coachId
   const status = isEdit ? EntityStatus.EDIT : EntityStatus.CREATE
+  const [form] = Form.useForm()
   const { getFieldDecorator } = form
 
   useEffect(() => {
@@ -52,6 +53,7 @@ const Coach = ({ match, history, form }) => {
         onSubmit={handleSubmit}
         {...formItemLayout}
         className="coach__edit-form"
+        form={form}
       >
         <Form.Item label="手机号">
           {getFieldDecorator('phone', {
@@ -102,4 +104,4 @@ const Coach = ({ match, history, form }) => {
   )
 }
 
-export default Form.create()(Coach)
+export default Coach

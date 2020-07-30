@@ -11,7 +11,7 @@ import { buildParameters } from 'src/utils/common'
 
 const { TextArea } = Input
 
-const Examiner = ({ match, history, form }) => {
+const Examiner = ({ match, history }) => {
   const dispatch = useDispatch()
   const { examinerInEdit } = useSelector((state) => state.examiner)
   const [avatar, setAvatar] = useState({
@@ -22,6 +22,7 @@ const Examiner = ({ match, history, form }) => {
   const examinerId = match.params.id
   const isEdit = !!examinerId
   const status = isEdit ? EntityStatus.EDIT : EntityStatus.CREATE
+  const [form] = Form.useForm()
   const { getFieldDecorator } = form
 
   useEffect(() => {
@@ -80,6 +81,7 @@ const Examiner = ({ match, history, form }) => {
         onSubmit={handleSubmit}
         {...formItemLayout}
         className="examiner__edit-form"
+        form={form}
       >
         <Form.Item label="姓名">
           {getFieldDecorator('name', {
@@ -150,4 +152,4 @@ const Examiner = ({ match, history, form }) => {
   )
 }
 
-export default Form.create()(Examiner)
+export default Examiner

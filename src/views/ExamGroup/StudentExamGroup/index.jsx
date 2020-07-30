@@ -4,11 +4,12 @@ import api from 'src/utils/api'
 import { Form, message, Input, Button, Select } from 'antd'
 import { formItemLayout } from 'src/utils/const'
 
-const StudentExamGroup = ({ match, form, history }) => {
+const StudentExamGroup = ({ match, history }) => {
   const [studExamGroup, setStudExamGroup] = useState()
   const [examRoundInfo, setExamRoundInfo] = useState()
   const examId = match.params.id
   const examGroupId = match.params.examGroupId
+  const [form] = Form.useForm()
   const { getFieldDecorator } = form
 
   useEffect(() => {
@@ -57,6 +58,7 @@ const StudentExamGroup = ({ match, form, history }) => {
             onSubmit={handleSubmit}
             {...formItemLayout}
             className="exam-group__edit-form"
+            form={form}
           >
             <Form.Item label="考生姓名">
               <Input disabled value={studExamGroup.studentName} />
@@ -95,4 +97,4 @@ const StudentExamGroup = ({ match, form, history }) => {
   )
 }
 
-export default Form.create()(StudentExamGroup)
+export default StudentExamGroup
