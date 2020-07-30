@@ -118,7 +118,7 @@ export const updateExamSign = async (history, examId, values) => {
       values.currLevelId
     }&currState=${currState}&faceUrl=${values.faceUrl}&gender=${
       values.gender
-    }&levels=${values.levels}&name=${values.name}&note=${
+    }&levels=${values.levels.join(',')}&name=${values.name}&note=${
       values.note
     }&parentName=${values.parentName}&phone=${values.phone}&relationship=${
       values.relationship

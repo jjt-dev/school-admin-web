@@ -216,10 +216,12 @@ const ExamSign = ({ match, history, form }) => {
         </Form.Item>
         <Form.Item label="报考级别">
           {getFieldDecorator('levels', {
-            initialValue: isEdit ? signInEdit?.signLevels[0]?.levelId : '',
+            initialValue: isEdit
+              ? (signInEdit?.signLevels || []).map((level) => level.levelId)
+              : [],
             rules: [{ required: true }],
           })(
-            <Select placeholder="请选择报考级别">
+            <Select placeholder="请选择报考级别" mode="multiple">
               {availableExamLevels.map((level) => (
                 <Option key={level.id} value={level.id}>
                   {level.name}

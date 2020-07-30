@@ -8,15 +8,12 @@ import { Genders, Relationships } from 'src/utils/const'
 
 const ExamSignDetail = ({ match, history }) => {
   const dispatch = useDispatch()
-  const { allCoaches, allSigningExams, allExamLevels } = useSelector(
-    (state) => state.app
-  )
+  const { allCoaches, allSigningExams } = useSelector((state) => state.app)
   const { signInEdit } = useSelector((state) => state.examSign)
   const examId = match.params.id
   const signId = match.params.signId
   // 当前只有一个等级考试
   const signLevel = (signInEdit && signInEdit.signLevels[0]) || {}
-  const signLevelId = signLevel.id
   const examFinished = signLevel.resultScore !== -1
 
   useEffect(() => {
@@ -24,7 +21,7 @@ const ExamSignDetail = ({ match, history }) => {
   }, [dispatch, signId])
 
   const goToPrint = (type) => {
-    history.push(`/exam/${examId}/sign/${signId}/print/${type}/${signLevelId}`)
+    history.push(`/exam/${examId}/sign/${signId}/print/${type}`)
   }
 
   return (
@@ -64,7 +61,7 @@ const ExamSignDetail = ({ match, history }) => {
               {signInEdit.parentName}
             </Descriptions.Item>
             <Descriptions.Item label="报考级别" span={3}>
-              {findById(allExamLevels, signInEdit.signLevels[0]?.levelId).name}
+              {signInEdit.signLevels.map((level) => level.levelName).join(',')}
             </Descriptions.Item>
             <Descriptions.Item label="住址" span={3}>
               {signInEdit.address}

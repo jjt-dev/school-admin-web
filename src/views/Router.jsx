@@ -92,7 +92,7 @@ export const routes = [
     },
   },
   {
-    path: '/exam/:id/sign/:signId/print/exam-certif/:signLevelId',
+    path: '/exam/:id/sign/:signId/print/exam-certif',
     comp: PrintExamCertif,
     back: {
       path: '/exam/:id/sign/:signId/detail',

@@ -21,11 +21,6 @@ class ExamCertifPrint extends React.Component {
   }
 
   render() {
-    //这里的examCertifInfo如果是单个考生的信息那就是object, 如果是批量打印那就是array
-    let examCertifInfoArr = this.props.examCertifInfo
-    if (!Array.isArray(examCertifInfoArr)) {
-      examCertifInfoArr = [examCertifInfoArr]
-    }
     return (
       <div className="page exam-certif-print">
         <div className="exam-certif-print__header">
@@ -35,7 +30,7 @@ class ExamCertifPrint extends React.Component {
           />
         </div>
         <div className="exam-certif-print__content" ref={this.myRef}>
-          {examCertifInfoArr.map((examCertifInfo, index) => {
+          {this.props.examCertifInfos.map((examCertifInfo, index) => {
             const mappedValue = mapExamCertifValue({ ...examCertifInfo })
             return (
               <div className="exam-certif-print__content-item" key={index}>

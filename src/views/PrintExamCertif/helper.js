@@ -42,11 +42,10 @@ export const mapReportValue = (student, examResult = {}) => {
   }
 }
 
-export const buildPath = (match, location) => {
-  const { id: examId, signLevelId } = match.params
-  // 如果signLevelId存在，则是获取单个考生的准考证内容
-  if (!!signLevelId) {
-    return `/exam/sign/examineeIDCardInfo?signLevelId=${signLevelId}`
+export const buildPath = (examId, signId, location) => {
+  // 如果signId存在，则是获取单个考生的准考证内容
+  if (!!signId) {
+    return `/exam/sign/examineeIDCardInfo?signId=${signId}`
   }
 
   // 下面的逻辑是通过考试id，教练id和教练所带班级id获取要批量打印成绩单的考生列表
