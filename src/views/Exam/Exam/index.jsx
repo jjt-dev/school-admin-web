@@ -12,6 +12,7 @@ import {
   Col,
   InputNumber,
   Radio,
+  Select,
 } from 'antd'
 import * as examAction from 'src/actions/exam'
 import { updateExam, getExamItemValue } from '../helper'
@@ -20,6 +21,7 @@ import api from 'src/utils/api'
 
 const { TextArea } = Input
 const { RangePicker } = DatePicker
+const { Option } = Select
 
 const Exam = ({ match, history, form }) => {
   const dispatch = useDispatch()
@@ -67,9 +69,8 @@ const Exam = ({ match, history, form }) => {
     dispatch(examAction.updateItemRatio({ itemId, ratio }))
   }
 
-  const handleItemCheckChange = (itemId, e) => {
-    validateItems()
-    dispatch(examAction.updateItemCheck({ itemId, checked: e.target.checked }))
+  const selectItems = (levelId, selectedItems) => {
+    dispatch(examAction.selectItems({ levelId, selectedItems }))
   }
 
   const handleLevelCheckChange = (levelId, e) => {
@@ -101,6 +102,8 @@ const Exam = ({ match, history, form }) => {
       }
     })
   }
+
+  const checkedLevels = examLevelList.filter((item) => item.checked)
 
   // 如果编辑考试，需要等到获取到该考试后，再渲染考试。这样可以解决form初始值的问题
   if (isEdit && !examInEdit) {
@@ -197,43 +200,15 @@ const Exam = ({ match, history, form }) => {
             </Checkbox.Group>
           )}
         </Form.Item>
-        <Form.Item label="考项" className="exam__edit-form--item">
-          {getFieldDecorator('examItems', {
-            initialValue: isEdit
-              ? examInEdit?.itemes.map((item) => item.examItemId)
-              : '',
-            rules: [{ required: true }],
-          })(
-            <Checkbox.Group style={{ width: '100%' }}>
-              {examItemList &&
-                examItemList.map((item) => (
-                  <Row key={item.id}>
-                    <Col>
-                      <Checkbox
-                        value={item.id}
-                        onChange={(e) => handleItemCheckChange(item.id, e)}
-                      >
-                        {item.name}
-                      </Checkbox>
-                      <InputNumber
-                        defaultValue={getExamItemValue(examInEdit, item)}
-                        min={0}
-                        max={100}
-                        formatter={(value) => `${value}%`}
-                        parser={(value) => value.replace('%', '')}
-                        onChange={(e) => handleItemRatioChange(item.id, e)}
-                      />
-                    </Col>
-                  </Row>
-                ))}
-              {!itemsValid && (
-                <span className="exam__edit-form--item-error">
-                  请选择考项并且所选考项百分比总和应该为100
-                </span>
-              )}
-            </Checkbox.Group>
-          )}
-        </Form.Item>
+        {checkedLevels.map((level) => (
+          <LevelExamItems
+            key={level.id}
+            getFieldDecorator={getFieldDecorator}
+            level={level}
+            examItemList={examItemList}
+            selectItems={selectItems}
+          />
+        ))}
         <Form.Item label="启用">
           {getFieldDecorator('isEnable', {
             initialValue: isEdit ? examInEdit?.isEnable : false,
@@ -267,3 +242,62 @@ const Exam = ({ match, history, form }) => {
 }
 
 export default Form.create()(Exam)
+
+const LevelExamItems = ({
+  getFieldDecorator,
+  isEdit,
+  level,
+  examItemList,
+  selectItems,
+}) => {
+  const selectedItems = level.items || []
+  return (
+    <Form.Item label={`${level.name}考项`} className="exam__edit-form--item">
+      {getFieldDecorator(`examItems${level.id}`, {
+        rules: [{ required: true }],
+      })(
+        <>
+          <Select
+            mode="multiple"
+            style={{ width: '100%' }}
+            placeholder={`请选择${level.name}的考项`}
+            defaultValue={[]}
+            onChange={(value) => selectItems(level.id, value)}
+          >
+            {examItemList.map((item) => {
+              return (
+                <Option
+                  key={`all-items-${level.id}-${item.id}`}
+                  value={item.id}
+                >
+                  {item.name}
+                </Option>
+              )
+            })}
+          </Select>
+          {selectedItems.map((itemId, index) => {
+            const item = examItemList.find((item) => item.id === itemId)
+            return (
+              <Row
+                key={`selected-items-${level.id}-${item.id}`}
+                className={`selected-items-${index}`}
+              >
+                <Col>
+                  <span>{item.name}</span>
+                  <InputNumber
+                    // defaultValue={getExamItemValue(examInEdit, item)}
+                    min={0}
+                    max={100}
+                    formatter={(value) => `${value}%`}
+                    parser={(value) => value.replace('%', '')}
+                    // onChange={(e) => handleItemRatioChange(item.id, e)}
+                  />
+                </Col>
+              </Row>
+            )
+          })}
+        </>
+      )}
+    </Form.Item>
+  )
+}

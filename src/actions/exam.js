@@ -9,7 +9,7 @@ export const GET_EXAM_LEVEL_LIST = 'GET_EXAM_LEVEL_LIST'
 
 export const EXAM_UPDATE_FILTER = 'COACH_UPDATE_FILTER'
 export const EXAM_UPDATE_ITEM_RATIO = 'EXAM_UPDATE_ITEM_RATIO'
-export const EXAM_UPDATE_ITEM_CEHCK = 'EXAM_UPDATE_ITEM_CEHCK'
+export const EXAM_SELECT_LEVEL_ITEM = 'EXAM_SELECT_LEVEL_ITEM'
 export const EXAM_UPDATE_LEVEL_CEHCK = 'EXAM_UPDATE_LEVEL_CEHCK'
 
 export const EXAM_RESET_STORE = 'EXAM_RESET_STORE'
@@ -52,8 +52,8 @@ export const updateItemRatio = createAction(
   (params) => params
 )
 
-export const updateItemCheck = createAction(
-  EXAM_UPDATE_ITEM_CEHCK,
+export const selectItems = createAction(
+  EXAM_SELECT_LEVEL_ITEM,
   (params) => params
 )
 

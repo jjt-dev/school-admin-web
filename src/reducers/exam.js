@@ -9,7 +9,7 @@ import {
   GET_EXAM_LEVEL_LIST,
   EXAM_UPDATE_ITEM_RATIO,
   EXAM_UPDATE_LEVEL_CEHCK,
-  EXAM_UPDATE_ITEM_CEHCK,
+  EXAM_SELECT_LEVEL_ITEM,
   EXAM_RESET_STORE,
 } from 'src/actions/exam'
 
@@ -63,10 +63,10 @@ const exam = handleActions(
       const index = state.examItemList.findIndex((item) => item.id === itemId)
       return set(`examItemList[${index}].ratio`, ratio, state)
     },
-    [EXAM_UPDATE_ITEM_CEHCK]: (state, { payload }) => {
-      const { itemId, checked } = payload
-      const index = state.examItemList.findIndex((item) => item.id === itemId)
-      return set(`examItemList[${index}].checked`, checked, state)
+    [EXAM_SELECT_LEVEL_ITEM]: (state, { payload }) => {
+      const { levelId, selectedItems } = payload
+      const index = state.examLevelList.findIndex((item) => item.id === levelId)
+      return set(`examLevelList[${index}].items`, selectedItems, state)
     },
     [EXAM_UPDATE_LEVEL_CEHCK]: (state, { payload }) => {
       const { levelId, checked } = payload
