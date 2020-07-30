@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import './index.less'
 import { useDispatch, useSelector } from 'react-redux'
 import { formItemLayout, EntityStatus } from 'src/utils/const'
@@ -10,19 +10,17 @@ import {
   Checkbox,
   Row,
   Col,
-  InputNumber,
   Radio,
-  Select,
 } from 'antd'
 import * as examAction from 'src/actions/exam'
 import { updateExam } from '../helper'
 import moment from 'moment'
 import api from 'src/utils/api'
 import { enforceLevelList, validateItems } from './helper'
+import LevelExamItems from './LevelExamItems'
 
 const { TextArea } = Input
 const { RangePicker } = DatePicker
-const { Option } = Select
 
 const Exam = ({ match, history, form }) => {
   const dispatch = useDispatch()
@@ -171,6 +169,7 @@ const Exam = ({ match, history, form }) => {
         </Form.Item>
         {checkedLevels.map((level) => (
           <LevelExamItems
+            getFieldDecorator={getFieldDecorator}
             key={level.id}
             level={level}
             examItemList={examItemList}
@@ -211,56 +210,3 @@ const Exam = ({ match, history, form }) => {
 }
 
 export default Form.create()(Exam)
-
-const LevelExamItems = ({
-  level,
-  examItemList,
-  selectItems,
-  updateItemRatio,
-}) => {
-  const itemIds = Object.keys(level.items).map((i) => Number(i))
-  return (
-    <Form.Item label={`${level.name}考项`} className="exam__edit-form--item">
-      <>
-        <Select
-          mode="multiple"
-          style={{ width: '100%' }}
-          placeholder={`请选择${level.name}的考项`}
-          defaultValue={itemIds}
-          onChange={(value) => selectItems(level.id, value)}
-        >
-          {examItemList.map((item) => {
-            return (
-              <Option key={`all-items-${level.id}-${item.id}`} value={item.id}>
-                {item.name}
-              </Option>
-            )
-          })}
-        </Select>
-        {itemIds.map((itemId, index) => {
-          const item = examItemList.find((item) => item.id === itemId)
-          return (
-            <Row
-              key={`selected-items-${level.id}-${item.id}`}
-              className={`selected-items-${index}`}
-            >
-              <Col>
-                <span>{item.name}</span>
-                <InputNumber
-                  defaultValue={level.items[itemId]}
-                  min={0}
-                  max={100}
-                  formatter={(value) => `${value}%`}
-                  parser={(value) => value.replace('%', '')}
-                  onChange={(value) =>
-                    updateItemRatio(level.id, item.id, value)
-                  }
-                />
-              </Col>
-            </Row>
-          )
-        })}
-      </>
-    </Form.Item>
-  )
-}
