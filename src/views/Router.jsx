@@ -112,7 +112,7 @@ export const routes = [
     isPrintCertif: true,
   },
   {
-    path: '/exam/:id/sign/:signId/print/report/:signLevelId',
+    path: '/exam/:id/sign/:signId/print/report',
     comp: PrintReport,
     back: {
       path: '/exam/:id/sign/:signId/detail',

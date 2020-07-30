@@ -47,10 +47,7 @@ class ReportVertical extends React.Component {
   }
 
   render() {
-    // 目前只能报考一个考试，所以直接取results第一个元素
-    const { studentInfo, examResult } = this.props.examResultContainer
-    const { studentFaceUrl, schoolName } = studentInfo
-    const mappedValue = mapReportValue(studentInfo, examResult)
+    const { studentInfo, examResults } = this.props.examResultContainer
     const bgImageLink = this.state.withBgImg
       ? `url(${getDomain()}${this.state.template.bgUrl})`
       : ''
@@ -70,88 +67,100 @@ class ReportVertical extends React.Component {
           />
         </div>
         <div className="report-vertical__content" ref={this.myRef}>
-          <div
-            className="report-vertical__content-report"
-            style={{ backgroundImage: bgImageLink }}
-          >
-            <div className="report-vertical__content-report-edit">
-              <div className="basic-info">
-                <div
-                  className="basic-info__logo"
-                  style={{
-                    backgroundImage: `url(${getDomain()}${studentFaceUrl})`,
-                  }}
-                />
-                <div className="basic-info__content">
-                  <Row>
-                    <Col span={24}>
-                      <span className="basic-info__content-school">
-                        报考单位
-                      </span>
-                      <span className="basic-info__content-colon">:</span>
-                      <span>{schoolName}</span>
-                    </Col>
-                    {BasicInfoPositions.map((position) => {
-                      const info = this.findInfo(position)
-                      return (
-                        <Col key={position} span={position % 2 === 1 ? 13 : 11}>
-                          {info ? (
-                            <>
-                              <span className="basic-info__content-title">
-                                {info.name}
-                              </span>
-                              <span className="basic-info__content-colon">
-                                :
-                              </span>
-                              <span>{mappedValue[info.name]}</span>
-                            </>
-                          ) : (
-                            <></>
-                          )}
+          {examResults.map((examResult, index) => {
+            const { studentFaceUrl, schoolName } = studentInfo
+            const mappedValue = mapReportValue(studentInfo, examResult)
+            return (
+              <div
+                key={index}
+                className="report-vertical__content-report"
+                style={{ backgroundImage: bgImageLink }}
+              >
+                <div className="report-vertical__content-report-edit">
+                  <div className="basic-info">
+                    <div
+                      className="basic-info__logo"
+                      style={{
+                        backgroundImage: `url(${getDomain()}${studentFaceUrl})`,
+                      }}
+                    />
+                    <div className="basic-info__content">
+                      <Row>
+                        <Col span={24}>
+                          <span className="basic-info__content-school">
+                            报考单位
+                          </span>
+                          <span className="basic-info__content-colon">:</span>
+                          <span>{schoolName}</span>
                         </Col>
-                      )
-                    })}
-                  </Row>
-                </div>
-              </div>
-              <div className="result-level">
-                <img src={certificateIc1} alt="" />
-                <span className="result-level__title">
-                  {examResult?.scoreMode === ExamResultMode.score
-                    ? examResult?.score
-                    : examResult?.gradeName}
-                </span>
-                <img src={certificateIc2} alt="" />
-              </div>
-              <div className="item-result">
-                <div className="item-result__title">综合成绩</div>
-                <ResultItems resultItems={examResult?.items} />
-                <div className="item-result__comments">
-                  <div className="item-result__comments-item writing-mode-vertical">
-                    考官评语
-                  </div>
-                  <div className="item-result__comments-item examiner-comment">
-                    {examResult?.commnent}
-                    <div className="examiner-comment__sign">
-                      考官签字: <span>{examResult?.examinerName}</span>
+                        {BasicInfoPositions.map((position) => {
+                          const info = this.findInfo(position)
+                          return (
+                            <Col
+                              key={position}
+                              span={position % 2 === 1 ? 13 : 11}
+                            >
+                              {info ? (
+                                <>
+                                  <span className="basic-info__content-title">
+                                    {info.name}
+                                  </span>
+                                  <span className="basic-info__content-colon">
+                                    :
+                                  </span>
+                                  <span>{mappedValue[info.name]}</span>
+                                </>
+                              ) : (
+                                <></>
+                              )}
+                            </Col>
+                          )
+                        })}
+                      </Row>
                     </div>
                   </div>
-                  <div className="item-result__comments-item writing-mode-vertical">
-                    备注
+                  <div className="result-level">
+                    <img src={certificateIc1} alt="" />
+                    <span className="result-level__title">
+                      {examResult?.scoreMode === ExamResultMode.score
+                        ? examResult?.score
+                        : examResult?.gradeName}
+                    </span>
+                    <img src={certificateIc2} alt="" />
                   </div>
-                  <div className="item-result__comments-item examiner-remark">
-                    <div>1.考官未打分的科目属于本级别规定不考科目</div>
-                    <div>2.考试合格的学员凭此表领取证书和腰带</div>
-                    <div>3.考试不合格的学员凭补考单进行补考 (限补考一次)</div>
-                    <div>4.此表盖章有效</div>
+                  <div className="item-result">
+                    <div className="item-result__title">综合成绩</div>
+                    <ResultItems resultItems={examResult?.items} />
+                    <div className="item-result__comments">
+                      <div className="item-result__comments-item writing-mode-vertical">
+                        考官评语
+                      </div>
+                      <div className="item-result__comments-item examiner-comment">
+                        {examResult?.commnent}
+                        <div className="examiner-comment__sign">
+                          考官签字: <span>{examResult?.examinerName}</span>
+                        </div>
+                      </div>
+                      <div className="item-result__comments-item writing-mode-vertical">
+                        备注
+                      </div>
+                      <div className="item-result__comments-item examiner-remark">
+                        <div>1.考官未打分的科目属于本级别规定不考科目</div>
+                        <div>2.考试合格的学员凭此表领取证书和腰带</div>
+                        <div>
+                          3.考试不合格的学员凭补考单进行补考 (限补考一次)
+                        </div>
+                        <div>4.此表盖章有效</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="report-vertical__content-report-edit-date">
+                    日期: {chineseDate()}
                   </div>
                 </div>
               </div>
-              <div className="report-vertical__content-report-edit-date">
-                日期: {chineseDate()}
-              </div>
-            </div>
-          </div>
+            )
+          })}
         </div>
       </div>
     )
