@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import './index.less'
 import { useDispatch, useSelector } from 'react-redux'
-import { formItemLayout, EntityStatus } from 'src/utils/const'
+import { formLayout, EntityStatus } from 'src/utils/const'
 import {
   Form,
   Input,
@@ -83,7 +83,7 @@ const Exam = ({ match, history }) => {
       <div className="exam__edit-title">{status}考试</div>
       <Form
         onSubmit={handleSubmit}
-        {...formItemLayout}
+        {...formLayout}
         className="exam__edit-form"
         form={form}
       >

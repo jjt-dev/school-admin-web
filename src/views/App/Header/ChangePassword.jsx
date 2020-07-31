@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Modal, Form, Icon, Input, message } from 'antd'
 import './ChangePassword.less'
 import api from 'src/utils/api'
-import { formItemLayout } from 'src/utils/const'
+import { formLayout } from 'src/utils/const'
 
 const ChangePassword = ({ setVisible, user }) => {
   const [confirmDirty, setConfirmDirty] = useState(false)
@@ -54,7 +54,7 @@ const ChangePassword = ({ setVisible, user }) => {
         cancelText="取消"
         okText="确定"
       >
-        <Form {...formItemLayout} className="change-password-form" form={form}>
+        <Form {...formLayout} className="change-password-form" form={form}>
           <Form.Item label="用户名称">
             <span>{user?.username}</span>
           </Form.Item>

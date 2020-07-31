@@ -5,7 +5,7 @@ import api from 'src/utils/api'
 import * as roomAction from 'src/actions/room'
 import * as appAction from 'src/actions/app'
 import { useDispatch, useSelector } from 'react-redux'
-import { EntityStatus, formItemLayout } from 'src/utils/const'
+import { EntityStatus, formLayout } from 'src/utils/const'
 import { buildParameters } from 'src/utils/common'
 
 const Room = ({ match, history }) => {
@@ -52,7 +52,7 @@ const Room = ({ match, history }) => {
       <div className="room__edit-title">{status}考场</div>
       <Form
         onSubmit={handleSubmit}
-        {...formItemLayout}
+        {...formLayout}
         className="room__edit-form"
         form={form}
       >

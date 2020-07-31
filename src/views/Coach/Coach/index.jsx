@@ -1,72 +1,61 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import './index.less'
 import { Form, Input, Button, Radio, message } from 'antd'
-import * as coachAction from 'src/actions/coach'
-import { useDispatch, useSelector } from 'react-redux'
-import { EntityStatus, formItemLayout } from 'src/utils/const'
+import { EntityStatus, formLayout } from 'src/utils/const'
 import { buildParameters } from 'src/utils/common'
-import useMutation from 'src/hooks/useMutation'
+import api from 'src/utils/api'
+import { useDispatch } from 'react-redux'
+import { getAllCoaches } from 'src/actions/app'
+import FormInput from 'src/components/FormInput'
 
 const { TextArea } = Input
 
 const Coach = ({ match, history }) => {
   const dispatch = useDispatch()
-  const { postApi } = useMutation()
-  const { coachInEdit } = useSelector((state) => state.coach)
+  const [form] = Form.useForm()
   const coachId = match.params.id
   const isEdit = !!coachId
   const status = isEdit ? EntityStatus.EDIT : EntityStatus.CREATE
-  const [form] = Form.useForm()
-  const { getFieldDecorator } = form
 
   useEffect(() => {
-    if (coachId) {
-      dispatch(coachAction.getCoach(coachId))
+    const fetchData = async () => {
+      const result = await api.get(`/coach/item?id=${coachId}`)
+      form.setFieldsValue(result)
     }
-  }, [dispatch, coachId])
+    if (coachId) {
+      fetchData()
+    }
+  }, [coachId, form])
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    form.validateFields(async (err, values) => {
-      if (!err) {
-        let path = buildParameters('/coach/edit?', {
-          phone: values.phone,
-          username: values.name,
-          nickname: values.nickname,
-          isEnable: values.isEnable,
-          note: values.note,
-        })
-        if (isEdit) {
-          path += `&id=${coachId}`
-        }
-        await postApi(path)
-        message.success(`${status}教练成功`)
-        history.push('/coaches')
-      }
-    })
+  const onFinish = async (values) => {
+    if (!!coachId) {
+      values.id = coachId
+    }
+    await api.post(buildParameters(`/client/school/edit`, values))
+    message.success(`${status}教练成功`)
+    dispatch(getAllCoaches())
+    history.push('/coaches')
   }
 
   return (
     <div className="page coach">
       <div className="coach__edit-title">{status}教练</div>
       <Form
-        onSubmit={handleSubmit}
-        {...formItemLayout}
+        {...formLayout}
         className="coach__edit-form"
         form={form}
+        onFinish={onFinish}
       >
-        <Form.Item label="手机号">
-          {getFieldDecorator('phone', {
-            initialValue: isEdit ? coachInEdit?.phone : '',
-            rules: [{ required: true }],
-          })(<Input type="text" placeholder="请输入手机号" />)}
-        </Form.Item>
+        <FormInput label="手机号" name="phone" />
+        <FormInput label="姓名" name="name" />
         <Form.Item label="姓名">
           {getFieldDecorator('name', {
             initialValue: isEdit ? coachInEdit?.username : '',
             rules: [{ required: true }],
           })(<Input disabled={isEdit} type="text" placeholder="请输入姓名" />)}
         </Form.Item>
+
+        {/* 
         <Form.Item label="昵称">
           {getFieldDecorator('nickname', {
             initialValue: isEdit ? coachInEdit?.nickname : '',
@@ -87,7 +76,7 @@ const Coach = ({ match, history }) => {
           {getFieldDecorator('note', {
             initialValue: isEdit ? coachInEdit?.note : '',
           })(<TextArea rows={2} placeholder="请输入描述" />)}
-        </Form.Item>
+        </Form.Item> */}
         <Form.Item className="coach__edit-form--btns">
           <Button
             className="edit-cancel-btn"

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import './index.less'
 import api from 'src/utils/api'
 import { Form, message, Input, Button, Select } from 'antd'
-import { formItemLayout } from 'src/utils/const'
+import { formLayout } from 'src/utils/const'
 
 const StudentExamGroup = ({ match, history }) => {
   const [studExamGroup, setStudExamGroup] = useState()
@@ -56,7 +56,7 @@ const StudentExamGroup = ({ match, history }) => {
           <div className="exam-group__edit-title">考试分组</div>
           <Form
             onSubmit={handleSubmit}
-            {...formItemLayout}
+            {...formLayout}
             className="exam-group__edit-form"
             form={form}
           >

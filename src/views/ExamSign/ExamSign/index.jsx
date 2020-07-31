@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import './index.less'
 import { useDispatch, useSelector } from 'react-redux'
-import { Relationships, formItemLayout } from 'src/utils/const'
+import { Relationships, formLayout } from 'src/utils/const'
 import { Form, Input, Button, Select, Radio, DatePicker } from 'antd'
 import * as examSignAction from 'src/actions/examSign'
 import { updateExamSign } from '../helper'
@@ -93,7 +93,7 @@ const ExamSign = ({ match, history }) => {
       <div className="sign__edit-title">{isEdit ? '编辑报名' : '人工报名'}</div>
       <Form
         onSubmit={handleSubmit}
-        {...formItemLayout}
+        {...formLayout}
         className="sign__edit-form"
         form={form}
       >

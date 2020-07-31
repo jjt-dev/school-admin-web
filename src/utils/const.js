@@ -7,7 +7,7 @@ export const formLayoutLogin = {
   },
 }
 
-export const formItemLayout = {
+export const formLayout = {
   labelCol: {
     xs: { span: 24 },
     sm: { span: 5 },

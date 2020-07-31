@@ -5,7 +5,7 @@ import api from 'src/utils/api'
 import * as examinerAction from 'src/actions/examiner'
 import * as appAction from 'src/actions/app'
 import { useDispatch, useSelector } from 'react-redux'
-import { EntityStatus, formItemLayout } from 'src/utils/const'
+import { EntityStatus, formLayout } from 'src/utils/const'
 import Avatar from 'src/components/Avatar'
 import { buildParameters } from 'src/utils/common'
 
@@ -79,7 +79,7 @@ const Examiner = ({ match, history }) => {
       <div className="examiner__edit-title">{status}考官</div>
       <Form
         onSubmit={handleSubmit}
-        {...formItemLayout}
+        {...formLayout}
         className="examiner__edit-form"
         form={form}
       >

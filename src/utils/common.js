@@ -79,8 +79,9 @@ export const chineseDate = () => {
 }
 
 export const buildParameters = (path, parameters) => {
+  path += '?'
   Object.keys(parameters).forEach((key) => {
-    if (typeof isNotEmpty(parameters[key])) {
+    if (isNotEmpty(String(parameters[key]))) {
       path += `&${key}=${encodeURIComponent(parameters[key])}`
     }
   })

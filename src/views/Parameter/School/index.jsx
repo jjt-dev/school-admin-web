@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import './index.less'
 import { Form, Input, Button, message } from 'antd'
 import api from 'src/utils/api'
-import { formItemLayout } from 'src/utils/const'
+import { formLayout } from 'src/utils/const'
 import Avatar from 'src/components/Avatar'
 
 const { TextArea } = Input
@@ -54,7 +54,7 @@ const School = () => {
       {school && (
         <Form
           onSubmit={handleSubmit}
-          {...formItemLayout}
+          {...formLayout}
           className="school__edit-form"
           form={form}
         >
