@@ -46,10 +46,11 @@ const CustomTable = ({
   return (
     <Table
       {...tableProps}
+      loading={false}
       rowSelection={rowSelection}
       pagination={pagination && finalPagination}
-      onChange={(paginator, filters, sorter) =>
-        fetchTable({ __tableChange__: { paginator, filters, sorter } })
+      onChange={(paginator, filters) =>
+        fetchTable({ __tableChange__: { paginator, filters } })
       }
     />
   )

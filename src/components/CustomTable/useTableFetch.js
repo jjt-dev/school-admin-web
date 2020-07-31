@@ -16,7 +16,6 @@ const useTableFetch = (defaultPath = null, options = {}) => {
     current: 1,
     pageSize: Number(defaultPageSizeOptions[0]),
   })
-  const [sorter, setSorter] = useState({})
   const [filters, setFilters] = useState({})
   const defaultSearchRef = useRef(defaultSearch)
   const [search, setSearch] = useState(defaultSearchRef.current)
@@ -43,17 +42,12 @@ const useTableFetch = (defaultPath = null, options = {}) => {
         const {
           paginator: newPaginator,
           filters: newFilters,
-          sorter: newSorter,
         } = value.__tableChange__
         setPaignator({
           current: newPaginator.current,
           pageSize: newPaginator.pageSize,
         })
         setFilters(newFilters)
-        setSorter({
-          sort: newSorter.field,
-          direction: newSorter.order,
-        })
         return
       }
 
@@ -134,7 +128,6 @@ const useTableFetch = (defaultPath = null, options = {}) => {
         search,
         paginator,
         filters,
-        sorter,
         setData,
         setTotal,
         hasPagination
@@ -182,7 +175,6 @@ const useTableFetch = (defaultPath = null, options = {}) => {
         search,
         paginator,
         filters,
-        sorter,
         setData,
         setTotal,
         hasPagination
@@ -195,7 +187,6 @@ const useTableFetch = (defaultPath = null, options = {}) => {
     forceRefreshCount,
     debouncedFetch,
     filters,
-    sorter,
     hasPagination,
   ])
 

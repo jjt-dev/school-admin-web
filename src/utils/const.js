@@ -18,6 +18,11 @@ export const formLayout = {
   },
 }
 
+export const emptyLayout = {
+  labelCol: {},
+  wrapperCol: {},
+}
+
 /**
  * 分页默认配置
  */

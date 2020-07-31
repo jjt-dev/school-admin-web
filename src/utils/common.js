@@ -1,7 +1,7 @@
 import * as queryString from 'query-string'
 import moment from 'moment'
 import { message } from 'antd'
-import { ExamStates, SignStates } from './const'
+import { EntityStatus, ExamStates, SignStates } from './const'
 import domtoimage from 'dom-to-image'
 import confirm from 'antd/lib/modal/confirm'
 import api from './api'
@@ -197,4 +197,8 @@ export const confirmUpdate = ({
       console.log('Cancel')
     },
   })
+}
+
+export const getStatus = (isEdit) => {
+  return isEdit ? EntityStatus.EDIT : EntityStatus.CREATE
 }

@@ -1,23 +1,33 @@
 import React, { useState } from 'react'
 import ActionBar from './ActionBar'
-import { Modal, Table, message } from 'antd'
+import { Modal, message } from 'antd'
 import './index.less'
-import { classListColumns } from '../helper'
+import { classListColumns } from './helper'
 import api from 'src/utils/api'
-import useListSearch from 'src/hooks/useListSearch'
-import { parseSearches } from 'src/utils/common'
+import { buildParameters, confirmUpdate, parseSearches } from 'src/utils/common'
 import ClassExamineeList from './ClassExamineeList'
+import CustomTable from 'src/components/CustomTable'
 
+const { useTableFetch } = CustomTable
 const { confirm } = Modal
 
-const CoachClassList = ({ match, history, location }) => {
+const CoachClassList = ({ match, location }) => {
+  const coachId = match.params.id
+  const classList = useTableFetch(`/coach/class/page?coachId=${coachId}`)
   const [classInEdit, setClassInEdit] = useState()
   const [selectedClass, setSelectedClass] = useState()
-  const coachId = match.params.id
   const { coachName } = parseSearches(location)
-  const { data, refetchList, pagination } = useListSearch(`/coach/class/page`, {
-    coachId,
-  })
+
+  const deleteClass = (coachClass) => {
+    const entity = {
+      status: '删除',
+      title: '学校',
+      titleValue: coachClass.name,
+      path: `/coach/class/del?id=${coachClass.id}`,
+      callback: () => classList.fetchTable(),
+    }
+    confirmUpdate(entity)
+  }
 
   const confirmDeleteCoach = (coachClass) => {
     confirm({
@@ -34,33 +44,30 @@ const CoachClassList = ({ match, history, location }) => {
   }
 
   const updateClass = async (classId, newClassName) => {
-    await api.post(
-      `/coach/class/edit?coachId=${coachId}&name=${newClassName}&id=${classId}`
-    )
+    const params = {
+      coachId,
+      name: newClassName,
+      id: classId,
+    }
+    await api.post(buildParameters('/coach/class/edit', params))
     setClassInEdit()
-    refetchList()
+    classList.fetchTable()
   }
 
   return (
-    <div className="page class-list">
-      <div className="class-list__title">{coachName}教练班级列表</div>
-      <ActionBar coachId={coachId} refetchList={refetchList} />
-      <Table
-        className="class-list__table"
+    <div className="page page-list">
+      <div className="page-list__title">{coachName}教练班级列表</div>
+      <ActionBar coachId={coachId} />
+      <CustomTable
+        {...classList}
         columns={classListColumns(
-          history,
           confirmDeleteCoach,
           classInEdit,
           setClassInEdit,
           updateClass,
           setSelectedClass
         )}
-        dataSource={data}
         rowKey="id"
-        size="middle"
-        bordered={true}
-        pagination={pagination}
-        onChange={(value) => refetchList({ paginator: value })}
       />
       {selectedClass && (
         <ClassExamineeList

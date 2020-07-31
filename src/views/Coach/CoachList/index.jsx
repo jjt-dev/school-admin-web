@@ -15,7 +15,7 @@ const CoachList = () => {
     const entity = {
       status: '删除',
       title: '教练',
-      titleValue: coach.name,
+      titleValue: coach.username,
       path: `/coach/del?id=${coach.id}`,
       callback: () => coachList.fetchTable(),
     }
