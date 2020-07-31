@@ -1,32 +1,33 @@
-import React from 'react'
-import { Button, Input } from 'antd'
-import { useState } from 'react'
+import { Input } from 'antd'
+import Button from 'antd/es/button'
+import React, { useState } from 'react'
 import { useHistory } from 'react-router'
+import './index.less'
 
-const ActionBar = ({ updateFilter }) => {
+const ListHeader = ({ fetchTable, path, placeholder }) => {
   const history = useHistory()
   const [search, setSearch] = useState('')
 
   const handleSearch = () => {
-    updateFilter('search', search)
+    fetchTable({ keyword: search })
   }
 
   const clearSearch = () => {
     setSearch('')
-    updateFilter('search', '')
+    fetchTable({ keyword: '' })
   }
 
   return (
-    <div className="coach-list__action">
-      <Button type="primary" onClick={() => history.push('/coach')}>
+    <div className="list-header">
+      <Button type="primary" onClick={() => history.push(path)}>
         新增
       </Button>
-      <div className="coach-list__action-right">
+      <div className="list-header-right">
         <Input
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           onPressEnter={handleSearch}
-          placeholder="请输入姓名或电话"
+          placeholder={placeholder}
           style={{ width: 220 }}
         />
         <Button className="mr-10" onClick={handleSearch}>
@@ -38,4 +39,4 @@ const ActionBar = ({ updateFilter }) => {
   )
 }
 
-export default ActionBar
+export default ListHeader

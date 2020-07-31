@@ -3,6 +3,8 @@ import moment from 'moment'
 import { message } from 'antd'
 import { ExamStates, SignStates } from './const'
 import domtoimage from 'dom-to-image'
+import confirm from 'antd/lib/modal/confirm'
+import api from './api'
 
 export const parseSearches = (location) => {
   return queryString.parse(location.search)
@@ -171,4 +173,27 @@ export const downloadImg = async (url) => {
   document.body.appendChild(a)
   a.click()
   document.body.removeChild(a)
+}
+
+export const confirmUpdate = ({
+  status,
+  title,
+  titleValue,
+  path,
+  callback,
+}) => {
+  confirm({
+    title: `请问您确认要${status}该${title}吗?`,
+    content: `${title}名: ${titleValue}`,
+    okText: '确定',
+    cancelText: '取消',
+    onOk: async () => {
+      await api.post(path)
+      message.success(`${title}${status}成功`)
+      callback && callback()
+    },
+    onCancel() {
+      console.log('Cancel')
+    },
+  })
 }

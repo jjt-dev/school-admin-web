@@ -1,69 +1,39 @@
-import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import * as coachAction from 'src/actions/coach'
-import ActionBar from './ActionBar'
-import { Modal, Table, message } from 'antd'
+import React from 'react'
 import './index.less'
-import { coachListColumns } from '../helper'
-import { pagConfig } from 'src/utils/const'
 import { useHistory } from 'react-router'
-import api from 'src/utils/api'
-
-const { confirm } = Modal
+import CustomTable from 'src/components/CustomTable'
+import ListHeader from 'src/components/ListHeader'
+import { confirmUpdate } from 'src/utils/common'
+import { coachListColumns } from './helper'
+const { useTableFetch } = CustomTable
 
 const CoachList = () => {
+  const coachList = useTableFetch(`/coach/page`)
   const history = useHistory()
-  const dispatch = useDispatch()
-  const { coachList, filter, total } = useSelector((state) => state.coach)
-  const { page, rows } = filter.paginator
 
-  useEffect(() => {
-    dispatch(coachAction.getCoachList(filter))
-  }, [dispatch, filter])
-
-  useEffect(() => {
-    return () => dispatch(coachAction.resetStore())
-  }, [dispatch])
-
-  const updateFilter = (field, value) => {
-    dispatch(coachAction.updateFilter(field, value))
-  }
-
-  const confirmDeleteCoach = (coach) => {
-    confirm({
-      title: '请问您确认要删除该教练吗?',
-      content: `教练名: ${coach.username}`,
-      onOk: async () => {
-        await api.post(`/coach/del?id=${coach.id}`)
-        message.success('教练删除成功')
-        dispatch(coachAction.getCoachList(filter))
-      },
-      onCancel() {
-        console.log('Cancel')
-      },
-    })
+  const deleteCoach = (coach) => {
+    const entity = {
+      status: '删除',
+      title: '教练',
+      titleValue: coach.name,
+      path: `/coach/del?id=${coach.id}`,
+      callback: () => coachList.fetchTable(),
+    }
+    confirmUpdate(entity)
   }
 
   return (
-    <div className="page coach-list">
-      <div className="coach-list__title">教练列表</div>
-      <ActionBar updateFilter={updateFilter} filter={filter} />
-      <Table
-        className="coach-list__table"
-        columns={coachListColumns(history, confirmDeleteCoach)}
-        dataSource={coachList}
+    <div className="page page-list">
+      <div className="page-list__title">教练列表</div>
+      <ListHeader
+        fetchTable={coachList.fetchTable}
+        path="/coach"
+        placeholder="请输入名称或联系方式"
+      />
+      <CustomTable
+        {...coachList}
+        columns={coachListColumns(history, deleteCoach)}
         rowKey="id"
-        size="middle"
-        bordered={true}
-        pagination={{
-          ...pagConfig,
-          current: page,
-          pageSize: rows,
-          total,
-        }}
-        onChange={({ current, pageSize }) =>
-          updateFilter('paginator', { page: current, rows: pageSize })
-        }
       />
     </div>
   )

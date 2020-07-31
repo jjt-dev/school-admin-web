@@ -29,22 +29,22 @@ import CoachClassList from './Coach/CoachClassList'
 
 export const routes = [
   { path: '/login', comp: Login },
-  // { path: '/coaches', comp: CoachList },
-  // {
-  //   path: '/coach/:id/classes',
-  //   comp: CoachClassList,
-  //   back: { path: '/coaches', breadcrumbs: ['教练管理', '教练班级'] },
-  // },
-  // {
-  //   path: '/coach',
-  //   comp: Coach,
-  //   back: { path: '/coaches', breadcrumbs: ['教练管理', '新增教练'] },
-  // },
-  // {
-  //   path: '/coach/:id',
-  //   comp: Coach,
-  //   back: { path: '/coaches', breadcrumbs: ['教练管理', '编辑教练'] },
-  // },
+  { path: '/coaches', comp: CoachList },
+  {
+    path: '/coach/:id/classes',
+    comp: CoachClassList,
+    back: { path: '/coaches', breadcrumbs: ['教练管理', '教练班级'] },
+  },
+  {
+    path: '/coach',
+    comp: Coach,
+    back: { path: '/coaches', breadcrumbs: ['教练管理', '新增教练'] },
+  },
+  {
+    path: '/coach/:id',
+    comp: Coach,
+    back: { path: '/coaches', breadcrumbs: ['教练管理', '编辑教练'] },
+  },
   // { path: '/exams', comp: ExamList },
   // {
   //   path: '/exam',
