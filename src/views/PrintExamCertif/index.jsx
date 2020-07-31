@@ -8,7 +8,6 @@ import useListSearch from 'src/hooks/useListSearch'
 import './index.less'
 import api from 'src/utils/api'
 import { useDispatch } from 'react-redux'
-import { closeLoadingBar, showLoadingBar } from 'src/actions/app'
 
 const PrintExamCertif = ({ match, location }) => {
   const dispatch = useDispatch()
