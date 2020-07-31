@@ -58,10 +58,10 @@ const ReportHoriz = ({
         <UploadBgImage callback={setImgUrl} />
         <Button
           onClick={() => {
-            setShowBgImgModal(true)
+            window.open(`${getDomain()}${imgUrl}`, '_blank')
           }}
         >
-          打印背景图片
+          打开背景图片
         </Button>
         <Button type="primary" onClick={updateTemplate}>
           保存
