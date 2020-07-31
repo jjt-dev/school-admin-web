@@ -120,8 +120,7 @@ export const updateExam = async (
   status,
   id,
   values,
-  examItemList,
-  examLevelList
+  checkedLevels
 ) => {
   const { title, examTime, signTime, note, address, isEnable } = values
   const examStartTime = examTime[0].format(timeFormat)
@@ -129,21 +128,24 @@ export const updateExam = async (
   const signStartTime = signTime[0].format(timeFormat)
   const signEndTime = signTime[1].format(timeFormat)
 
-  const items = examItemList
-    .filter((item) => item.checked)
-    .map((item) => ({ examItemId: item.id, ratio: item.ratio / 100 }))
+  const levelItems = {}
+  checkedLevels.forEach((level) => {
+    const { id: levelId, items } = level
+    const temp = Object.keys(items).map((itemId) => ({
+      examItemId: itemId,
+      ratio: items[itemId] / 100,
+    }))
+    levelItems[levelId] = temp
+  })
 
-  const levelsCanSign = examLevelList
-    .filter((level) => level.checked)
-    .map((level) => level.id)
-    .join(',')
+  const levelsCanSign = checkedLevels.map((level) => level.id).join(',')
 
   const postData = {
     id,
     address,
     examStartTime,
     examEndTime,
-    items,
+    levelItems,
     levelsCanSign,
     note,
     signStartTime,

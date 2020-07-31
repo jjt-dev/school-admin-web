@@ -16,6 +16,10 @@
       margin: 0 auto;
       margin-bottom: 15px;
 
+      .selected-items-0 {
+        margin-top: 15px;
+      }
+
       .ant-calendar-picker-input {
         width: 300px;
       }
@@ -78,6 +82,16 @@
 
       &-error {
         color: #f5222d;
+      }
+
+      label::before {
+        display: inline-block;
+        margin-right: 4px;
+        color: #f5222d;
+        font-size: 14px;
+        font-family: SimSun, sans-serif;
+        line-height: 1;
+        content: '*';
       }
     }
   }

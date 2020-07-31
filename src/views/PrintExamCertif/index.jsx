@@ -6,15 +6,33 @@ import { Empty } from 'antd'
 import { buildPath } from './helper'
 import useListSearch from 'src/hooks/useListSearch'
 import './index.less'
+import api from 'src/utils/api'
+import { useDispatch } from 'react-redux'
 
 const PrintExamCertif = ({ match, location }) => {
+  const dispatch = useDispatch()
+  const { id: examId, signId } = match.params
   const ExamCertifType = CertificateTypes[2]
   const [template, setTemplate] = useState()
   const [schoolConfig] = useFetch(`/school/item`)
-  const [examCertifInfo] = useFetch(buildPath(match, location))
   const { data: templates } = useListSearch(`/config/file/page`, {
     pageSize: 1000,
   })
+  const [examCertifInfos, setExamCertifInfos] = useState()
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const temp = await api.get(buildPath(examId, signId, location))
+      const result = []
+      temp.forEach((item) => {
+        item.signLevels.forEach((signLevel) => {
+          result.push({ ...item, signLevel })
+        })
+      })
+      setExamCertifInfos(result)
+    }
+    fetchData()
+  }, [dispatch, examId, location, signId])
 
   useEffect(() => {
     setTemplate(templates.find((item) => item.type === ExamCertifType.id))
@@ -28,10 +46,10 @@ const PrintExamCertif = ({ match, location }) => {
 
   return (
     <>
-      {schoolConfig && examCertifInfo && (
+      {schoolConfig && examCertifInfos && (
         <ExamCertifPrint
           template={template}
-          examCertifInfo={examCertifInfo}
+          examCertifInfos={examCertifInfos}
           schoolConfig={schoolConfig}
         />
       )}

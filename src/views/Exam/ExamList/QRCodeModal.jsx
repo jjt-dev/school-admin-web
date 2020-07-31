@@ -5,6 +5,7 @@ import * as QRCode from 'qrcode.react'
 
 const QRCodeModal = ({ exam, setSelectedExam }) => {
   const { title, hashCode } = exam
+  const qrCodeValue = `${process.env.REACT_APP_DOMAIN}?examCode=${hashCode}`
 
   const saveAsImage = (id) => {
     domToImage(
@@ -28,7 +29,7 @@ const QRCodeModal = ({ exam, setSelectedExam }) => {
       <div id={hashCode} className="exam-qrcode__content">
         <div className="exam-qrcode__content-title">考试: {title}</div>
         <div className="exam-qrcode__content-code">
-          <QRCode value={hashCode} size={350} />
+          <QRCode value={qrCodeValue} size={350} />
         </div>
       </div>
     </Modal>

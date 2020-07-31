@@ -1,31 +1,23 @@
-import React, { useState, useEffect } from 'react'
-import api from 'src/utils/api'
+import React from 'react'
 import { Empty, Tabs } from 'antd'
 import ReportVertical from './ReportVertical'
 import ReportVerticalWithRight from './ReportVerticalWithRight'
 import ReportHoriz from './ReportHoriz'
 import './index.less'
+import useFetch from 'src/hooks/useFetch'
 
 const { TabPane } = Tabs
 
 const PrintReport = ({ match }) => {
-  const [examResult, setExamResult] = useState()
-  const signLevelId = match.params.signLevelId
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const examResults = await api.get(
-        `/exam/sign/getStudentExamResult?signLevelId=${signLevelId}`
-      )
-      setExamResult(examResults)
-    }
-    fetchData()
-  }, [signLevelId])
+  const { signId } = match.params
+  const [examResult] = useFetch(
+    `/exam/sign/getStudentExamResult?signId=${signId}`
+  )
 
   return (
     <div className="page print-report">
       {examResult ? (
-        <Tabs defaultActiveKey="0" onChange={() => {}}>
+        <Tabs defaultActiveKey="0">
           <TabPane tab="竖版" key="0">
             <ReportVertical examResultContainer={examResult} />
           </TabPane>

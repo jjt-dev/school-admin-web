@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import './index.less'
 import { useDispatch, useSelector } from 'react-redux'
 import { formItemLayout, EntityStatus } from 'src/utils/const'
@@ -10,23 +10,24 @@ import {
   Checkbox,
   Row,
   Col,
-  InputNumber,
   Radio,
 } from 'antd'
 import * as examAction from 'src/actions/exam'
-import { updateExam, getExamItemValue } from '../helper'
+import { updateExam } from '../helper'
 import moment from 'moment'
 import api from 'src/utils/api'
+import { enforceLevelList, validateItems } from './helper'
+import LevelExamItems from './LevelExamItems'
 
 const { TextArea } = Input
 const { RangePicker } = DatePicker
 
 const Exam = ({ match, history }) => {
   const dispatch = useDispatch()
-  const [itemsValid, setItemsValid] = useState(true)
   const { examItemList, examLevelList, examInEdit } = useSelector(
     (state) => state.exam
   )
+  const checkedLevels = examLevelList.filter((level) => level.items)
   const examId = match.params.id
   const isEdit = !!examId
   const status = isEdit ? EntityStatus.EDIT : EntityStatus.CREATE
@@ -40,22 +41,7 @@ const Exam = ({ match, history }) => {
       if (examId) {
         const exam = await api.get(`/examination/item?id=${examId}`)
         dispatch(examAction.getExam(exam))
-
-        exam.itemes.forEach((item) => {
-          const index = examItemList.findIndex((i) => i.id === item.examItemId)
-          if (index > -1) {
-            examItemList[index].checked = true
-            examItemList[index].ratio = item.ratio * 100
-          }
-        })
-        exam.levelsCanSign.split('').forEach((levelId) => {
-          const index = examLevelList.findIndex(
-            (level) => level.id === Number(levelId)
-          )
-          if (index > -1) {
-            examLevelList[index].checked = true
-          }
-        })
+        examLevelList = enforceLevelList(exam, examLevelList)
       }
       dispatch(examAction.getExamItemList(examItemList))
       dispatch(examAction.getExamLevelList(examLevelList))
@@ -63,14 +49,12 @@ const Exam = ({ match, history }) => {
     fetchData()
   }, [dispatch, examId])
 
-  const handleItemRatioChange = (itemId, ratio) => {
-    validateItems()
-    dispatch(examAction.updateItemRatio({ itemId, ratio }))
+  const updateItemRatio = (levelId, itemId, ratio) => {
+    dispatch(examAction.updateItemRatio({ levelId, itemId, ratio }))
   }
 
-  const handleItemCheckChange = (itemId, e) => {
-    validateItems()
-    dispatch(examAction.updateItemCheck({ itemId, checked: e.target.checked }))
+  const selectItems = (levelId, selectedItems) => {
+    dispatch(examAction.selectItems({ levelId, selectedItems }))
   }
 
   const handleLevelCheckChange = (levelId, e) => {
@@ -79,26 +63,12 @@ const Exam = ({ match, history }) => {
     )
   }
 
-  const validateItems = () => {
-    let result
-    const selectedItems = examItemList.filter((item) => item.checked)
-    if (selectedItems.length === 0) {
-      result = false
-    } else {
-      let totalRatio = 0
-      selectedItems.map((item) => (totalRatio += item.ratio ?? 0))
-      result = totalRatio === 100
-    }
-    setItemsValid(result)
-    return result
-  }
-
   const handleSubmit = (e) => {
     e.preventDefault()
-    const itemsValid = validateItems()
+    const itemsValid = validateItems(checkedLevels)
     form.validateFields(async (err, values) => {
       if (!err && itemsValid) {
-        updateExam(history, status, examId, values, examItemList, examLevelList)
+        updateExam(history, status, examId, values, checkedLevels)
       }
     })
   }
@@ -199,43 +169,16 @@ const Exam = ({ match, history }) => {
             </Checkbox.Group>
           )}
         </Form.Item>
-        <Form.Item label="考项" className="exam__edit-form--item">
-          {getFieldDecorator('examItems', {
-            initialValue: isEdit
-              ? examInEdit?.itemes.map((item) => item.examItemId)
-              : '',
-            rules: [{ required: true }],
-          })(
-            <Checkbox.Group style={{ width: '100%' }}>
-              {examItemList &&
-                examItemList.map((item) => (
-                  <Row key={item.id}>
-                    <Col>
-                      <Checkbox
-                        value={item.id}
-                        onChange={(e) => handleItemCheckChange(item.id, e)}
-                      >
-                        {item.name}
-                      </Checkbox>
-                      <InputNumber
-                        defaultValue={getExamItemValue(examInEdit, item)}
-                        min={0}
-                        max={100}
-                        formatter={(value) => `${value}%`}
-                        parser={(value) => value.replace('%', '')}
-                        onChange={(e) => handleItemRatioChange(item.id, e)}
-                      />
-                    </Col>
-                  </Row>
-                ))}
-              {!itemsValid && (
-                <span className="exam__edit-form--item-error">
-                  请选择考项并且所选考项百分比总和应该为100
-                </span>
-              )}
-            </Checkbox.Group>
-          )}
-        </Form.Item>
+        {checkedLevels.map((level) => (
+          <LevelExamItems
+            getFieldDecorator={getFieldDecorator}
+            key={level.id}
+            level={level}
+            examItemList={examItemList}
+            selectItems={selectItems}
+            updateItemRatio={updateItemRatio}
+          />
+        ))}
         <Form.Item label="启用">
           {getFieldDecorator('isEnable', {
             initialValue: isEdit ? examInEdit?.isEnable : false,

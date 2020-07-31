@@ -43,7 +43,7 @@ const ExamCertificate = ({
       </div>
       <div className="exam-certificate__content">
         <div className="exam-certificate__content-logo">
-          {schoolConfig && (
+          {schoolConfig && schoolConfig.logoUrl && (
             <img
               className="exam-certificate__content-logo-school"
               src={`${getDomain()}${schoolConfig.logoUrl}`}
