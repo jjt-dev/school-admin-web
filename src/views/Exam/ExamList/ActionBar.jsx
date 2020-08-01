@@ -3,14 +3,12 @@ import { Button, Input, Select } from 'antd'
 import { useState } from 'react'
 import { useHistory } from 'react-router'
 import { ExamStates } from 'src/utils/const'
-import useFetch from 'src/hooks/useFetch'
 
 const { Option } = Select
 
-const ActionBar = ({ updateFilter }) => {
+const ActionBar = ({ updateFilter, canAddMockExam }) => {
   const history = useHistory()
   const [search, setSearch] = useState('')
-  const [canAddMockExam] = useFetch(`/examination/canShowMockBtn`)
 
   const handleSearch = () => {
     updateFilter('search', search)

@@ -9,12 +9,14 @@ import { pagConfig } from 'src/utils/const'
 import { useHistory } from 'react-router'
 import api from 'src/utils/api'
 import QRCodeModal from './QRCodeModal'
+import useFetch from 'src/hooks/useFetch'
 
 const { confirm } = Modal
 
 const ExamList = () => {
   const history = useHistory()
   const dispatch = useDispatch()
+  const [canAddMockExam, refetch] = useFetch(`/examination/canShowMockBtn`)
   const [selectedExam, setSelectedExam] = useState()
   const { examList, filter, total } = useSelector((state) => state.exam)
   const { page, rows } = filter.paginator
@@ -39,6 +41,7 @@ const ExamList = () => {
         await api.post(`/examination/del?id=${exam.id}`)
         message.success('删除考试成功')
         dispatch(examAction.getExamList(filter))
+        refetch()
       },
       onCancel() {
         console.log('Cancel')
@@ -49,7 +52,11 @@ const ExamList = () => {
   return (
     <div className="page exam-list">
       <div className="exam-list__title">考试列表</div>
-      <ActionBar updateFilter={updateFilter} filter={filter} />
+      <ActionBar
+        updateFilter={updateFilter}
+        filter={filter}
+        canAddMockExam={canAddMockExam}
+      />
       <Table
         className="exam-list__table"
         columns={examListColumns(history, confirmDeleteExam, setSelectedExam)}
