@@ -3,12 +3,14 @@ import { Button, Input, Select } from 'antd'
 import { useState } from 'react'
 import { useHistory } from 'react-router'
 import { ExamStates } from 'src/utils/const'
+import useFetch from 'src/hooks/useFetch'
 
 const { Option } = Select
 
 const ActionBar = ({ updateFilter }) => {
   const history = useHistory()
   const [search, setSearch] = useState('')
+  const [canAddMockExam] = useFetch(`/examination/canShowMockBtn`)
 
   const handleSearch = () => {
     updateFilter('search', search)
@@ -25,9 +27,24 @@ const ActionBar = ({ updateFilter }) => {
 
   return (
     <div className="exam-list__action">
-      <Button type="primary" onClick={() => history.push('/exam')}>
-        新增
-      </Button>
+      <div className="exam-list__action-btns">
+        <Button
+          type="primary"
+          onClick={() => history.push('/exam?isFormal=true')}
+          size="small"
+        >
+          新增正式考试
+        </Button>
+        {canAddMockExam && (
+          <Button
+            type="primary"
+            onClick={() => history.push('/exam?isFormal=false')}
+            size="small"
+          >
+            新增模拟考试
+          </Button>
+        )}
+      </div>
       <div className="exam-list__action-right">
         <div className="exam-select-state">
           <span>当前状态</span>

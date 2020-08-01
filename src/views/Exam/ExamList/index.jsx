@@ -31,7 +31,7 @@ const ExamList = () => {
     dispatch(examAction.updateFilter(field, value))
   }
 
-  const confirmDeleteCoach = (exam) => {
+  const confirmDeleteExam = (exam) => {
     confirm({
       title: '请问您确认要删除该考试吗?',
       content: `考试名: ${exam.title}`,
@@ -52,7 +52,7 @@ const ExamList = () => {
       <ActionBar updateFilter={updateFilter} filter={filter} />
       <Table
         className="exam-list__table"
-        columns={examListColumns(history, confirmDeleteCoach, setSelectedExam)}
+        columns={examListColumns(history, confirmDeleteExam, setSelectedExam)}
         dataSource={examList}
         rowKey="id"
         size="middle"

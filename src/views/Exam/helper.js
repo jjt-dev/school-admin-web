@@ -66,6 +66,10 @@ export const examListColumns = (
     render: (text, record) => <span>{record.isEnable ? '是' : '否'}</span>,
   },
   {
+    title: '考试类型',
+    render: (text, record) => <span>{record.isFormal ? '正式' : '模拟'}</span>,
+  },
+  {
     title: '考生列表',
     render: (text, record) => (
       <span
@@ -88,16 +92,14 @@ export const examListColumns = (
     ),
   },
   {
-    title: '支付线下收款平台费用',
-    render: (text, record) => <span className="table-action">查看</span>,
-  },
-  {
     title: '操作',
     render: (text, record) => (
       <>
         <span
           className="table-action"
-          onClick={() => history.push(`/exam/${record.id}`)}
+          onClick={() =>
+            history.push(`/exam/${record.id}?isFormal=${record.isFormal}`)
+          }
         >
           编辑
         </span>
@@ -122,7 +124,15 @@ export const updateExam = async (
   values,
   checkedLevels
 ) => {
-  const { title, examTime, signTime, note, address, isEnable } = values
+  const {
+    title,
+    examTime,
+    signTime,
+    note,
+    address,
+    isEnable,
+    isFormal,
+  } = values
   const examStartTime = examTime[0].format(timeFormat)
   const examEndTime = examTime[1].format(timeFormat)
   const signStartTime = signTime[0].format(timeFormat)
@@ -152,6 +162,7 @@ export const updateExam = async (
     signEndTime,
     title,
     isEnable,
+    isFormal,
   }
 
   await api.post(`/examination/edit`, postData)

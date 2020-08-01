@@ -18,12 +18,14 @@ import moment from 'moment'
 import api from 'src/utils/api'
 import { enforceLevelList, validateItems } from './helper'
 import LevelExamItems from './LevelExamItems'
+import { parseSearches } from 'src/utils/common'
 
 const { TextArea } = Input
 const { RangePicker } = DatePicker
 
-const Exam = ({ match, history, form }) => {
+const Exam = ({ match, history, form, location }) => {
   const dispatch = useDispatch()
+  const { isFormal } = parseSearches(location)
   const { examItemList, examLevelList, examInEdit } = useSelector(
     (state) => state.exam
   )
@@ -32,6 +34,7 @@ const Exam = ({ match, history, form }) => {
   const isEdit = !!examId
   const status = isEdit ? EntityStatus.EDIT : EntityStatus.CREATE
   const { getFieldDecorator } = form
+  const examType = isFormal === 'true' ? '正式' : '模拟'
 
   useEffect(() => {
     const fetchData = async () => {
@@ -67,6 +70,7 @@ const Exam = ({ match, history, form }) => {
     const itemsValid = validateItems(checkedLevels)
     form.validateFields(async (err, values) => {
       if (!err && itemsValid) {
+        values.isFormal = isFormal
         updateExam(history, status, examId, values, checkedLevels)
       }
     })
@@ -79,7 +83,10 @@ const Exam = ({ match, history, form }) => {
 
   return (
     <div className="page exam">
-      <div className="exam__edit-title">{status}考试</div>
+      <div className="exam__edit-title">
+        {status}
+        {examType}考试
+      </div>
       <Form
         onSubmit={handleSubmit}
         {...formItemLayout}
