@@ -2,13 +2,12 @@ import React from 'react'
 import { Button } from 'antd'
 import getEditClass from './EditClass'
 
-export const classListColumns = (
-  deleteClass,
+export const getClassColumns = (
   classInEdit,
   setClassInEdit,
   updateClass,
   setSelectedClass
-) => [
+) => (deleteClass) => [
   {
     title: '序号',
     key: 'index',

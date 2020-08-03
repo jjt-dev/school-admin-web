@@ -2,26 +2,34 @@ import React from 'react'
 import { confirmUpdate } from 'src/utils/common'
 import ListHeader from '../ListHeader'
 import CustomTable from '../CustomTable'
+import useActiveRoute from 'src/hooks/useActiveRoute'
 
 const { useTableFetch } = CustomTable
 
 const PageList = ({
-  path,
-  title,
-  titleProp = 'name',
   columns,
-  add = path,
+  addCallback,
+  defaultTableList,
   placeholder = '请输入查询条件',
   rowKey = 'id',
 }) => {
-  const tableList = useTableFetch(`${path}/page`)
+  const { editPath, title, titleProp = 'name' } = useActiveRoute()
+  let tableList = useTableFetch(defaultTableList ? '' : `${editPath}/page`)
+  if (defaultTableList) {
+    tableList = defaultTableList
+  }
+
+  // addCallback如果没有值，则取list的编辑路径
+  if (!addCallback) {
+    addCallback = editPath
+  }
 
   const deleteEntity = (entity) => {
     const payload = {
       status: '删除',
       title,
       titleValue: entity[titleProp],
-      path: `${path}/del?id=${entity.id}`,
+      path: `${editPath}/del?id=${entity.id}`,
       callback: () => tableList.fetchTable(),
     }
     confirmUpdate(payload)
@@ -32,7 +40,7 @@ const PageList = ({
       <div className="page-list__title">{title}列表</div>
       <ListHeader
         fetchTable={tableList.fetchTable}
-        add={add}
+        addCallback={addCallback}
         placeholder={placeholder}
       />
       <CustomTable

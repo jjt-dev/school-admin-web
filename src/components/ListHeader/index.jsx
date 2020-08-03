@@ -4,7 +4,11 @@ import React, { useState } from 'react'
 import { useHistory } from 'react-router'
 import './index.less'
 
-const ListHeader = ({ fetchTable, add, placeholder = '请输入查询条件' }) => {
+const ListHeader = ({
+  fetchTable,
+  addCallback,
+  placeholder = '请输入查询条件',
+}) => {
   const history = useHistory()
   const [search, setSearch] = useState('')
 
@@ -18,11 +22,11 @@ const ListHeader = ({ fetchTable, add, placeholder = '请输入查询条件' }) 
   }
 
   const handleAdd = () => {
-    if (typeof add === 'string') {
-      history.push(add)
+    if (typeof addCallback === 'string') {
+      history.push(addCallback)
       return
     }
-    add()
+    addCallback()
   }
 
   return (
