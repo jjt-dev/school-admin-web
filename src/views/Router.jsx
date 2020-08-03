@@ -37,11 +37,14 @@ export const routes = [
   },
   {
     path: '/coach',
+    title: '教练',
     comp: Coach,
     back: { path: '/coaches', breadcrumbs: ['教练管理', '新增教练'] },
   },
   {
     path: '/coach/:id',
+    defaultPath: '/coach',
+    title: '教练',
     comp: Coach,
     back: { path: '/coaches', breadcrumbs: ['教练管理', '编辑教练'] },
   },

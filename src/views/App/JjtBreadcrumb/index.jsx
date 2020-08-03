@@ -1,9 +1,12 @@
 import React from 'react'
 import { Breadcrumb, Button } from 'antd'
 import './index.less'
-import { useRouteMatch } from 'react-router'
+import { useHistory, useRouteMatch } from 'react-router'
+import useActiveRoute from 'src/hooks/useActiveRoute'
 
-const JjtBreadcrumb = ({ history, activeRoute }) => {
+const JjtBreadcrumb = () => {
+  const activeRoute = useActiveRoute()
+  const history = useHistory()
   const match = useRouteMatch({
     path: activeRoute?.path,
     strict: true,
