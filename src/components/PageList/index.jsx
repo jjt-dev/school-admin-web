@@ -12,6 +12,7 @@ const PageList = ({
   defaultTableList,
   placeholder = '请输入查询条件',
   rowKey = 'id',
+  children,
 }) => {
   const { editPath, title, titleProp = 'name' } = useActiveRoute()
   let tableList = useTableFetch(defaultTableList ? '' : `${editPath}/page`)
@@ -38,11 +39,15 @@ const PageList = ({
   return (
     <div className="page page-list">
       <div className="page-list__title">{title}列表</div>
-      <ListHeader
-        fetchTable={tableList.fetchTable}
-        addCallback={addCallback}
-        placeholder={placeholder}
-      />
+      {children ? (
+        { children }
+      ) : (
+        <ListHeader
+          fetchTable={tableList.fetchTable}
+          addCallback={addCallback}
+          placeholder={placeholder}
+        />
+      )}
       <CustomTable
         {...tableList}
         columns={columns(deleteEntity)}

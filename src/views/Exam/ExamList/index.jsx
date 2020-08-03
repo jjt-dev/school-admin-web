@@ -7,6 +7,7 @@ import { useHistory } from 'react-router'
 import QRCodeModal from './QRCodeModal'
 import useFetch from 'src/hooks/useFetch'
 import CustomTable from 'src/components/CustomTable'
+import PageList from 'src/components/PageList'
 
 const { useTableFetch } = CustomTable
 
@@ -33,20 +34,20 @@ const ExamList = () => {
   // }
 
   return (
-    <div className="page exam-list">
-      <div className="exam-list__title">考试列表</div>
-      <Header
-        fetchTable={examList.fetchTable}
-        canAddMockExam={canAddMockExam}
-      />
-      <CustomTable
-        columns={examListColumns(history, confirmDeleteExam, setSelectedExam)}
+    <>
+      <PageList
+        columns={examListColumns(setSelectedExam)}
         dataSource={examList}
-      />
+      >
+        <Header
+          fetchTable={examList.fetchTable}
+          canAddMockExam={canAddMockExam}
+        />
+      </PageList>
       {selectedExam && (
         <QRCodeModal exam={selectedExam} setSelectedExam={setSelectedExam} />
       )}
-    </div>
+    </>
   )
 }
 

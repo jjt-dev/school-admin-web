@@ -1,15 +1,11 @@
 import React from 'react'
-import { formatTime, copyToClipboard } from 'src/utils/common'
+import { formatTime, copyToClipboard, getLinkRow } from 'src/utils/common'
 import { timeFormat } from 'src/utils/const'
 import { ExamStates } from 'src/utils/const'
 import { Divider, message, Button } from 'antd'
 import api from 'src/utils/api'
 
-export const examListColumns = (
-  history,
-  confirmDeleteCoach,
-  setSelectedExam
-) => [
+export const examListColumns = (setSelectedExam) => [
   {
     title: '序号',
     key: 'index',
@@ -33,14 +29,14 @@ export const examListColumns = (
             size="small"
             onClick={() => window.open(link, '_blank')}
           >
-            打开链接
+            打开
           </Button>
           <Button
             style={{ marginRight: '5px' }}
             size="small"
             onClick={() => copyToClipboard(link)}
           >
-            复制链接
+            复制
           </Button>
           <Button size="small" onClick={() => setSelectedExam(record)}>
             二维码
@@ -69,28 +65,8 @@ export const examListColumns = (
     title: '考试类型',
     render: (text, record) => <span>{record.isFormal ? '正式' : '模拟'}</span>,
   },
-  {
-    title: '考生列表',
-    render: (text, record) => (
-      <span
-        className="table-action"
-        onClick={() => history.push(`/exam/${record.id}/signs`)}
-      >
-        查看
-      </span>
-    ),
-  },
-  {
-    title: '考试分组',
-    render: (text, record) => (
-      <span
-        className="table-action"
-        onClick={() => history.push(`/exam/${record.id}/group`)}
-      >
-        查看
-      </span>
-    ),
-  },
+  getLinkRow('考生列表', '/exam/::/signs', ['id']),
+  getLinkRow('考试分组', '/exam/::/group', ['id']),
   {
     title: '操作',
     render: (text, record) => (

@@ -232,7 +232,7 @@ export const getLinkRow = (title, link, placeholderNames) => {
       placeholderNames.forEach((item) => {
         link = link.replace('::', record[item])
       })
-      return <Link to={link}>{title}</Link>
+      return <Link to={link}>查看</Link>
     },
   }
 }
