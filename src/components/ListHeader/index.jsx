@@ -1,5 +1,4 @@
-import { Input } from 'antd'
-import Button from 'antd/es/button'
+import { Button, Input } from 'antd'
 import React, { useState } from 'react'
 import { useHistory } from 'react-router'
 import './index.less'

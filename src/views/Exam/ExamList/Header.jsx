@@ -1,26 +1,16 @@
 import React from 'react'
-import { Button, Input, Select } from 'antd'
-import { useState } from 'react'
+import { Button, Select } from 'antd'
 import { useHistory } from 'react-router'
 import { ExamStates } from 'src/utils/const'
+import ListHeaderRight from 'src/components/ListHeaderRight'
 
 const { Option } = Select
 
-const ActionBar = ({ updateFilter, canAddMockExam }) => {
+const Header = ({ fetchTable, canAddMockExam }) => {
   const history = useHistory()
-  const [search, setSearch] = useState('')
-
-  const handleSearch = () => {
-    updateFilter('search', search)
-  }
-
-  const clearSearch = () => {
-    setSearch('')
-    updateFilter('search', '')
-  }
 
   const handleChangeState = (examState) => {
-    updateFilter('examState', examState)
+    fetchTable('examState', examState)
   }
 
   return (
@@ -43,7 +33,7 @@ const ActionBar = ({ updateFilter, canAddMockExam }) => {
           </Button>
         )}
       </div>
-      <div className="exam-list__action-right">
+      <ListHeaderRight fetchTable={fetchTable}>
         <div className="exam-select-state">
           <span>当前状态</span>
           <Select
@@ -59,20 +49,9 @@ const ActionBar = ({ updateFilter, canAddMockExam }) => {
             ))}
           </Select>
         </div>
-        <Input
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          onPressEnter={handleSearch}
-          placeholder="请输入考试名称"
-          style={{ width: 220 }}
-        />
-        <Button className="mr-10" onClick={handleSearch}>
-          搜索
-        </Button>
-        <Button onClick={clearSearch}>清空</Button>
-      </div>
+      </ListHeaderRight>
     </div>
   )
 }
 
-export default ActionBar
+export default Header
