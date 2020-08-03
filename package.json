@@ -37,8 +37,8 @@
     "redux-actions": "^2.6.5"
   },
   "scripts": {
-    "start": "set PORT=3006 && react-app-rewired start",
-    "start:prod": "set PORT=3006 && env-cmd -f .env react-app-rewired start",
+    "start": "react-app-rewired start",
+    "start:prod": "env-cmd -f .env react-app-rewired start",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
     "test:coverage": "react-app-rewired test --coverage",
