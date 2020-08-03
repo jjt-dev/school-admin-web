@@ -7,8 +7,10 @@ import FormBottom from 'src/components/FormBottom'
 import useFetch from 'src/hooks/useFetch'
 import { useHistory, useRouteMatch } from 'react-router'
 import useActiveRoute from 'src/hooks/useActiveRoute'
+import FormInput from '../FormInput'
+import FormEnableRadio from '../FormEnableRadio'
 
-const PageForm = ({ callback, children }) => {
+const PageForm = ({ callback, formItems }) => {
   const match = useRouteMatch()
   const history = useHistory()
   const { path, title, back, defaultPath = path } = useActiveRoute()
@@ -39,7 +41,14 @@ const PageForm = ({ callback, children }) => {
         {title}
       </div>
       <Form {...formLayout} form={form} onFinish={onFinish}>
-        {children}
+        {formItems.map((item, index) => {
+          const { comp, disabled, ...rest } = item
+          rest.key = index
+          if (disabled === 'isEdit') {
+            rest.disabled = isEdit
+          }
+          return React.createElement(compMap[comp], rest)
+        })}
         <FormBottom path={back} />
       </Form>
     </div>
@@ -47,3 +56,8 @@ const PageForm = ({ callback, children }) => {
 }
 
 export default PageForm
+
+const compMap = {
+  FormInput,
+  FormEnableRadio,
+}
