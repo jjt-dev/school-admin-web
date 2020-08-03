@@ -1,10 +1,13 @@
+import React from 'react'
 import * as queryString from 'query-string'
 import moment from 'moment'
-import { message } from 'antd'
+import { Divider, message } from 'antd'
 import { EntityStatus, ExamStates, SignStates } from './const'
 import domtoimage from 'dom-to-image'
 import confirm from 'antd/lib/modal/confirm'
 import api from './api'
+import { Link } from 'react-router-dom'
+import Button from 'antd/es/button'
 
 export const parseSearches = (location) => {
   return queryString.parse(location.search)
@@ -202,3 +205,88 @@ export const confirmUpdate = ({
 export const getStatus = (isEdit) => {
   return isEdit ? EntityStatus.EDIT : EntityStatus.CREATE
 }
+
+export const tableOrder = {
+  title: '序号',
+  key: 'index',
+  render: (text, record, index) => `${index + 1}`,
+}
+
+export const getRow = (title, name) => ({
+  title,
+  dataIndex: name,
+  key: name,
+})
+
+export const getDateRow = (title, name) => ({
+  title,
+  dataIndex: name,
+  key: name,
+  render: (text, record) => <span>{formatTime(record[name])}</span>,
+})
+
+export const getLinkRow = (title, link, placeholderNames) => {
+  return {
+    title,
+    render: (text, record) => {
+      placeholderNames.forEach((item) => {
+        link = link.replace('::', record[item])
+      })
+      return <Link to={link}>{title}</Link>
+    },
+  }
+}
+
+export const getEnableRow = () => ({
+  title: '已启用',
+  dataIndex: 'isEnable',
+  key: 'isEnable',
+  render: (text, record) => <span>{record.isEnable ? '是' : '否'}</span>,
+})
+
+export const getActionRow = (path, deleteEntity) => ({
+  title: '操作',
+  key: 'action',
+  render: (text, record) => (
+    <>
+      <Link to={`${path}/${record.id}`}>编辑</Link>
+      <Divider type="vertical" />
+      <span
+        className="table-action"
+        onClick={() => {
+          deleteEntity(record)
+        }}
+      >
+        删除
+      </span>
+    </>
+  ),
+})
+
+export const getViewRow = (title, callback) => ({
+  title,
+  render: (text, record) => {
+    return (
+      <span>
+        <Button size="small" onClick={() => callback(record)}>
+          查看{title}
+        </Button>
+      </span>
+    )
+  },
+})
+
+export const getDeleteRow = (deleteEntity) => ({
+  title: '操作',
+  key: 'action',
+  render: (text, record) => (
+    <span
+      className="table-action"
+      onClick={() => {
+        deleteEntity(record)
+      }}
+    >
+      删除
+    </span>
+  ),
+})

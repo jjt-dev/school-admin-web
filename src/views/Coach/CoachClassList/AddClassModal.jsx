@@ -1,6 +1,7 @@
 import React from 'react'
-import { Button, Modal, Input, message } from 'antd'
+import { Input, message } from 'antd'
 import api from 'src/utils/api'
+import JjtModal from 'src/components/JjtModal'
 
 const { Search } = Input
 
@@ -13,22 +14,12 @@ const AddClassModal = ({ coachId, callback, hideModal }) => {
   }
 
   return (
-    <Modal
-      title="新增班级"
-      visible={true}
-      wrapClassName="add-coach-class"
-      onCancel={hideModal}
-      footer={[
-        <Button key="back" onClick={hideModal}>
-          取消
-        </Button>,
-      ]}
-    >
+    <JjtModal title="新增班级" customClass="add-coach-class" hide={hideModal}>
       <div className="add-coach-class__content">
         <span>班级名称：</span>
         <Search enterButton="确定" onSearch={addClass} />
       </div>
-    </Modal>
+    </JjtModal>
   )
 }
 

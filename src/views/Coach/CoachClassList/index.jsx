@@ -1,12 +1,17 @@
 import React, { useState } from 'react'
 import './index.less'
-import { getClassColumns } from './helper'
 import api from 'src/utils/api'
-import { buildParameters } from 'src/utils/common'
+import {
+  buildParameters,
+  getDeleteRow,
+  getViewRow,
+  tableOrder,
+} from 'src/utils/common'
 import ClassExamineeList from './ClassExamineeList'
 import CustomTable from 'src/components/CustomTable'
 import AddClassModal from './AddClassModal'
 import PageList from 'src/components/PageList'
+import getEditClass from './EditClass'
 
 const { useTableFetch } = CustomTable
 
@@ -32,7 +37,7 @@ const CoachClassList = ({ match }) => {
     <>
       <PageList
         defaultTableList={classList}
-        columns={getClassColumns(
+        columns={getColumns(
           classInEdit,
           setClassInEdit,
           updateClass,
@@ -59,3 +64,20 @@ const CoachClassList = ({ match }) => {
 }
 
 export default CoachClassList
+
+const getColumns = (
+  classInEdit,
+  setClassInEdit,
+  updateClass,
+  setSelectedClass
+) => (deleteClass) => [
+  tableOrder,
+  {
+    title: '班级名称',
+    dataIndex: 'name',
+    render: (text, record) =>
+      getEditClass(record, classInEdit, setClassInEdit, updateClass),
+  },
+  getViewRow('班级学生', setSelectedClass),
+  getDeleteRow(deleteClass),
+]
