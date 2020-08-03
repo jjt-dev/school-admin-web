@@ -1,8 +1,9 @@
-import { Button, Divider } from 'antd'
+import { Divider } from 'antd'
 import React from 'react'
+import { Link } from 'react-router-dom'
 import { formatTime } from 'src/utils/common'
 
-export const coachListColumns = (history, confirmDeleteCoach) => [
+export const getColumns = (deleteCoach) => [
   {
     title: '序号',
     key: 'index',
@@ -27,18 +28,9 @@ export const coachListColumns = (history, confirmDeleteCoach) => [
     title: '所带班级',
     render: (text, record) => {
       return (
-        <span>
-          <Button
-            size="small"
-            onClick={() =>
-              history.push(
-                `/coach/${record.id}/classes?coachName=${record.username}`
-              )
-            }
-          >
-            查看班级
-          </Button>
-        </span>
+        <Link to={`/coach/${record.id}/classes?coachName=${record.username}`}>
+          查看班级
+        </Link>
       )
     },
   },
@@ -59,17 +51,12 @@ export const coachListColumns = (history, confirmDeleteCoach) => [
     key: 'action',
     render: (text, record) => (
       <>
-        <span
-          className="table-action"
-          onClick={() => history.push(`/coach/${record.id}`)}
-        >
-          编辑
-        </span>
+        <Link to={`/coach/${record.id}`}>编辑</Link>
         <Divider type="vertical" />
         <span
           className="table-action"
           onClick={() => {
-            confirmDeleteCoach(record)
+            deleteCoach(record)
           }}
         >
           删除

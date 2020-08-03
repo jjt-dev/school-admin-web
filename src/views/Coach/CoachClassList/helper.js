@@ -3,7 +3,7 @@ import { Button } from 'antd'
 import getEditClass from './EditClass'
 
 export const classListColumns = (
-  confirmDeleteClass,
+  deleteClass,
   classInEdit,
   setClassInEdit,
   updateClass,
@@ -40,7 +40,7 @@ export const classListColumns = (
       <span
         className="table-action"
         onClick={() => {
-          confirmDeleteClass(record)
+          deleteClass(record)
         }}
       >
         删除

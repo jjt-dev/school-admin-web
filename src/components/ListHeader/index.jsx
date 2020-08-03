@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { useHistory } from 'react-router'
 import './index.less'
 
-const ListHeader = ({ fetchTable, path, placeholder }) => {
+const ListHeader = ({ fetchTable, add, placeholder = '请输入查询条件' }) => {
   const history = useHistory()
   const [search, setSearch] = useState('')
 
@@ -17,9 +17,17 @@ const ListHeader = ({ fetchTable, path, placeholder }) => {
     fetchTable({ keyword: '' })
   }
 
+  const handleAdd = () => {
+    if (typeof add === 'string') {
+      history.push(add)
+      return
+    }
+    add()
+  }
+
   return (
     <div className="list-header">
-      <Button type="primary" onClick={() => history.push(path)}>
+      <Button type="primary" onClick={handleAdd}>
         新增
       </Button>
       <div className="list-header-right">
