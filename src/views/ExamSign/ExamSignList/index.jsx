@@ -7,6 +7,7 @@ import { examSignListColumns } from '../helper'
 import api from 'src/utils/api'
 import useListSearch from 'src/hooks/useListSearch'
 import useFetch from 'src/hooks/useFetch'
+import { local, TOKEN } from 'src/utils/storage'
 
 const { confirm } = Modal
 
@@ -66,6 +67,17 @@ const ExamSignList = ({ match, history }) => {
     })
   }
 
+  const downloadExamineeInfo = () => {
+    window.open(
+      `${
+        process.env.REACT_APP_API_ROOT
+      }/statistics/getSomeExamAllResults?examinationId=${examId}&token=${encodeURIComponent(
+        local.getItem(TOKEN)
+      )}`,
+      '_blank'
+    )
+  }
+
   return (
     <div className="page sign-list">
       <ActionBar
@@ -75,6 +87,7 @@ const ExamSignList = ({ match, history }) => {
         examState={exam.currState}
         allCoaches={allCoaches}
         printExamCertifs={printExamCertifs}
+        downloadExamineeInfo={downloadExamineeInfo}
       />
       <Table
         className="sign-list__table"
