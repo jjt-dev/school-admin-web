@@ -5,6 +5,7 @@ import './index.less'
 
 const ListHeader = ({
   fetchTable,
+  showAdd,
   addCallback,
   placeholder = '请输入查询条件',
 }) => {
@@ -30,7 +31,11 @@ const ListHeader = ({
 
   return (
     <div className="list-header">
-      <Button type="primary" onClick={handleAdd}>
+      <Button
+        type="primary"
+        onClick={handleAdd}
+        style={{ visibility: showAdd ? 'visible' : 'hidden' }}
+      >
         新增
       </Button>
       <div className="list-header-right">

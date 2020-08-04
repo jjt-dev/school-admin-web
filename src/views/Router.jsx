@@ -183,12 +183,19 @@ export const routes = [
   //     breadcrumbs: ['考试管理', '分组管理', '考场与考官', '绑定考官'],
   //   },
   // },
-  // { path: '/examinees', comp: ExamineeList },
-  // {
-  //   path: '/examinee/:id',
-  //   comp: Examinee,
-  //   back: { path: '/examinees', breadcrumbs: ['考生管理', '考生详情'] },
-  // },
+  {
+    path: '/examinees',
+    editPath: '/examinee',
+    title: '考生',
+    titleProp: 'username',
+    comp: ExamineeList,
+  },
+  {
+    path: '/examinee/:id',
+    title: '考生',
+    comp: Examinee,
+    back: { path: '/examinees', breadcrumbs: ['考生管理', '考生详情'] },
+  },
   // { path: '/examiners', comp: ExaminerList },
   // {
   //   path: '/examiner',

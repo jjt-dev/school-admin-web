@@ -1,5 +1,4 @@
 import React from 'react'
-import './index.less'
 import PageList from 'src/components/PageList'
 import {
   getActionRow,
@@ -11,7 +10,7 @@ import {
 } from 'src/utils/common'
 
 const CoachList = () => {
-  return <PageList titleProp="username" columns={getColumns} />
+  return <PageList columns={getColumns} />
 }
 
 export default CoachList

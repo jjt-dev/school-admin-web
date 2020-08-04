@@ -8,15 +8,22 @@ const { useTableFetch } = CustomTable
 
 const PageList = ({
   columns,
+  showAdd = true,
   addCallback,
   deleteCallback,
   defaultTableList,
   placeholder = '请输入查询条件',
   rowKey = 'id',
+  path,
   children,
 }) => {
   const { editPath, title, titleProp = 'name' } = useActiveRoute()
-  let tableList = useTableFetch(defaultTableList ? '' : `${editPath}/page`)
+
+  let fetchPath = ''
+  if (!defaultTableList) {
+    fetchPath = path ? path : `${editPath}/page`
+  }
+  let tableList = useTableFetch(fetchPath)
   if (defaultTableList) {
     tableList = defaultTableList
   }
@@ -47,6 +54,7 @@ const PageList = ({
       {!children && (
         <ListHeader
           fetchTable={tableList.fetchTable}
+          showAdd={showAdd}
           addCallback={addCallback}
           placeholder={placeholder}
         />

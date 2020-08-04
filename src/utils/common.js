@@ -291,6 +291,12 @@ export const getDeleteRow = (deleteEntity) => ({
   ),
 })
 
+export const getDetailRow = (getPath) => ({
+  title: '操作',
+  key: 'action',
+  render: (text, record) => <Link to={getPath(record)}>详情</Link>,
+})
+
 export const getCustomRow = (title, getValue) => ({
   title,
   render: (text, record) => <span>{getValue(record)}</span>,

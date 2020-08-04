@@ -8,7 +8,6 @@ import app from 'src/reducers/app'
 import exam from 'src/reducers/exam'
 import examSign from 'src/reducers/examSign'
 import examGroup from 'src/reducers/examGroup'
-import examinee from 'src/reducers/examinee'
 import examiner from 'src/reducers/examiner'
 import room from 'src/reducers/room'
 import certificate from 'src/reducers/certificate'
@@ -23,7 +22,6 @@ export default (history) => {
       exam,
       examSign,
       examGroup,
-      examinee,
       examiner,
       room,
       certificate,

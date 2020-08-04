@@ -1,5 +1,4 @@
 import React from 'react'
-import './index.less'
 import { useDispatch } from 'react-redux'
 import PageForm from 'src/components/PageForm'
 import { getAllCoaches } from 'src/actions/app'
