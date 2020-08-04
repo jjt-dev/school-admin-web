@@ -89,7 +89,7 @@ const menus = [
   },
   {
     key: '6',
-    path: '/parameter',
+    path: '/parameter/1',
     prefix: '/parameter',
     icon: 'file-text',
     title: '参数管理',

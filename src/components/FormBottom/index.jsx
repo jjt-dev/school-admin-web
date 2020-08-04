@@ -8,7 +8,12 @@ const FormBottom = ({ path }) => {
 
   return (
     <Form.Item {...emptyLayout} className="form-bottom">
-      <Button onClick={() => history.push(path)}>取消</Button>
+      <Button
+        style={{ visibility: path ? 'visible' : 'hidden' }}
+        onClick={() => history.push(path)}
+      >
+        取消
+      </Button>
       <Button type="primary" htmlType="submit">
         确定
       </Button>

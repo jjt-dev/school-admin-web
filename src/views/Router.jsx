@@ -254,7 +254,12 @@ export const routes = [
   //   },
   // },
   // { path: '/certificates', comp: Certificates },
-  // { path: '/parameter', comp: Parameter },
+  {
+    path: '/parameter/:id',
+    title: '学校',
+    defaultPath: '/school',
+    comp: Parameter,
+  },
 ]
 
 const Router = () => (

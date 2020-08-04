@@ -31,7 +31,9 @@ const PageForm = ({ callback, formItems }) => {
     }
     await api.post(buildParameters(`${defaultPath}/edit`, values))
     message.success(`${status}${title}成功`)
-    history.push(back.path)
+    if (back) {
+      history.push(back.path)
+    }
     callback && callback()
   }
 

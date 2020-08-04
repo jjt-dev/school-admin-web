@@ -212,10 +212,11 @@ export const tableOrder = {
   render: (text, record, index) => `${index + 1}`,
 }
 
-export const getRow = (title, name) => ({
+export const getRow = (title, name, width) => ({
   title,
   dataIndex: name,
   key: name,
+  width,
 })
 
 export const getDateRow = (title, name) => ({
