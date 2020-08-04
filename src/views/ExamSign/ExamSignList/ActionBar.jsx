@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button, Input, Select } from 'antd'
 import { useState } from 'react'
-import { SignStates } from 'src/utils/const'
+import { SignStates, ExamStatus } from 'src/utils/const'
 import { findExamStateId } from 'src/utils/common'
 import CoachClassSelect from './CoachClassSelect'
 
@@ -14,6 +14,7 @@ const ActionBar = ({
   examState,
   allCoaches,
   printExamCertifs,
+  downloadExamineeInfo,
 }) => {
   const [search, setSearch] = useState('')
   const [selectedClasses, setSelectedClasses] = useState([])
@@ -44,6 +45,9 @@ const ActionBar = ({
           <Button type="primary" onClick={printExamCertifs}>
             打印准考证
           </Button>
+        )}
+        {examState === ExamStatus.finish && (
+          <Button onClick={downloadExamineeInfo}>下载考试信息</Button>
         )}
       </div>
       <div className="sign-list__bar-title">报考列表</div>

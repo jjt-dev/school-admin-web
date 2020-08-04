@@ -44,6 +44,14 @@ export const ExamStates = {
   40: '完成',
 }
 
+export const ExamStatus = {
+  waitForSign: 0,
+  signing: 10,
+  waitForExam: 20,
+  examing: 30,
+  finish: 40,
+}
+
 export const SignStates = {
   0: '待付款',
   10: '已支付等待分组',
