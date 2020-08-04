@@ -9,6 +9,7 @@ import { useHistory, useRouteMatch } from 'react-router'
 import useActiveRoute from 'src/hooks/useActiveRoute'
 import FormInput from '../FormInput'
 import FormEnableRadio from '../FormEnableRadio'
+import FormImage from '../FormImage'
 
 const PageForm = ({ callback, formItems }) => {
   const match = useRouteMatch()
@@ -42,10 +43,17 @@ const PageForm = ({ callback, formItems }) => {
       </div>
       <Form {...formLayout} form={form} onFinish={onFinish}>
         {formItems.map((item, index) => {
-          const { comp, disabled, ...rest } = item
+          const { comp, disabled, hide, ...rest } = item
           rest.key = index
+          rest.form = form
           if (disabled === 'isEdit') {
             rest.disabled = isEdit
+          }
+          if (hide === 'isEdit') {
+            rest.hide = isEdit
+          }
+          if (comp === 'FormImage') {
+            rest.imageUrl = entity ? entity[item.name] : ''
           }
           return React.createElement(compMap[comp], rest)
         })}
@@ -60,4 +68,5 @@ export default PageForm
 const compMap = {
   FormInput,
   FormEnableRadio,
+  FormImage,
 }

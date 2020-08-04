@@ -196,17 +196,26 @@ export const routes = [
     comp: Examinee,
     back: { path: '/examinees', breadcrumbs: ['考生管理', '考生详情'] },
   },
-  // { path: '/examiners', comp: ExaminerList },
-  // {
-  //   path: '/examiner',
-  //   comp: Examiner,
-  //   back: { path: '/examiners', breadcrumbs: ['考官管理', '新增考官'] },
-  // },
-  // {
-  //   path: '/examiner/:id',
-  //   comp: Examiner,
-  //   back: { path: '/examiners', breadcrumbs: ['考官管理', '编辑考官'] },
-  // },
+  {
+    path: '/examiners',
+    editPath: '/examiner',
+    title: '考官',
+    titleProp: 'username',
+    comp: ExaminerList,
+  },
+  {
+    path: '/examiner',
+    title: '考官',
+    comp: Examiner,
+    back: { path: '/examiners', breadcrumbs: ['考官管理', '新增考官'] },
+  },
+  {
+    path: '/examiner/:id',
+    title: '考官',
+    defaultPath: '/examiner',
+    comp: Examiner,
+    back: { path: '/examiners', breadcrumbs: ['考官管理', '编辑考官'] },
+  },
   // { path: '/rooms', comp: RoomList },
   // {
   //   path: '/room',

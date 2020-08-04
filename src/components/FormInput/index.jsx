@@ -11,6 +11,7 @@ const FormInput = ({
   disabled,
   rules,
   initialValue,
+  hide,
   ...rest
 }) => {
   const isDisabled = disabled === true
@@ -18,6 +19,9 @@ const FormInput = ({
   if (rules) {
     finalRules = rules
   }
+
+  if (hide) return null
+
   return (
     <Form.Item
       rules={finalRules}
