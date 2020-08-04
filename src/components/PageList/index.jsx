@@ -17,11 +17,16 @@ const PageList = ({
   path,
   children,
 }) => {
-  const { editPath, title, titleProp = 'name' } = useActiveRoute()
+  const {
+    editPath,
+    title,
+    titleProp = 'name',
+    apiPath = editPath,
+  } = useActiveRoute()
 
   let fetchPath = ''
   if (!defaultTableList) {
-    fetchPath = path ? path : `${editPath}/page`
+    fetchPath = path ? path : `${apiPath}/page`
   }
   let tableList = useTableFetch(fetchPath)
   if (defaultTableList) {
@@ -38,7 +43,7 @@ const PageList = ({
       status: '删除',
       title,
       titleValue: entity[titleProp],
-      path: `${editPath}/del?id=${entity.id}`,
+      path: `${apiPath}/del?id=${entity.id}`,
       callback: () => {
         tableList.fetchTable()
         deleteCallback && deleteCallback()

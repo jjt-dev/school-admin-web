@@ -216,17 +216,27 @@ export const routes = [
     comp: Examiner,
     back: { path: '/examiners', breadcrumbs: ['考官管理', '编辑考官'] },
   },
-  // { path: '/rooms', comp: RoomList },
-  // {
-  //   path: '/room',
-  //   comp: Room,
-  //   back: { path: '/rooms', breadcrumbs: ['考场管理', '新增考场'] },
-  // },
-  // {
-  //   path: '/room/:id',
-  //   comp: Room,
-  //   back: { path: '/rooms', breadcrumbs: ['考场管理', '编辑考场'] },
-  // },
+  {
+    path: '/rooms',
+    editPath: '/room',
+    apiPath: '/config/room',
+    title: '考场',
+    comp: RoomList,
+  },
+  {
+    path: '/room',
+    defaultPath: '/config/room',
+    title: '考场',
+    comp: Room,
+    back: { path: '/rooms', breadcrumbs: ['考场管理', '新增考场'] },
+  },
+  {
+    path: '/room/:id',
+    defaultPath: '/config/room',
+    title: '考场',
+    comp: Room,
+    back: { path: '/rooms', breadcrumbs: ['考场管理', '编辑考场'] },
+  },
   // {
   //   path: '/certificate',
   //   comp: Certificate,

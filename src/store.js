@@ -8,8 +8,6 @@ import app from 'src/reducers/app'
 import exam from 'src/reducers/exam'
 import examSign from 'src/reducers/examSign'
 import examGroup from 'src/reducers/examGroup'
-import examiner from 'src/reducers/examiner'
-import room from 'src/reducers/room'
 import certificate from 'src/reducers/certificate'
 
 import { createStore } from 'src/utils/injectReducer'
@@ -22,8 +20,6 @@ export default (history) => {
       exam,
       examSign,
       examGroup,
-      examiner,
-      room,
       certificate,
     },
     applyMiddleware(
