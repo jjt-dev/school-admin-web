@@ -66,7 +66,9 @@ const certificate = handleActions(
         basicInfos[oldIndex].position = null
       }
       const index = basicInfos.findIndex((item) => item.name === name)
-      basicInfos[index].position = position
+      if (index > -1) {
+        basicInfos[index].position = position
+      }
       return {
         ...state,
         basicInfos,

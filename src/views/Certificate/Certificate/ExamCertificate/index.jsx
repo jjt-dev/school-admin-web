@@ -1,7 +1,7 @@
 import React from 'react'
 import './index.less'
-import { Row, Col, Menu, Dropdown, message, Button } from 'antd'
-import { BasicInfoPositions, ExamBasicInfos } from '../../helper'
+import { Row, Col, Dropdown, message, Button } from 'antd'
+import { BasicInfoPositions, ExamBasicInfos, getMenus } from '../../helper'
 import { useSelector } from 'react-redux'
 import api from 'src/utils/api'
 import { getDomain } from 'src/utils/common'
@@ -59,7 +59,13 @@ const ExamCertificate = ({
                 const info = findInfo(position)
                 return (
                   <Col key={position} span={12}>
-                    <Dropdown overlay={getMenus(updateBasicInfo, position)}>
+                    <Dropdown
+                      overlay={getMenus(
+                        ExamBasicInfos,
+                        updateBasicInfo,
+                        position
+                      )}
+                    >
                       <a
                         className="ant-dropdown-link"
                         onClick={(e) => e.preventDefault()}
@@ -87,18 +93,3 @@ const ExamCertificate = ({
 }
 
 export default ExamCertificate
-
-const getMenus = (updateBasicInfo, position) => (
-  <Menu>
-    {ExamBasicInfos.map((item) => (
-      <Menu.Item
-        key={item}
-        onClick={() => {
-          updateBasicInfo(position, item)
-        }}
-      >
-        {item}
-      </Menu.Item>
-    ))}
-  </Menu>
-)

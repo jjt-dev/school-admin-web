@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import './index.less'
-import { Row, Col, Menu, Dropdown, message, Button } from 'antd'
+import { Row, Col, Dropdown, message, Button } from 'antd'
 import {
   BasicInfoPositions,
   ItemPositions,
   ReportBasicInfos,
+  getMenus,
 } from '../../helper'
 import { useSelector } from 'react-redux'
 import api from 'src/utils/api'
@@ -91,7 +92,11 @@ const ReportHoriz = ({
                     <Col key={position} span={12}>
                       <Dropdown
                         overlayClassName="basic-info__content-dropdown"
-                        overlay={getMenus(updateBasicInfo, position)}
+                        overlay={getMenus(
+                          ReportBasicInfos,
+                          updateBasicInfo,
+                          position
+                        )}
                       >
                         <a
                           className="ant-dropdown-link"
@@ -158,18 +163,3 @@ const ReportHoriz = ({
 }
 
 export default ReportHoriz
-
-const getMenus = (updateBasicInfo, position) => (
-  <Menu>
-    {ReportBasicInfos.map((item) => (
-      <Menu.Item
-        key={item}
-        onClick={() => {
-          updateBasicInfo(position, item)
-        }}
-      >
-        {item}
-      </Menu.Item>
-    ))}
-  </Menu>
-)

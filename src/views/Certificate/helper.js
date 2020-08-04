@@ -1,6 +1,6 @@
 import React from 'react'
 import { formatTime } from 'src/utils/common'
-import { Divider } from 'antd'
+import { Divider, Menu } from 'antd'
 
 export const certificateListColumns = (history, confirmDeleteCertif) => [
   {
@@ -107,6 +107,7 @@ export const ItemPositions = [
 ]
 
 export const ReportBasicInfos = [
+  '取消选择',
   '考号',
   '姓名',
   '性别',
@@ -117,6 +118,7 @@ export const ReportBasicInfos = [
   '申请带色',
 ]
 export const ExamBasicInfos = [
+  '取消选择',
   '姓名',
   '性别',
   '出生时间',
@@ -126,3 +128,18 @@ export const ExamBasicInfos = [
   '考试时间',
   '考试地点',
 ]
+
+export const getMenus = (infos, updateBasicInfo, position) => (
+  <Menu>
+    {infos.map((item) => (
+      <Menu.Item
+        key={item}
+        onClick={() => {
+          updateBasicInfo(position, item)
+        }}
+      >
+        {item}
+      </Menu.Item>
+    ))}
+  </Menu>
+)
