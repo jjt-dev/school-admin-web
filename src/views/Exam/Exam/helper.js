@@ -1,16 +1,27 @@
 import { message } from 'antd'
+import api from 'src/utils/api'
 import { findIndexById } from 'src/utils/common'
+import { timeFormat } from 'src/utils/const'
 
 export const validateItems = (checkedLevels) => {
+  let result = true
+
   checkedLevels.forEach(({ items }) => {
     let totalRatio = 0
-    Object.keys(items).map((itemId) => (totalRatio += items[itemId] ?? 0))
+    const itemIds = Object.keys(items)
+    if (itemIds.length === 0) {
+      result = false
+      return
+    }
+
+    itemIds.map((itemId) => (totalRatio += items[itemId] ?? 0))
     if (totalRatio !== 100) {
-      message.error('请保证每一个级别的考项比例之和为100')
-      return false
+      result = false
+      return
     }
   })
-  return true
+
+  return result
 }
 
 export const enforceLevelList = (exam, levelList) => {
@@ -29,4 +40,57 @@ export const enforceLevelList = (exam, levelList) => {
     levelList[index].items = items
   })
   return levelList
+}
+
+export const updateExam = async (
+  history,
+  status,
+  id,
+  values,
+  checkedLevels
+) => {
+  const {
+    title,
+    examTime,
+    signTime,
+    note,
+    address,
+    isEnable,
+    isFormal,
+  } = values
+  const examStartTime = examTime[0].format(timeFormat)
+  const examEndTime = examTime[1].format(timeFormat)
+  const signStartTime = signTime[0].format(timeFormat)
+  const signEndTime = signTime[1].format(timeFormat)
+
+  const levelItems = {}
+  checkedLevels.forEach((level) => {
+    const { id: levelId, items } = level
+    const temp = Object.keys(items).map((itemId) => ({
+      examItemId: itemId,
+      ratio: items[itemId] / 100,
+    }))
+    levelItems[levelId] = temp
+  })
+
+  const levelsCanSign = checkedLevels.map((level) => level.id).join(',')
+
+  const postData = {
+    id,
+    address,
+    examStartTime,
+    examEndTime,
+    levelItems,
+    levelsCanSign,
+    note,
+    signStartTime,
+    signEndTime,
+    title,
+    isEnable,
+    isFormal,
+  }
+
+  await api.post(`/examination/edit`, postData)
+  message.success(`${status}考试成功`)
+  history.push('/exams')
 }

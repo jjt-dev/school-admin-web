@@ -1,11 +1,9 @@
 import React, { useEffect } from 'react'
 import './index.less'
 import { useDispatch, useSelector } from 'react-redux'
-import { Form } from 'antd'
 import * as examAction from 'src/actions/exam'
-import { updateExam } from '../helper'
 import api from 'src/utils/api'
-import { enforceLevelList, validateItems } from './helper'
+import { enforceLevelList, updateExam, validateItems } from './helper'
 import LevelExamItems from './LevelExamItems'
 import PageFormCustom from 'src/components/PageFormCustom'
 import useSearch from 'src/hooks/useSearch'
@@ -13,19 +11,19 @@ import FormInput from 'src/components/FormInput'
 import FormEnableRadio from 'src/components/FormEnableRadio'
 import FormDateRange from 'src/components/FormDateRange'
 import LevelRangeItems from './LevelRangeItems'
+import { message } from 'antd'
 
 const { usePageForm } = PageFormCustom
 
 const Exam = ({ history }) => {
   const dispatch = useDispatch()
   const { isFormal } = useSearch()
+  const examType = isFormal === 'true' ? '正式' : '模拟'
+  const [examId, isEdit, status] = usePageForm()
   const { examItemList, examLevelList, examInEdit } = useSelector(
     (state) => state.exam
   )
   const checkedLevels = examLevelList.filter((level) => level.items)
-  const examType = isFormal === 'true' ? '正式' : '模拟'
-  const [form] = Form.useForm()
-  const [examId, isEdit, status] = usePageForm()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -56,15 +54,14 @@ const Exam = ({ history }) => {
     )
   }
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
+  const onFinish = (values) => {
     const itemsValid = validateItems(checkedLevels)
-    form.validateFields(async (err, values) => {
-      if (!err && itemsValid) {
-        values.isFormal = isFormal
-        updateExam(history, status, examId, values, checkedLevels)
-      }
-    })
+    if (itemsValid) {
+      values.isFormal = isFormal
+      updateExam(history, status, examId, values, checkedLevels)
+    } else {
+      message.error('请保证每一个级别的考项比例之和为100')
+    }
   }
 
   // 如果编辑考试，需要等到获取到该考试后，再渲染考试。这样可以解决form初始值的问题
@@ -84,7 +81,11 @@ const Exam = ({ history }) => {
   } = examInEdit || {}
 
   return (
-    <PageFormCustom title={`${examType}考试`} customClass="exam">
+    <PageFormCustom
+      onFinish={onFinish}
+      title={`${examType}考试`}
+      customClass="exam"
+    >
       <FormInput label="名称" name="title" initialValue={title} />
       <FormInput label="地址" name="address" initialValue={address} />
       <FormDateRange
