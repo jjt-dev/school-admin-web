@@ -9,6 +9,7 @@ const { useTableFetch } = CustomTable
 const PageList = ({
   columns,
   addCallback,
+  deleteCallback,
   defaultTableList,
   placeholder = '请输入查询条件',
   rowKey = 'id',
@@ -31,7 +32,10 @@ const PageList = ({
       title,
       titleValue: entity[titleProp],
       path: `${editPath}/del?id=${entity.id}`,
-      callback: () => tableList.fetchTable(),
+      callback: () => {
+        tableList.fetchTable()
+        deleteCallback && deleteCallback()
+      },
     }
     confirmUpdate(payload)
   }
@@ -39,9 +43,8 @@ const PageList = ({
   return (
     <div className="page page-list">
       <div className="page-list__title">{title}列表</div>
-      {children ? (
-        { children }
-      ) : (
+      {children}
+      {!children && (
         <ListHeader
           fetchTable={tableList.fetchTable}
           addCallback={addCallback}

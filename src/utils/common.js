@@ -244,12 +244,12 @@ export const getEnableRow = () => ({
   render: (text, record) => <span>{record.isEnable ? '是' : '否'}</span>,
 })
 
-export const getActionRow = (path, deleteEntity) => ({
+export const getActionRow = (getPath, deleteEntity) => ({
   title: '操作',
   key: 'action',
   render: (text, record) => (
     <>
-      <Link to={`${path}/${record.id}`}>编辑</Link>
+      <Link to={getPath(record)}>编辑</Link>
       <Divider type="vertical" />
       <span
         className="table-action"
@@ -289,4 +289,9 @@ export const getDeleteRow = (deleteEntity) => ({
       删除
     </span>
   ),
+})
+
+export const getCustomRow = (title, getValue) => ({
+  title,
+  render: (text, record) => <span>{getValue(record)}</span>,
 })

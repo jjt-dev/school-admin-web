@@ -56,7 +56,13 @@ export const routes = [
     comp: Coach,
     back: { path: '/coaches', breadcrumbs: ['教练管理', '编辑教练'] },
   },
-  { path: '/exams', comp: ExamList },
+  {
+    path: '/exams',
+    editPath: '/exam',
+    title: '考试',
+    titleProp: 'title',
+    comp: ExamList,
+  },
   // {
   //   path: '/exam',
   //   comp: Exam,

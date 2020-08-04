@@ -10,7 +10,7 @@ const Header = ({ fetchTable, canAddMockExam }) => {
   const history = useHistory()
 
   const handleChangeState = (examState) => {
-    fetchTable('examState', examState)
+    fetchTable({ currState: examState })
   }
 
   return (
@@ -37,11 +37,11 @@ const Header = ({ fetchTable, canAddMockExam }) => {
         <div className="exam-select-state">
           <span>当前状态</span>
           <Select
-            defaultValue="all"
+            defaultValue=""
             style={{ width: 120 }}
             onChange={handleChangeState}
           >
-            <Option value="all">所有</Option>
+            <Option value="">所有</Option>
             {Object.keys(ExamStates).map((key) => (
               <Option key={key} value={key}>
                 {ExamStates[key]}

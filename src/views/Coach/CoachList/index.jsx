@@ -24,5 +24,5 @@ const getColumns = (deleteCoach) => [
   getLinkRow('所带班级', `/coach/::/classes?coachName=::`, ['id', 'username']),
   getEnableRow(),
   getDateRow('创建时间', 'createTime'),
-  getActionRow('/coach', deleteCoach),
+  getActionRow((record) => `/coach/${record.id}`, deleteCoach),
 ]
