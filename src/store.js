@@ -5,7 +5,6 @@ import promiseMiddleware from './middlewares/promise'
 import errorMiddleware from './middlewares/error'
 import loadingMiddleware from './middlewares/loading'
 import app from 'src/reducers/app'
-import coach from 'src/reducers/coach'
 import exam from 'src/reducers/exam'
 import examSign from 'src/reducers/examSign'
 import examGroup from 'src/reducers/examGroup'
@@ -21,7 +20,6 @@ export default (history) => {
     {
       router: connectRouter(history),
       app,
-      coach,
       exam,
       examSign,
       examGroup,

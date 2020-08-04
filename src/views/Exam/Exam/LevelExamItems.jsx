@@ -11,7 +11,7 @@ const LevelExamItems = ({
 }) => {
   const itemIds = Object.keys(level.items).map((i) => Number(i))
   return (
-    <Form.Item label={`${level.name}考项`} className="exam__edit-form--item">
+    <Form.Item label={`${level.name}考项`} className="exam-level-item">
       <>
         <Select
           mode="multiple"

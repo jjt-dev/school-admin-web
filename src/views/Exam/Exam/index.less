@@ -1,98 +1,49 @@
 .exam {
-  padding-top: 30px !important;
+  &-level-range {
+    .ant-form-explain {
+      display: block;
+    }
 
-  &__edit-title {
-    display: flex;
-    justify-content: center;
-    font-size: 18px;
-    font-weight: bold;
+    .ant-col {
+      margin-bottom: 5px;
+      display: flex;
+      justify-content: space-between;
+
+      .ant-input-group-wrapper {
+        width: 40%;
+      }
+    }
   }
 
-  &__edit-form {
-    margin-top: 20px;
+  &-level-item {
+    .ant-form-item-control {
+      width: 100%;
 
-    .ant-form-item {
-      width: 450px;
-      margin: 0 auto;
-      margin-bottom: 15px;
-
-      .selected-items-0 {
-        margin-top: 15px;
-      }
-
-      .ant-calendar-picker-input {
-        width: 300px;
-      }
-    }
-
-    &--btns {
-      width: 340px !important;
-
-      .ant-form-item-control-wrapper {
-        width: 100%;
-
-        .ant-form-item-control {
-          display: flex;
-          justify-content: center;
-
-          .ant-form-item-children {
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            padding-left: 40px;
-
-            button {
-              width: 120px;
-            }
-
-            .edit-cancel-btn {
-              margin-right: 30px;
-            }
-          }
-        }
-      }
-    }
-
-    &--level {
-      .ant-form-explain {
-        display: block;
+      .ant-select {
+        margin-bottom: 10px;
       }
 
       .ant-col {
-        margin-bottom: 5px;
+        width: 100%;
+        margin-bottom: 10px;
         display: flex;
         justify-content: space-between;
-
-        .ant-input-group-wrapper {
-          width: 40%;
-        }
+        align-items: center;
       }
     }
 
-    &--item {
-      .ant-form-item-control {
-        width: 100%;
+    &-error {
+      color: #f5222d;
+    }
 
-        .ant-col {
-          margin-bottom: 5px;
-          display: flex;
-          justify-content: space-between;
-        }
-      }
-
-      &-error {
-        color: #f5222d;
-      }
-
-      label::before {
-        display: inline-block;
-        margin-right: 4px;
-        color: #f5222d;
-        font-size: 14px;
-        font-family: SimSun, sans-serif;
-        line-height: 1;
-        content: '*';
-      }
+    label::before {
+      display: inline-block;
+      margin-right: 4px;
+      color: #f5222d;
+      font-size: 14px;
+      font-family: SimSun, sans-serif;
+      line-height: 1;
+      content: '*';
     }
   }
 }

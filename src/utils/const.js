@@ -72,6 +72,7 @@ export const Genders = {
 
 export const timeFormat = 'YYYY-MM-DD HH:mm'
 export const dateFormat = 'YYYY-MM-DD'
+export const hourFormat = 'HH:mm'
 
 export const Relationships = {
   0: '父亲',

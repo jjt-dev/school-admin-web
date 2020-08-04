@@ -10,6 +10,7 @@ const FormInput = ({
   type,
   disabled,
   rules,
+  initialValue,
   ...rest
 }) => {
   const isDisabled = disabled === true
@@ -18,7 +19,12 @@ const FormInput = ({
     finalRules = rules
   }
   return (
-    <Form.Item rules={finalRules} label={label} name={name}>
+    <Form.Item
+      rules={finalRules}
+      label={label}
+      name={name}
+      initialValue={initialValue}
+    >
       {type === 'textarea' ? (
         <TextArea rows={2} disabled={isDisabled} {...rest} />
       ) : (

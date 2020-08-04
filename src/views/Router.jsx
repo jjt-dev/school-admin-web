@@ -63,16 +63,18 @@ export const routes = [
     titleProp: 'title',
     comp: ExamList,
   },
-  // {
-  //   path: '/exam',
-  //   comp: Exam,
-  //   back: { path: '/exams', breadcrumbs: ['考试管理', '新增考试'] },
-  // },
-  // {
-  //   path: '/exam/:id',
-  //   comp: Exam,
-  //   back: { path: '/exams', breadcrumbs: ['考试管理', '编辑考试'] },
-  // },
+  {
+    path: '/exam',
+    title: '考试',
+    comp: Exam,
+    back: { path: '/exams', breadcrumbs: ['考试管理', '新增考试'] },
+  },
+  {
+    path: '/exam/:id',
+    title: '考试',
+    comp: Exam,
+    back: { path: '/exams', breadcrumbs: ['考试管理', '编辑考试'] },
+  },
   // {
   //   path: '/exam/:id/signs',
   //   comp: ExamSignList,

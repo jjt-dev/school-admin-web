@@ -1,10 +1,10 @@
 import { Form, Radio } from 'antd'
 import React from 'react'
 
-const FormEnableRadio = ({ label, name }) => {
+const FormEnableRadio = ({ label, name, initialValue = true }) => {
   return (
     <Form.Item
-      initialValue={true}
+      initialValue={initialValue}
       rules={[{ required: true }]}
       label={label ?? '启用'}
       name={name ?? 'isEnable'}
