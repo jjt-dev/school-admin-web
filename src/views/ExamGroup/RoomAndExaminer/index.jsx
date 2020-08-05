@@ -5,14 +5,14 @@ import { Table, message } from 'antd'
 import { roomExaminerColumns } from '../helper'
 import { useSelector } from 'react-redux'
 import { deepClone } from 'src/utils/common'
-import ActionBar from './ActionBar'
+import Header from './Header'
+import PageListCustom from 'src/components/PageListCustom'
 
 const RoomAndExaminer = ({ match, history }) => {
   const [search, setSearch] = useState('')
+  const { id: examId, roomId } = match.params
   const [roomAndExaminer, setRoomAndExaminer] = useState()
   const { allExaminers } = useSelector((state) => state.app)
-  const examId = match.params.id
-  const roomId = match.params.roomId
 
   useEffect(() => {
     const fetchData = async () => {
@@ -72,12 +72,11 @@ const RoomAndExaminer = ({ match, history }) => {
   }
 
   return (
-    <div className="page room-examiner">
-      <div className="room-examiner__title">绑定考官</div>
-      <ActionBar bindExaminers={bindExaminers} setSearch={setSearch} />
+    <PageListCustom title="绑定考官">
+      <Header bindExaminers={bindExaminers} setSearch={setSearch} />
       {roomAndExaminer && (
         <Table
-          className="room-examiner__table"
+          className="room-examiner-table"
           columns={roomExaminerColumns(
             roomAndExaminer.examiners,
             updateRoomExaminers
@@ -96,7 +95,7 @@ const RoomAndExaminer = ({ match, history }) => {
           )}
         />
       )}
-    </div>
+    </PageListCustom>
   )
 }
 

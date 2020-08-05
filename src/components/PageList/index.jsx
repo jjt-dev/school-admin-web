@@ -54,7 +54,7 @@ const PageList = ({
 
   return (
     <div className="page page-list">
-      <div className="page-list__title">{title}列表</div>
+      <div className="page-list-title">{title}列表</div>
       {children}
       {!children && (
         <ListHeader
