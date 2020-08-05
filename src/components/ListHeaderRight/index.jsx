@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { Button, Input } from 'antd'
-import './index.less'
 
 const ListHeaderRight = ({
   fetchTable,

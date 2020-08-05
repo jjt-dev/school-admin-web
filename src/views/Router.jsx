@@ -139,14 +139,15 @@ export const routes = [
   //     breadcrumbs: ['考试管理', '报考列表', '报名详情', '打印成绩单'],
   //   },
   // },
-  // {
-  //   path: '/exam/:id/group',
-  //   comp: ExamGroup,
-  //   back: {
-  //     path: '/exams',
-  //     breadcrumbs: ['考试管理', '分组管理'],
-  //   },
-  // },
+  {
+    path: '/exam/:id/group',
+    title: '考试分组',
+    comp: ExamGroup,
+    back: {
+      path: '/exams',
+      breadcrumbs: ['考试管理', '分组管理'],
+    },
+  },
   // {
   //   path: '/exam/:id/group/:examGroupId',
   //   comp: StudentExamGroup,

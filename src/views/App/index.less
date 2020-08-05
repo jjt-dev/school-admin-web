@@ -170,3 +170,30 @@ tr.drop-over-upward td {
     }
   }
 }
+
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+
+  &-left {
+    button {
+      margin-right: 15px;
+    }
+  }
+
+  &-right {
+    display: flex;
+    align-items: center;
+
+    input,
+    button {
+      margin-right: 15px;
+    }
+
+    button:last-child {
+      margin-right: 0;
+    }
+  }
+}

@@ -3,6 +3,8 @@ import { Button, Select } from 'antd'
 import { useHistory } from 'react-router'
 import { ExamStates } from 'src/utils/const'
 import ListHeaderRight from 'src/components/ListHeaderRight'
+import ListHeaderCustom from 'src/components/ListHeaderCustom'
+import ListHeaderLeft from 'src/components/ListHeaderLeft'
 
 const { Option } = Select
 
@@ -13,26 +15,24 @@ const Header = ({ fetchTable, canAddMockExam }) => {
     fetchTable({ currState: examState })
   }
 
+  const getBtn = (isFormal, examType) => {
+    return (
+      <Button
+        type="primary"
+        onClick={() => history.push(`/exam/isFormal=${isFormal}`)}
+        size="small"
+      >
+        新增{examType}考试
+      </Button>
+    )
+  }
+
   return (
-    <div className="exam-list__action">
-      <div className="exam-list__action-btns">
-        <Button
-          type="primary"
-          onClick={() => history.push('/exam?isFormal=true')}
-          size="small"
-        >
-          新增正式考试
-        </Button>
-        {canAddMockExam && (
-          <Button
-            type="primary"
-            onClick={() => history.push('/exam?isFormal=false')}
-            size="small"
-          >
-            新增模拟考试
-          </Button>
-        )}
-      </div>
+    <ListHeaderCustom>
+      <ListHeaderLeft>
+        {getBtn('true', '正式')}
+        {canAddMockExam && getBtn('false', '模拟')}
+      </ListHeaderLeft>
       <ListHeaderRight fetchTable={fetchTable}>
         <div className="exam-select-state">
           <span>当前状态</span>
@@ -50,7 +50,7 @@ const Header = ({ fetchTable, canAddMockExam }) => {
           </Select>
         </div>
       </ListHeaderRight>
-    </div>
+    </ListHeaderCustom>
   )
 }
 

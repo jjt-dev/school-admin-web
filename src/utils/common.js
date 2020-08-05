@@ -251,15 +251,19 @@ export const getActionRow = (getPath, deleteEntity) => ({
   render: (text, record) => (
     <>
       <Link to={getPath(record)}>编辑</Link>
-      <Divider type="vertical" />
-      <span
-        className="table-action"
-        onClick={() => {
-          deleteEntity(record)
-        }}
-      >
-        删除
-      </span>
+      {deleteEntity && (
+        <>
+          <Divider type="vertical" />
+          <span
+            className="table-action"
+            onClick={() => {
+              deleteEntity(record)
+            }}
+          >
+            删除
+          </span>
+        </>
+      )}
     </>
   ),
 })

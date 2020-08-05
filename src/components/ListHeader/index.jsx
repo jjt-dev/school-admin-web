@@ -1,7 +1,6 @@
 import { Button, Input } from 'antd'
 import React, { useState } from 'react'
 import { useHistory } from 'react-router'
-import './index.less'
 
 const ListHeader = ({
   fetchTable,
