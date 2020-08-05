@@ -7,10 +7,10 @@ import { useRouteMatch } from 'react-router'
 import useActiveRoute from 'src/hooks/useActiveRoute'
 import usePageForm from './usePageForm'
 
-const PageFormCustom = ({ onFinish, children, title, customClass }) => {
+const PageFormCustom = ({ onFinish, children, title, customClass, form }) => {
   const match = useRouteMatch()
   const { title: defaultTitle, back } = useActiveRoute()
-  const [form] = Form.useForm()
+  const [defaultForm] = Form.useForm()
   const entityId = match.params.id
   const isEdit = !!entityId
   const status = getStatus(isEdit)
@@ -24,7 +24,7 @@ const PageFormCustom = ({ onFinish, children, title, customClass }) => {
         {status}
         {title}
       </div>
-      <Form {...formLayout} form={form} onFinish={onFinish}>
+      <Form {...formLayout} form={form ?? defaultForm} onFinish={onFinish}>
         {children}
         <FormBottom path={back} />
       </Form>

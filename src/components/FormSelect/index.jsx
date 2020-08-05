@@ -10,6 +10,8 @@ const FormSelect = ({
   message,
   required,
   initialValue,
+  valueKey = 'id',
+  titleKey = 'id',
 }) => {
   return (
     <Form.Item
@@ -20,8 +22,8 @@ const FormSelect = ({
     >
       <Select placeholder={message}>
         {options.map((item) => (
-          <Option key={item.id} value={item.id}>
-            {item.name}
+          <Option key={item[valueKey]} value={item[valueKey]}>
+            {item[titleKey]}
           </Option>
         ))}
       </Select>

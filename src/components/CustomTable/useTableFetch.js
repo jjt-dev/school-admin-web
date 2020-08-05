@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { debounce } from 'lodash'
 import CustomTable from '.'
+import { isNotEmpty } from 'src/utils/common'
 
 const defaultPageSizeOptions = ['10', '20', '30', '50', '100']
 
@@ -211,14 +212,3 @@ const useTableFetch = (defaultPath = null, options = {}) => {
 }
 
 export default useTableFetch
-
-const isNotEmpty = (value) => {
-  if (!value) return false
-  if (Array.isArray(value)) {
-    return value.length > 0
-  }
-  if (typeof value === 'boolean') return value
-  if (value instanceof Object) return value
-
-  return value.trim() !== ''
-}

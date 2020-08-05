@@ -1,36 +1,22 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import './index.less'
 import api from 'src/utils/api'
-import { Form, message, Input, Button, Select } from 'antd'
-import { formLayout } from 'src/utils/const'
+import { Form, message } from 'antd'
+import useFetch from 'src/hooks/useFetch'
+import PageFormCustom from 'src/components/PageFormCustom'
+import FormInput from 'src/components/FormInput'
+import FormSelect from 'src/components/FormSelect'
 
 const StudentExamGroup = ({ match, history }) => {
-  const [studExamGroup, setStudExamGroup] = useState()
-  const [examRoundInfo, setExamRoundInfo] = useState()
   const examId = match.params.id
   const examGroupId = match.params.examGroupId
   const [form] = Form.useForm()
-  const { getFieldDecorator } = form
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const result = await api.get(
-        `/examination/studentGroupedDetail?examinationGroupId=${examGroupId}`
-      )
-      setStudExamGroup(result)
-    }
-    fetchData()
-  }, [examGroupId])
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const result = await api.get(
-        `/examination/examRoundInfo?examinationId=${examId}`
-      )
-      setExamRoundInfo(result)
-    }
-    fetchData()
-  }, [examId])
+  const [examRoundInfo] = useFetch(
+    `/examination/examRoundInfo?examinationId=${examId}`
+  )
+  const [studExamGroup] = useFetch(
+    `/examination/studentGroupdDetail?examinationGroupId=${examGroupId}`
+  )
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -49,51 +35,26 @@ const StudentExamGroup = ({ match, history }) => {
     history.push(`/exam/${examId}/group`)
   }
 
+  if (!studExamGroup || !examRoundInfo) return null
+
   return (
-    <>
-      {studExamGroup && examRoundInfo && (
-        <div className="page exam-group">
-          <div className="exam-group__edit-title">考试分组</div>
-          <Form
-            onSubmit={handleSubmit}
-            {...formLayout}
-            className="exam-group__edit-form"
-            form={form}
-          >
-            <Form.Item label="考生姓名">
-              <Input disabled value={studExamGroup.studentName} />
-            </Form.Item>
-            <Form.Item label="考评级别">
-              <Input disabled value={studExamGroup.levelName} />
-            </Form.Item>
-            <Form.Item label="组号">
-              {getFieldDecorator('toRoundNum', {
-                initialValue: examRoundInfo.find(
-                  (round) => round.roundNum === studExamGroup.currRoundNum
-                ).roundNum,
-                rules: [{ required: true }],
-              })(
-                <Select placeholder="请选择报考级别">
-                  {examRoundInfo.map((round) => (
-                    <Select.Option key={round.roundNum} value={round.roundNum}>
-                      {round.roundNum}
-                    </Select.Option>
-                  ))}
-                </Select>
-              )}
-            </Form.Item>
-            <Form.Item className="coach__edit-form--btns">
-              <Button className="edit-cancel-btn" onClick={goBack}>
-                取消
-              </Button>
-              <Button type="primary" htmlType="submit">
-                确定
-              </Button>
-            </Form.Item>
-          </Form>
-        </div>
-      )}
-    </>
+    <PageFormCustom form={form} title="考试分组">
+      <FormInput label="考生姓名" disabled value={studExamGroup.studentName} />
+      <FormInput label="考评级别" disabled value={studExamGroup.levelName} />
+      <FormSelect
+        label="组号"
+        name="toRoundNum"
+        options={examRoundInfo}
+        valueKey="roundNum"
+        tileKey="roundNUm"
+        message="请选择报考级别"
+        initialValue={
+          examRoundInfo.find(
+            (round) => round.roundNum === studExamGroup.currRoundNum
+          ).roundNum
+        }
+      />
+    </PageFormCustom>
   )
 }
 

@@ -10,6 +10,7 @@ import useActiveRoute from 'src/hooks/useActiveRoute'
 import FormInput from '../FormInput'
 import FormEnableRadio from '../FormEnableRadio'
 import FormImage from '../FormImage'
+import FormSelect from '../FormSelect'
 
 const PageForm = ({ callback, formItems }) => {
   const match = useRouteMatch()
@@ -71,4 +72,5 @@ const compMap = {
   FormInput,
   FormEnableRadio,
   FormImage,
+  FormSelect,
 }

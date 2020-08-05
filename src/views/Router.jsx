@@ -148,42 +148,42 @@ export const routes = [
       breadcrumbs: ['考试管理', '分组管理'],
     },
   },
-  // {
-  //   path: '/exam/:id/group/:examGroupId',
-  //   comp: StudentExamGroup,
-  //   back: {
-  //     path: '/exam/:id/group',
-  //     params: ['id'],
-  //     breadcrumbs: ['考试管理', '分组管理', '编辑考试分组'],
-  //   },
-  // },
-  // {
-  //   path: '/exam/:id/round-room',
-  //   comp: RoundAndRoom,
-  //   back: {
-  //     path: '/exam/:id/group',
-  //     params: ['id'],
-  //     breadcrumbs: ['考试管理', '分组管理', '考场分配'],
-  //   },
-  // },
-  // {
-  //   path: '/exam/:id/room-examiner',
-  //   comp: RoomAndExaminerList,
-  //   back: {
-  //     path: '/exam/:id/group',
-  //     params: ['id'],
-  //     breadcrumbs: ['考试管理', '分组管理', '考场与考官'],
-  //   },
-  // },
-  // {
-  //   path: '/exam/:id/room/:roomId/examiners',
-  //   comp: RoomAndExaminer,
-  //   back: {
-  //     path: '/exam/:id/room-examiner',
-  //     params: ['id'],
-  //     breadcrumbs: ['考试管理', '分组管理', '考场与考官', '绑定考官'],
-  //   },
-  // },
+  {
+    path: '/exam/:id/group/:examGroupId',
+    comp: StudentExamGroup,
+    back: {
+      path: '/exam/:id/group',
+      params: ['id'],
+      breadcrumbs: ['考试管理', '分组管理', '编辑考试分组'],
+    },
+  },
+  {
+    path: '/exam/:id/round-room',
+    comp: RoundAndRoom,
+    back: {
+      path: '/exam/:id/group',
+      params: ['id'],
+      breadcrumbs: ['考试管理', '分组管理', '考场分配'],
+    },
+  },
+  {
+    path: '/exam/:id/room-examiner',
+    comp: RoomAndExaminerList,
+    back: {
+      path: '/exam/:id/group',
+      params: ['id'],
+      breadcrumbs: ['考试管理', '分组管理', '考场与考官'],
+    },
+  },
+  {
+    path: '/exam/:id/room/:roomId/examiners',
+    comp: RoomAndExaminer,
+    back: {
+      path: '/exam/:id/room-examiner',
+      params: ['id'],
+      breadcrumbs: ['考试管理', '分组管理', '考场与考官', '绑定考官'],
+    },
+  },
   {
     path: '/examinees',
     editPath: '/examinee',

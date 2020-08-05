@@ -46,6 +46,7 @@ const CustomTable = ({
   return (
     <Table
       {...tableProps}
+      size="small"
       loading={false}
       rowSelection={rowSelection}
       pagination={pagination && finalPagination}
