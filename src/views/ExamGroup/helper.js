@@ -61,15 +61,28 @@ export const roundRoomColumns = (
 ) => [
   {
     title: '序号',
+    width: '60px',
     key: 'index',
     render: (text, record, index) => `${index + 1}`,
   },
   {
     title: '组号',
+    width: '80px',
     dataIndex: 'round_num',
     key: 'round_num',
     render: (text, record) => (
       <span>{addRoundNumPrefix(record.round_num)}</span>
+    ),
+  },
+  {
+    title: '教练',
+    width: '400px',
+    render: (text, record) => (
+      <>
+        {record.coachs.map(({ nickname, id }) => (
+          <Tag key={id}>{nickname}</Tag>
+        ))}
+      </>
     ),
   },
   {

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Modal, Table } from 'antd'
+import { Button, Modal, Table, Tag } from 'antd'
 import { addNumPrefix, addRoundNumPrefix } from 'src/utils/common'
 import useFetch from 'src/hooks/useFetch'
 import { DndProvider } from 'react-dnd'
@@ -117,6 +117,17 @@ const getRoundColumns = (setSelectedRound) => [
     title: '对应的组号',
     key: 'roundNum',
     render: (text, record) => `${addRoundNumPrefix(record.roundNum)}`,
+  },
+  {
+    title: '教练',
+    width: '300px',
+    render: (text, record) => (
+      <>
+        {record.coachs.map(({ nickname, id }) => (
+          <Tag key={id}>{nickname}</Tag>
+        ))}
+      </>
+    ),
   },
   {
     title: '级别',
