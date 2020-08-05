@@ -1,29 +1,23 @@
 import React from 'react'
-import { Button, Select } from 'antd'
-import { useHistory } from 'react-router'
+import { Select } from 'antd'
 import { ExamStates } from 'src/utils/const'
 import ListHeaderRight from 'src/components/ListHeaderRight'
 import ListHeaderCustom from 'src/components/ListHeaderCustom'
 import ListHeaderLeft from 'src/components/ListHeaderLeft'
+import LinkBtn from 'src/components/LinkBtn'
 
 const { Option } = Select
 
 const Header = ({ fetchTable, canAddMockExam }) => {
-  const history = useHistory()
-
   const handleChangeState = (examState) => {
     fetchTable({ currState: examState })
   }
 
   const getBtn = (isFormal, examType) => {
     return (
-      <Button
-        type="primary"
-        onClick={() => history.push(`/exam/isFormal=${isFormal}`)}
-        size="small"
-      >
+      <LinkBtn type="primary" path={`/exam/isFormal=${isFormal}`} size="small">
         新增{examType}考试
-      </Button>
+      </LinkBtn>
     )
   }
 

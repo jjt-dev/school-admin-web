@@ -7,7 +7,6 @@ import loadingMiddleware from './middlewares/loading'
 import app from 'src/reducers/app'
 import exam from 'src/reducers/exam'
 import examSign from 'src/reducers/examSign'
-import examGroup from 'src/reducers/examGroup'
 import certificate from 'src/reducers/certificate'
 
 import { createStore } from 'src/utils/injectReducer'
@@ -19,7 +18,6 @@ export default (history) => {
       app,
       exam,
       examSign,
-      examGroup,
       certificate,
     },
     applyMiddleware(

@@ -1,7 +1,6 @@
 import React from 'react'
-import { Button, Select, Radio, message } from 'antd'
+import { Select, Radio, message } from 'antd'
 import { useState } from 'react'
-import { useHistory } from 'react-router'
 import { NumberByGroup, GroupType } from 'src/utils/const'
 import api from 'src/utils/api'
 import { debounce } from 'lodash'
@@ -10,13 +9,13 @@ import ListHeaderLeft from 'src/components/ListHeaderLeft'
 import ListHeaderRight from 'src/components/ListHeaderRight'
 import { buildParameters } from 'src/utils/common'
 import useLoading from 'src/hooks/useLoading'
+import LinkBtn from 'src/components/LinkBtn'
 
 const { Option } = Select
 
 const Header = ({ fetchTable, exam }) => {
-  const history = useHistory()
   const [callWithLoading] = useLoading()
-  const examinationId = exam.id
+  const examId = exam.id
   const [groupNum, setGroupNum] = useState(exam.groupNum)
   const [groupType, setGroupType] = useState(exam.groupType)
 
@@ -34,7 +33,7 @@ const Header = ({ fetchTable, exam }) => {
   const saveChange = (groupAmount, type) => {
     callWithLoading(async () => {
       const params = {
-        examinationId,
+        examinationId: examId,
         groupAmount,
         type,
       }
@@ -49,16 +48,8 @@ const Header = ({ fetchTable, exam }) => {
   return (
     <ListHeaderCustom>
       <ListHeaderLeft>
-        <Button
-          onClick={() => history.push(`/exam/${examinationId}/round-room`)}
-        >
-          考场分配
-        </Button>
-        <Button
-          onClick={() => history.push(`/exam/${examinationId}/room-examiner`)}
-        >
-          考场和考官
-        </Button>
+        <LinkBtn path={`/exam/${examId}/round-room`}>考场分配</LinkBtn>
+        <LinkBtn path={`/exam/${examId}/room-examiner`}>考场和考官</LinkBtn>
       </ListHeaderLeft>
       <ListHeaderRight fetchTable={fetchTable}>
         <div className="number-by-group">
