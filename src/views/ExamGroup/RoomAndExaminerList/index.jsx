@@ -1,27 +1,20 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import './index.less'
-import api from 'src/utils/api'
 import { Table } from 'antd'
 import { roomExaminerListColumns } from '../helper'
 import RoomExamineeModal from './RoomExamineeModal'
 import RoomRoundModal from './RoomRoundModal'
+import useFetch from 'src/hooks/useFetch'
+import PageListCustom from 'src/components/PageListCustom'
 
 const RoomAndExaminerList = ({ match, history }) => {
-  const [roomAndExaminers, setRoomAndExaminers] = useState()
+  const examId = match.params.id
   const [selectedRoom, setSelectedRoom] = useState()
   const [showRoomExaminees, setShowRoomExaminees] = useState(false)
   const [showRoomRounds, setShowRoomRounds] = useState(false)
-  const examId = match.params.id
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const result = await api.get(
-        `/examination/getExamRoomsAndItsExaminers?examinationId=${examId}`
-      )
-      setRoomAndExaminers(result)
-    }
-    fetchData()
-  }, [examId])
+  const [roomAndExaminers] = useFetch(
+    `/examination/getExamRoomsAndItsExaminers?examinationId=${examId}`
+  )
 
   const hideRoomExamineesModal = () => {
     setShowRoomExaminees(false)
@@ -42,10 +35,9 @@ const RoomAndExaminerList = ({ match, history }) => {
   }
 
   return (
-    <div className="page room-examiner-list">
-      <div className="room-examiner-list__title">考场和考官列表</div>
+    <PageListCustom title="考场和考官列表">
       <Table
-        className="room-examiner-list__table"
+        className="room-examiner-list-table"
         columns={roomExaminerListColumns(
           history,
           examId,
@@ -71,7 +63,7 @@ const RoomAndExaminerList = ({ match, history }) => {
           hideRoomRoundsModal={hideRoomRoundsModal}
         />
       )}
-    </div>
+    </PageListCustom>
   )
 }
 

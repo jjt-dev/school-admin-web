@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { Button, Modal, Table } from 'antd'
-import { addNumPrefix, addRoundNumPrefix } from 'src/utils/common'
+import {
+  addNumPrefix,
+  addRoundNumPrefix,
+  getCustomRow,
+  tableOrder,
+} from 'src/utils/common'
 import useFetch from 'src/hooks/useFetch'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
@@ -77,7 +82,7 @@ const RoomRoundModal = ({
       {!selectedRound && (
         <DndProvider backend={HTML5Backend}>
           <Table
-            columns={getRoundColumns(setSelectedRound)}
+            columns={getColumns(setSelectedRound)}
             dataSource={state.rounds}
             components={dragBodyRowComponents}
             onRow={(record, index) => ({
@@ -102,27 +107,15 @@ const RoomRoundModal = ({
 
 export default RoomRoundModal
 
-const getRoundColumns = (setSelectedRound) => [
-  {
-    title: '序号',
-    key: 'index',
-    render: (text, record, index) => `${index + 1}`,
-  },
+const getColumns = (setSelectedRound) => [
+  tableOrder,
   {
     title: '场次',
     key: 'id',
     render: (text, record, index) => `${addNumPrefix(index + 1)}`,
   },
-  {
-    title: '对应的组号',
-    key: 'roundNum',
-    render: (text, record) => `${addRoundNumPrefix(record.roundNum)}`,
-  },
-  {
-    title: '级别',
-    key: 'levelName',
-    render: (text, record) => `${record.levelName}(${record.levelAlias})`,
-  },
+  getCustomRow('对应的组号', (record) => addRoundNumPrefix(record.roundNum)),
+  getCustomRow('级别', (record) => `${record.levelName}(${record.levelAlias})`),
   {
     title: '操作',
     render: (text, record) => (

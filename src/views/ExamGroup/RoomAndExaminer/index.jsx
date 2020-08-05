@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import './index.less'
 import api from 'src/utils/api'
-import { Table, message } from 'antd'
-import { roomExaminerColumns } from '../helper'
+import { Table, message, Checkbox, Radio } from 'antd'
 import { useSelector } from 'react-redux'
-import { deepClone } from 'src/utils/common'
+import { deepClone, getDateRow, getRow, tableOrder } from 'src/utils/common'
 import Header from './Header'
 import PageListCustom from 'src/components/PageListCustom'
 
@@ -77,10 +76,7 @@ const RoomAndExaminer = ({ match, history }) => {
       {roomAndExaminer && (
         <Table
           className="room-examiner-table"
-          columns={roomExaminerColumns(
-            roomAndExaminer.examiners,
-            updateRoomExaminers
-          )}
+          columns={getColumns(roomAndExaminer.examiners, updateRoomExaminers)}
           dataSource={filterAllExaminers()}
           rowKey="id"
           size="middle"
@@ -100,3 +96,42 @@ const RoomAndExaminer = ({ match, history }) => {
 }
 
 export default RoomAndExaminer
+
+const getColumns = (roomExaminers, updateRoomExaminers) => {
+  const mainExaminer = roomExaminers.find((item) => item.isMain) || {}
+  return [
+    tableOrder,
+    getRow('姓名', 'username'),
+    getRow('电话', 'phone'),
+    getDateRow('创建时间', 'createTime'),
+    {
+      title: '选择',
+      render: (text, record) => (
+        <Checkbox
+          checked={roomExaminers.some((item) => item.id === record.id)}
+          onChange={() =>
+            updateRoomExaminers(
+              record,
+              isRoomExaminer(roomExaminers, record) ? 'delete' : 'add'
+            )
+          }
+        />
+      ),
+    },
+    {
+      title: '是否是主考官',
+      render: (text, record) => (
+        <Radio
+          checked={mainExaminer.id === record.id}
+          onChange={() => {
+            updateRoomExaminers(record, 'add', true)
+          }}
+        />
+      ),
+    },
+  ]
+}
+
+const isRoomExaminer = (examiners, examiner) => {
+  return examiners.some((item) => item.id === examiner.id)
+}
