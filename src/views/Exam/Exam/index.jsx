@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import './index.less'
 import { useDispatch, useSelector } from 'react-redux'
 import { formItemLayout, EntityStatus } from 'src/utils/const'
@@ -19,6 +19,7 @@ import api from 'src/utils/api'
 import { enforceLevelList, validateItems } from './helper'
 import LevelExamItems from './LevelExamItems'
 import { parseSearches } from 'src/utils/common'
+import ImportExamModal from './ImportExamModal'
 
 const { TextArea } = Input
 const { RangePicker } = DatePicker
@@ -26,6 +27,7 @@ const { RangePicker } = DatePicker
 const Exam = ({ match, history, form, location }) => {
   const dispatch = useDispatch()
   const { isFormal } = parseSearches(location)
+  const [showImportExamModal, setShowImportExamModal] = useState(false)
   const { examItemList, examLevelList, examInEdit } = useSelector(
     (state) => state.exam
   )
@@ -76,6 +78,10 @@ const Exam = ({ match, history, form, location }) => {
     })
   }
 
+  const hideImportExam = () => {
+    setShowImportExamModal(false)
+  }
+
   // 如果编辑考试，需要等到获取到该考试后，再渲染考试。这样可以解决form初始值的问题
   if (isEdit && !examInEdit) {
     return null
@@ -83,6 +89,16 @@ const Exam = ({ match, history, form, location }) => {
 
   return (
     <div className="page exam">
+      {examInEdit?.isFormal === false && (
+        <Button
+          type="primary"
+          size="small"
+          className="import-exam-btn"
+          onClick={() => setShowImportExamModal(true)}
+        >
+          导入考试
+        </Button>
+      )}
       <div className="exam__edit-title">
         {status}
         {examType}考试
@@ -212,6 +228,7 @@ const Exam = ({ match, history, form, location }) => {
           </Button>
         </Form.Item>
       </Form>
+      {showImportExamModal && <ImportExamModal hideModal={hideImportExam} />}
     </div>
   )
 }
