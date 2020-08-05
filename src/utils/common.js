@@ -302,7 +302,8 @@ export const getDetailRow = (getPath) => ({
   render: (text, record) => <Link to={getPath(record)}>详情</Link>,
 })
 
-export const getCustomRow = (title, getValue) => ({
+export const getCustomRow = (title, getValue, width) => ({
   title,
+  width,
   render: (text, record) => <span>{getValue(record)}</span>,
 })

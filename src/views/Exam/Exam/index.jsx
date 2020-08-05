@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import './index.less'
 import { useDispatch, useSelector } from 'react-redux'
 import * as examAction from 'src/actions/exam'
@@ -11,13 +11,15 @@ import FormInput from 'src/components/FormInput'
 import FormEnableRadio from 'src/components/FormEnableRadio'
 import FormDateRange from 'src/components/FormDateRange'
 import LevelRangeItems from './LevelRangeItems'
-import { message } from 'antd'
+import { message, Button } from 'antd'
+import ImportExamModal from './ImportExamModal'
 
 const { usePageForm } = PageFormCustom
 
 const Exam = ({ history }) => {
   const dispatch = useDispatch()
   const { isFormal } = useSearch()
+  const [showImportExamModal, setShowImportExamModal] = useState(false)
   const examType = isFormal === 'true' ? '正式' : '模拟'
   const [examId, isEdit, status] = usePageForm()
   const { examItemList, examLevelList, examInEdit } = useSelector(
@@ -86,6 +88,16 @@ const Exam = ({ history }) => {
       title={`${examType}考试`}
       customClass="exam"
     >
+      {examInEdit?.isFormal === false && (
+        <Button
+          type="primary"
+          size="small"
+          className="import-exam-btn"
+          onClick={() => setShowImportExamModal(true)}
+        >
+          导入考试
+        </Button>
+      )}
       <FormInput label="名称" name="title" initialValue={title} />
       <FormInput label="地址" name="address" initialValue={address} />
       <FormDateRange
@@ -122,6 +134,9 @@ const Exam = ({ history }) => {
         initialValue={note}
         required={false}
       />
+      {showImportExamModal && (
+        <ImportExamModal hideModal={() => setShowImportExamModal(false)} />
+      )}
     </PageFormCustom>
   )
 }

@@ -85,7 +85,7 @@ const getColumns = (examId, handleShowRoomExaminees, handleShowRoomRounds) => [
   },
   {
     title: '操作',
-    width: 220,
+    width: 260,
     render: (text, record) => (
       <>
         <Link to={`/exam/${examId}/room/${record.roomId}/examiners`}>编辑</Link>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import './index.less'
 import api from 'src/utils/api'
-import { Table, message, Select } from 'antd'
+import { Table, message, Select, Tag } from 'antd'
 import { useSelector } from 'react-redux'
 import RoundExamineeModal from './RoundExamineeModal'
 import useFetch from 'src/hooks/useFetch'
@@ -51,8 +51,19 @@ const RoundAndRoom = ({ match }) => {
 export default RoundAndRoom
 
 const getColumns = (allRooms, updateRoundRoom, setSelectedRound) => [
-  tableOrder,
-  getCustomRow('组号', (record) => addRoundNumPrefix(record.round_num)),
+  { ...tableOrder, width: 80 },
+  getCustomRow('组号', (record) => addRoundNumPrefix(record.round_num), 80),
+  {
+    title: '教练',
+    width: 300,
+    render: (text, record) => (
+      <>
+        {record.coachs.map(({ nickname, id }) => (
+          <Tag key={id}>{nickname}</Tag>
+        ))}
+      </>
+    ),
+  },
   {
     title: '考场',
     key: 'roomId',

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Modal, Table } from 'antd'
+import { Button, Modal, Table, Tag } from 'antd'
 import {
   addNumPrefix,
   addRoundNumPrefix,
@@ -115,6 +115,17 @@ const getColumns = (setSelectedRound) => [
     render: (text, record, index) => `${addNumPrefix(index + 1)}`,
   },
   getCustomRow('对应的组号', (record) => addRoundNumPrefix(record.roundNum)),
+  {
+    title: '教练',
+    width: 300,
+    render: (text, record) => (
+      <>
+        {record.coachs.map(({ nickname, id }) => (
+          <Tag key={id}>{nickname}</Tag>
+        ))}
+      </>
+    ),
+  },
   getCustomRow('级别', (record) => `${record.levelName}(${record.levelAlias})`),
   {
     title: '操作',
