@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { Cascader } from 'antd'
-import './index.less'
 import api from 'src/utils/api'
 import set from 'lodash/fp/set'
 

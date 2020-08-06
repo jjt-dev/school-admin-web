@@ -9,9 +9,11 @@ const FormImage = ({ form, label, name, message, imageUrl }) => {
     })
   }
 
+  const url = imageUrl ?? form.getFieldValue(name)
+
   return (
     <Form.Item rules={[{ required: true, message }]} label={label} name={name}>
-      <ImageUpload callback={handleLogoChange} imageUrl={imageUrl} />
+      <ImageUpload callback={handleLogoChange} imageUrl={url} />
     </Form.Item>
   )
 }

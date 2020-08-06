@@ -7,7 +7,14 @@ import { useRouteMatch } from 'react-router'
 import useActiveRoute from 'src/hooks/useActiveRoute'
 import usePageForm from './usePageForm'
 
-const PageFormCustom = ({ onFinish, children, title, customClass, form }) => {
+const PageFormCustom = ({
+  children,
+  title,
+  fullTitle,
+  customClass,
+  form,
+  onFinish,
+}) => {
   const match = useRouteMatch()
   const { title: defaultTitle, back } = useActiveRoute()
   const [defaultForm] = Form.useForm()
@@ -18,12 +25,11 @@ const PageFormCustom = ({ onFinish, children, title, customClass, form }) => {
     title = defaultTitle
   }
 
+  const finalTitle = fullTitle ?? `${status}${title}`
+
   return (
     <div className={`page jjt-form ${customClass}`}>
-      <div className="jjt-form-title">
-        {status}
-        {title}
-      </div>
+      <div className="jjt-form-title">{finalTitle}</div>
       <Form {...formLayout} form={form ?? defaultForm} onFinish={onFinish}>
         {children}
         <FormBottom path={back} />

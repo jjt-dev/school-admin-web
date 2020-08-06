@@ -11,6 +11,8 @@ import FormInput from '../FormInput'
 import FormEnableRadio from '../FormEnableRadio'
 import FormImage from '../FormImage'
 import FormSelect from '../FormSelect'
+import FormGender from '../FormGender'
+import FormDate from '../FormDate'
 
 const PageForm = ({ callback, formItems }) => {
   const match = useRouteMatch()
@@ -73,4 +75,6 @@ const compMap = {
   FormEnableRadio,
   FormImage,
   FormSelect,
+  FormGender,
+  FormDate,
 }

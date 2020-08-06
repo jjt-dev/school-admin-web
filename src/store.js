@@ -6,7 +6,6 @@ import errorMiddleware from './middlewares/error'
 import loadingMiddleware from './middlewares/loading'
 import app from 'src/reducers/app'
 import exam from 'src/reducers/exam'
-import examSign from 'src/reducers/examSign'
 import certificate from 'src/reducers/certificate'
 
 import { createStore } from 'src/utils/injectReducer'
@@ -17,7 +16,6 @@ export default (history) => {
       router: connectRouter(history),
       app,
       exam,
-      examSign,
       certificate,
     },
     applyMiddleware(
