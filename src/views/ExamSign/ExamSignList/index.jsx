@@ -1,26 +1,34 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import ActionBar from './ActionBar'
-import { Modal, Table, message } from 'antd'
+import Header from './Header'
+import { Modal, message, Avatar, Divider } from 'antd'
 import './index.less'
-import { examSignListColumns } from '../helper'
 import api from 'src/utils/api'
-import useListSearch from 'src/hooks/useListSearch'
 import useFetch from 'src/hooks/useFetch'
 import { local, TOKEN } from 'src/utils/storage'
+import CustomTable from 'src/components/CustomTable'
+import {
+  tableOrder,
+  getRow,
+  getCustomRow,
+  getDomain,
+  getDateRow,
+} from 'src/utils/common'
+import { SignStates } from 'src/utils/const'
+import { Link } from 'react-router-dom'
+import PageListCustom from 'src/components/PageListCustom'
 
 const { confirm } = Modal
+const { useTableFetch } = CustomTable
 
 const ExamSignList = ({ match, history }) => {
   const examId = match.params.id
   const { allCoaches } = useSelector((state) => state.app)
   const [exam] = useFetch(`/examination/item?id=${examId}`, {})
-  const {
-    data: examSignList,
-    refetchList: fetchSignList,
-    pagination,
-    filter,
-  } = useListSearch('/exam/sign/signPage', { examinationId: examId })
+  const signTableList = useTableFetch('/exam/sign/signPage', {
+    examinationId: examId,
+  })
+  const { search, fetchTable } = signTableList
 
   const handleSign = () => {
     history.push(`/exam/${examId}/sign`)
@@ -28,11 +36,11 @@ const ExamSignList = ({ match, history }) => {
 
   const printExamCertifs = () => {
     let path = `/exam/${examId}/print-batch/exam-certif?`
-    if (!!filter.coachId) {
-      path += `coachId=${filter.coachId}`
+    if (!!search.coachId) {
+      path += `coachId=${search.coachId}`
     }
-    if (!!filter.coachClassId) {
-      path += `&coachClassId=${filter.coachClassId}`
+    if (!!search.coachClassId) {
+      path += `&coachClassId=${search.coachClassId}`
     }
     history.push(path)
   }
@@ -44,22 +52,7 @@ const ExamSignList = ({ match, history }) => {
       onOk: async () => {
         await api.post(`/exam/sign/delSign?signId=${examSign.signId}`)
         message.success('报名删除成功')
-        fetchSignList()
-      },
-      onCancel() {
-        console.log('Cancel')
-      },
-    })
-  }
-
-  const confirmPaySignExam = (sign) => {
-    confirm({
-      title: '请问您确认要支付该报名吗?',
-      content: `考生名: ${sign.name}`,
-      onOk: async () => {
-        await api.post(`/exam/sign/payOffline?signId=${sign.signId}`)
-        message.success('支付考试报名成功')
-        fetchSignList()
+        fetchTable()
       },
       onCancel() {
         console.log('Cancel')
@@ -79,33 +72,54 @@ const ExamSignList = ({ match, history }) => {
   }
 
   return (
-    <div className="page sign-list">
-      <ActionBar
-        examSignList={examSignList}
-        fetchSignList={fetchSignList}
+    <PageListCustom title="报考列表">
+      <Header
+        examSignList={signTableList.dataSource}
+        fetchTable={fetchTable}
         handleSign={handleSign}
         examState={exam.currState}
         allCoaches={allCoaches}
         printExamCertifs={printExamCertifs}
         downloadExamineeInfo={downloadExamineeInfo}
       />
-      <Table
-        className="sign-list__table"
-        columns={examSignListColumns(
-          examId,
-          history,
-          confirmDeleteExamSign,
-          confirmPaySignExam
-        )}
-        dataSource={examSignList}
+      <CustomTable
+        {...signTableList}
+        columns={getColumns(examId, confirmDeleteExamSign)}
         rowKey="signId"
-        size="middle"
-        bordered={true}
-        pagination={pagination}
-        onChange={(value) => fetchSignList({ paginator: value })}
       />
-    </div>
+    </PageListCustom>
   )
 }
 
 export default ExamSignList
+
+const getColumns = (examId, deleteSign) => [
+  tableOrder,
+  getRow('姓名', 'name'),
+  getRow('身份证号', 'cardId'),
+  getCustomRow('头像', (record) => (
+    <Avatar size={45} src={`${getDomain()}${record.faceUrl}`} />
+  )),
+  getDateRow('报名时间', 'signTime'),
+  getCustomRow('当前状态', (record) => SignStates[record.currState]),
+  getRow('联系电话', 'phone'),
+  {
+    title: '操作',
+    render: (text, record) => (
+      <>
+        <Link to={`/exam/${examId}/sign/${record.signId}`}>编辑</Link>
+        <Divider type="vertical" />
+        <Link to={`/exam/${examId}/sign/${record.signId}/detail`}>详情</Link>
+        <Divider type="vertical" />
+        <span
+          className="table-action"
+          onClick={() => {
+            deleteSign(record)
+          }}
+        >
+          删除
+        </span>
+      </>
+    ),
+  },
+]

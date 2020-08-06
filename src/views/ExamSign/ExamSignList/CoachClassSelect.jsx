@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { Cascader } from 'antd'
 import './index.less'
 import api from 'src/utils/api'
-import { formatCascaderCoaches } from './helper'
 import set from 'lodash/fp/set'
 
 const CoachClassSelect = ({
@@ -57,3 +56,11 @@ const CoachClassSelect = ({
 }
 
 export default CoachClassSelect
+
+const formatCascaderCoaches = (coaches) => {
+  return coaches.map((item) => ({
+    value: item.id,
+    label: item.username,
+    isLeaf: false,
+  }))
+}

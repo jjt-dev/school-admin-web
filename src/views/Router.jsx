@@ -75,70 +75,70 @@ export const routes = [
     comp: Exam,
     back: { path: '/exams', breadcrumbs: ['考试管理', '编辑考试'] },
   },
-  // {
-  //   path: '/exam/:id/signs',
-  //   comp: ExamSignList,
-  //   back: {
-  //     path: '/exams',
-  //     breadcrumbs: ['考试管理', '报考列表'],
-  //   },
-  // },
-  // {
-  //   path: '/exam/:id/sign',
-  //   comp: ExamSign,
-  //   back: {
-  //     path: '/exam/:id/signs',
-  //     params: ['id'],
-  //     breadcrumbs: ['考试管理', '报考列表', '人工报名'],
-  //   },
-  // },
-  // {
-  //   path: '/exam/:id/sign/:signId',
-  //   comp: ExamSign,
-  //   back: {
-  //     path: '/exam/:id/signs',
-  //     params: ['id'],
-  //     breadcrumbs: ['考试管理', '报考列表', '编辑报名'],
-  //   },
-  // },
-  // {
-  //   path: '/exam/:id/sign/:signId/detail',
-  //   comp: ExamSignDetail,
-  //   back: {
-  //     path: '/exam/:id/signs',
-  //     params: ['id'],
-  //     breadcrumbs: ['考试管理', '报考列表', '报名详情'],
-  //   },
-  // },
-  // {
-  //   path: '/exam/:id/sign/:signId/print/exam-certif/:signLevelId',
-  //   comp: PrintExamCertif,
-  //   back: {
-  //     path: '/exam/:id/sign/:signId/detail',
-  //     params: ['id', 'signId'],
-  //     breadcrumbs: ['考试管理', '报考列表', '报名详情', '打印准考证'],
-  //   },
-  //   isPrintCertif: true,
-  // },
-  // {
-  //   path: '/exam/:id/print-batch/exam-certif',
-  //   comp: PrintExamCertif,
-  //   back: {
-  //     path: '/exam/:id/signs',
-  //     params: ['id'],
-  //     breadcrumbs: ['考试管理', '报考列表', '批量打印准考证'],
-  //   },
-  //   isPrintCertif: true,
-  // },
-  // {
-  //   path: '/exam/:id/sign/:signId/print/report/:signLevelId',
-  //   comp: PrintReport,
-  //   back: {
-  //     path: '/exam/:id/sign/:signId/detail',
-  //     params: ['id', 'signId'],
-  //     breadcrumbs: ['考试管理', '报考列表', '报名详情', '打印成绩单'],
-  //   },
-  // },
+  {
+    path: '/exam/:id/signs',
+    comp: ExamSignList,
+    back: {
+      path: '/exams',
+      breadcrumbs: ['考试管理', '报考列表'],
+    },
+  },
+  {
+    path: '/exam/:id/sign',
+    comp: ExamSign,
+    back: {
+      path: '/exam/:id/signs',
+      params: ['id'],
+      breadcrumbs: ['考试管理', '报考列表', '人工报名'],
+    },
+  },
+  {
+    path: '/exam/:id/sign/:signId',
+    comp: ExamSign,
+    back: {
+      path: '/exam/:id/signs',
+      params: ['id'],
+      breadcrumbs: ['考试管理', '报考列表', '编辑报名'],
+    },
+  },
+  {
+    path: '/exam/:id/sign/:signId/detail',
+    comp: ExamSignDetail,
+    back: {
+      path: '/exam/:id/signs',
+      params: ['id'],
+      breadcrumbs: ['考试管理', '报考列表', '报名详情'],
+    },
+  },
+  {
+    path: '/exam/:id/sign/:signId/print/exam-certif/:signLevelId',
+    comp: PrintExamCertif,
+    back: {
+      path: '/exam/:id/sign/:signId/detail',
+      params: ['id', 'signId'],
+      breadcrumbs: ['考试管理', '报考列表', '报名详情', '打印准考证'],
+    },
+    isPrintCertif: true,
+  },
+  {
+    path: '/exam/:id/print-batch/exam-certif',
+    comp: PrintExamCertif,
+    back: {
+      path: '/exam/:id/signs',
+      params: ['id'],
+      breadcrumbs: ['考试管理', '报考列表', '批量打印准考证'],
+    },
+    isPrintCertif: true,
+  },
+  {
+    path: '/exam/:id/sign/:signId/print/report/:signLevelId',
+    comp: PrintReport,
+    back: {
+      path: '/exam/:id/sign/:signId/detail',
+      params: ['id', 'signId'],
+      breadcrumbs: ['考试管理', '报考列表', '报名详情', '打印成绩单'],
+    },
+  },
   {
     path: '/exam/:id/group',
     title: '考试分组',

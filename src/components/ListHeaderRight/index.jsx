@@ -4,6 +4,7 @@ import { Button, Input } from 'antd'
 const ListHeaderRight = ({
   fetchTable,
   placeholder = '请输入查询条件',
+  clearSearchCallback,
   children,
 }) => {
   const [search, setSearch] = useState('')
@@ -15,6 +16,7 @@ const ListHeaderRight = ({
   const clearSearch = () => {
     setSearch('')
     fetchTable({ keyword: '' })
+    clearSearchCallback && clearSearchCallback()
   }
 
   return (
