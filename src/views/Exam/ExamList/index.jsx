@@ -10,25 +10,39 @@ import {
   getActionRow,
   getCustomRow,
   getDateRow,
-  getEnableRow,
   getLinkRow,
   getRow,
   tableOrder,
+  confirmUpdate,
+  getSwitchRow,
 } from 'src/utils/common'
 import { ExamStates } from 'src/utils/const'
 import CustomTable from 'src/components/CustomTable'
+import { pathMockBtn, pathExamList, pathExamEnable } from 'src/utils/httpUtil'
 
 const { useTableFetch } = CustomTable
 
 const ExamList = () => {
-  const [canAddMockExam, refetch] = useFetch(`/examination/canShowMockBtn`)
+  const [canAddMockExam, refetch] = useFetch(pathMockBtn)
   const [selectedExam, setSelectedExam] = useState()
-  const examList = useTableFetch(`/examination/page`)
+  const examList = useTableFetch(pathExamList)
+
+  const updateExamStatus = (exam) => {
+    const { isEnable } = exam
+    const entity = {
+      status: isEnable ? '禁用' : '启用',
+      title: '考试',
+      titleValue: exam.title,
+      path: pathExamEnable({ id: exam.id, isEnable: !isEnable }),
+      callback: () => examList.fetchTable(),
+    }
+    confirmUpdate(entity)
+  }
 
   return (
     <>
       <PageList
-        columns={getColumns(setSelectedExam)}
+        columns={getColumns(setSelectedExam, updateExamStatus)}
         deleteCallback={refetch}
         defaultTableList={examList}
       >
@@ -46,14 +60,14 @@ const ExamList = () => {
 
 export default ExamList
 
-const getColumns = (setSelectedExam) => (deleteCoach) => [
+const getColumns = (setSelectedExam, updateExamStatus) => (deleteCoach) => [
   tableOrder,
   getRow('名称', 'title'),
   getExamlinkRow(setSelectedExam),
   getDateRow('考试时间', 'examStartTime'),
   getDateRow('报名时间', 'signStartTime'),
   getCustomRow('当前状态', (record) => ExamStates[record.currState]),
-  getEnableRow(),
+  getSwitchRow(updateExamStatus),
   getCustomRow('考试类型', (record) => (record.isFormal ? '正式' : '模拟')),
   getLinkRow('考生列表', '/exam/::/signs', ['id']),
   getLinkRow('考试分组', '/exam/::/group', ['id']),

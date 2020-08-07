@@ -1,3 +1,8 @@
+import { buildParameters } from './common'
+
+/**
+ * exam group
+ */
 export const pathExamRounds = (examId) =>
   `/examination/examRoundInfo?examinationId=${examId}`
 
@@ -12,3 +17,12 @@ export const pathRoundAndRoom = (examId) =>
 
 export const pathUpdRoundRoom = (sourceId, newRoomId) =>
   `/examination/updateRoundRoom?sourceId=${sourceId}&newRoomId=${newRoomId}`
+
+/**
+ * exam
+ */
+export const pathMockBtn = `/examination/canShowMockBtn`
+export const pathExamList = `/examination/page`
+
+export const pathExamEnable = (params) =>
+  buildParameters(`/examination/enable`, params)

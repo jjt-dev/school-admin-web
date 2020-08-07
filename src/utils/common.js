@@ -1,7 +1,7 @@
 import React from 'react'
 import * as queryString from 'query-string'
 import moment from 'moment'
-import { Divider, message } from 'antd'
+import { Divider, message, Switch } from 'antd'
 import { EntityStatus, ExamStates, SignStates } from './const'
 import domtoimage from 'dom-to-image'
 import confirm from 'antd/lib/modal/confirm'
@@ -243,6 +243,21 @@ export const getEnableRow = () => ({
   dataIndex: 'isEnable',
   key: 'isEnable',
   render: (text, record) => <span>{record.isEnable ? '是' : '否'}</span>,
+})
+
+export const getSwitchRow = (update) => ({
+  title: '状态',
+  key: 'isEnable',
+  render: (text, record) => {
+    return (
+      <Switch
+        onChange={() => update(record)}
+        checkedChildren="启用"
+        unCheckedChildren="禁用"
+        checked={record.isEnable}
+      />
+    )
+  },
 })
 
 export const getActionRow = (getPath, deleteEntity) => ({
