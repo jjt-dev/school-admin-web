@@ -1,8 +1,13 @@
+import React from 'react'
 import * as queryString from 'query-string'
 import moment from 'moment'
-import { message } from 'antd'
-import { ExamStates, SignStates } from './const'
+import { Divider, message, Switch } from 'antd'
+import { EntityStatus, ExamStates, SignStates } from './const'
 import domtoimage from 'dom-to-image'
+import confirm from 'antd/lib/modal/confirm'
+import api from './api'
+import { Link } from 'react-router-dom'
+import Button from 'antd/es/button'
 
 export const parseSearches = (location) => {
   return queryString.parse(location.search)
@@ -77,8 +82,9 @@ export const chineseDate = () => {
 }
 
 export const buildParameters = (path, parameters) => {
+  path += '?'
   Object.keys(parameters).forEach((key) => {
-    if (typeof isNotEmpty(parameters[key])) {
+    if (isNotEmpty(String(parameters[key]))) {
       path += `&${key}=${encodeURIComponent(parameters[key])}`
     }
   })
@@ -172,3 +178,147 @@ export const downloadImg = async (url) => {
   a.click()
   document.body.removeChild(a)
 }
+
+export const confirmUpdate = ({
+  status,
+  title,
+  titleValue,
+  path,
+  callback,
+}) => {
+  confirm({
+    title: `请问您确认要${status}该${title}吗?`,
+    content: `${title}名: ${titleValue}`,
+    okText: '确定',
+    cancelText: '取消',
+    onOk: async () => {
+      await api.post(path)
+      message.success(`${title}${status}成功`)
+      callback && callback()
+    },
+    onCancel() {
+      console.log('Cancel')
+    },
+  })
+}
+
+export const getStatus = (isEdit) => {
+  return isEdit ? EntityStatus.EDIT : EntityStatus.CREATE
+}
+
+export const tableOrder = {
+  title: '序号',
+  key: 'index',
+  render: (text, record, index) => `${index + 1}`,
+}
+
+export const getRow = (title, name, width) => ({
+  title,
+  dataIndex: name,
+  key: name,
+  width,
+})
+
+export const getDateRow = (title, name) => ({
+  title,
+  dataIndex: name,
+  key: name,
+  render: (text, record) => <span>{formatTime(record[name])}</span>,
+})
+
+export const getLinkRow = (title, link, placeholderNames) => {
+  return {
+    title,
+    render: (text, record) => {
+      placeholderNames.forEach((item) => {
+        link = link.replace('::', record[item])
+      })
+      return <Link to={link}>查看</Link>
+    },
+  }
+}
+
+export const getEnableRow = () => ({
+  title: '已启用',
+  dataIndex: 'isEnable',
+  key: 'isEnable',
+  render: (text, record) => <span>{record.isEnable ? '是' : '否'}</span>,
+})
+
+export const getSwitchRow = (update) => ({
+  title: '状态',
+  key: 'isEnable',
+  render: (text, record) => {
+    return (
+      <Switch
+        onChange={() => update(record)}
+        checkedChildren="启用"
+        unCheckedChildren="禁用"
+        checked={record.isEnable}
+      />
+    )
+  },
+})
+
+export const getActionRow = (getPath, deleteEntity) => ({
+  title: '操作',
+  key: 'action',
+  render: (text, record) => (
+    <>
+      <Link to={getPath(record)}>编辑</Link>
+      {deleteEntity && (
+        <>
+          <Divider type="vertical" />
+          <span
+            className="table-action"
+            onClick={() => {
+              deleteEntity(record)
+            }}
+          >
+            删除
+          </span>
+        </>
+      )}
+    </>
+  ),
+})
+
+export const getViewRow = (title, callback) => ({
+  title,
+  render: (text, record) => {
+    return (
+      <span>
+        <Button size="small" onClick={() => callback(record)}>
+          查看{title}
+        </Button>
+      </span>
+    )
+  },
+})
+
+export const getDeleteRow = (deleteEntity) => ({
+  title: '操作',
+  key: 'action',
+  render: (text, record) => (
+    <span
+      className="table-action"
+      onClick={() => {
+        deleteEntity(record)
+      }}
+    >
+      删除
+    </span>
+  ),
+})
+
+export const getDetailRow = (getPath) => ({
+  title: '操作',
+  key: 'action',
+  render: (text, record) => <Link to={getPath(record)}>详情</Link>,
+})
+
+export const getCustomRow = (title, getValue, width) => ({
+  title,
+  width,
+  render: (text, record) => <span>{getValue(record)}</span>,
+})

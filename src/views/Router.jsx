@@ -29,30 +29,49 @@ import CoachClassList from './Coach/CoachClassList'
 
 export const routes = [
   { path: '/login', comp: Login },
-  { path: '/coaches', comp: CoachList },
+  {
+    path: '/coaches',
+    editPath: '/coach',
+    title: '教练',
+    titleProp: 'username',
+    comp: CoachList,
+  },
   {
     path: '/coach/:id/classes',
+    editPath: '/coach/class',
+    title: '教练班级',
     comp: CoachClassList,
     back: { path: '/coaches', breadcrumbs: ['教练管理', '教练班级'] },
   },
   {
     path: '/coach',
+    title: '教练',
     comp: Coach,
     back: { path: '/coaches', breadcrumbs: ['教练管理', '新增教练'] },
   },
   {
     path: '/coach/:id',
+    defaultPath: '/coach',
+    title: '教练',
     comp: Coach,
     back: { path: '/coaches', breadcrumbs: ['教练管理', '编辑教练'] },
   },
-  { path: '/exams', comp: ExamList },
+  {
+    path: '/exams',
+    editPath: '/exam',
+    title: '考试',
+    titleProp: 'title',
+    comp: ExamList,
+  },
   {
     path: '/exam',
+    title: '考试',
     comp: Exam,
     back: { path: '/exams', breadcrumbs: ['考试管理', '新增考试'] },
   },
   {
     path: '/exam/:id',
+    title: '考试',
     comp: Exam,
     back: { path: '/exams', breadcrumbs: ['考试管理', '编辑考试'] },
   },
@@ -92,7 +111,7 @@ export const routes = [
     },
   },
   {
-    path: '/exam/:id/sign/:signId/print/exam-certif',
+    path: '/exam/:id/sign/:signId/print/exam-certif/:signLevelId',
     comp: PrintExamCertif,
     back: {
       path: '/exam/:id/sign/:signId/detail',
@@ -112,7 +131,7 @@ export const routes = [
     isPrintCertif: true,
   },
   {
-    path: '/exam/:id/sign/:signId/print/report',
+    path: '/exam/:id/sign/:signId/print/report/:signLevelId',
     comp: PrintReport,
     back: {
       path: '/exam/:id/sign/:signId/detail',
@@ -122,6 +141,7 @@ export const routes = [
   },
   {
     path: '/exam/:id/group',
+    title: '考试分组',
     comp: ExamGroup,
     back: {
       path: '/exams',
@@ -164,31 +184,57 @@ export const routes = [
       breadcrumbs: ['考试管理', '分组管理', '考场与考官', '绑定考官'],
     },
   },
-  { path: '/examinees', comp: ExamineeList },
+  {
+    path: '/examinees',
+    editPath: '/examinee',
+    title: '考生',
+    titleProp: 'username',
+    comp: ExamineeList,
+  },
   {
     path: '/examinee/:id',
+    title: '考生',
     comp: Examinee,
     back: { path: '/examinees', breadcrumbs: ['考生管理', '考生详情'] },
   },
-  { path: '/examiners', comp: ExaminerList },
+  {
+    path: '/examiners',
+    editPath: '/examiner',
+    title: '考官',
+    titleProp: 'username',
+    comp: ExaminerList,
+  },
   {
     path: '/examiner',
+    title: '考官',
     comp: Examiner,
     back: { path: '/examiners', breadcrumbs: ['考官管理', '新增考官'] },
   },
   {
     path: '/examiner/:id',
+    title: '考官',
+    defaultPath: '/examiner',
     comp: Examiner,
     back: { path: '/examiners', breadcrumbs: ['考官管理', '编辑考官'] },
   },
-  { path: '/rooms', comp: RoomList },
+  {
+    path: '/rooms',
+    editPath: '/room',
+    apiPath: '/config/room',
+    title: '考场',
+    comp: RoomList,
+  },
   {
     path: '/room',
+    defaultPath: '/config/room',
+    title: '考场',
     comp: Room,
     back: { path: '/rooms', breadcrumbs: ['考场管理', '新增考场'] },
   },
   {
     path: '/room/:id',
+    defaultPath: '/config/room',
+    title: '考场',
     comp: Room,
     back: { path: '/rooms', breadcrumbs: ['考场管理', '编辑考场'] },
   },
@@ -209,7 +255,12 @@ export const routes = [
     },
   },
   { path: '/certificates', comp: Certificates },
-  { path: '/parameter', comp: Parameter },
+  {
+    path: '/parameter/:id',
+    title: '学校',
+    defaultPath: '/school',
+    comp: Parameter,
+  },
 ]
 
 const Router = () => (

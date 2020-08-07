@@ -1,24 +1,16 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import './index.less'
 import { Table, Input, Divider, message } from 'antd'
 import api from 'src/utils/api'
-import { useCallback } from 'react'
+import useFetch from 'src/hooks/useFetch'
+import { getRow } from 'src/utils/common'
 
 const columnWidth = '100px'
 
 const LevelPrice = () => {
-  const [levelPrices, setLevelPrices] = useState([])
+  const [levelPrices, refetchPrices] = useFetch(`/config/level/price/list`, [])
   const [levelInEditing, setLevelInEditing] = useState(null)
   const [newPrice, setNewPrice] = useState(null)
-
-  const fetchLevels = useCallback(async () => {
-    const result = await api.get(`/config/level/price/list`)
-    setLevelPrices(result)
-  }, [])
-
-  useEffect(() => {
-    fetchLevels()
-  }, [fetchLevels])
 
   const changeLevelPrice = async () => {
     if (newPrice) {
@@ -26,7 +18,7 @@ const LevelPrice = () => {
         `/config/level/price/edit?levelId=${levelInEditing.id}&price=${newPrice}`
       )
       message.success('更新考评等级价格成功')
-      fetchLevels()
+      refetchPrices()
     }
     clearEdit()
   }
@@ -37,29 +29,11 @@ const LevelPrice = () => {
   }
 
   const columns = [
+    getRow('级别', 'id', columnWidth),
+    getRow('级别名称', 'name', columnWidth),
+    getRow('带色', 'alias', columnWidth),
     {
-      title: '级别',
-      dataIndex: 'id',
-      key: 'id',
-      width: columnWidth,
-    },
-    {
-      title: '级别名称',
-      dataIndex: 'name',
-      key: 'name',
-      width: columnWidth,
-    },
-    {
-      title: '带色',
-      dataIndex: 'alias',
-      key: 'alias',
-      width: columnWidth,
-    },
-    {
-      title: '价格',
-      dataIndex: 'price',
-      key: 'price',
-      width: columnWidth,
+      ...getRow('价格', 'price', columnWidth),
       render: (text, record) => {
         if (levelInEditing?.id === record.id) {
           return (

@@ -1,42 +1,31 @@
 import React, { useEffect, useState } from 'react'
 import './index.less'
 import { useDispatch, useSelector } from 'react-redux'
-import { formItemLayout, EntityStatus } from 'src/utils/const'
-import {
-  Form,
-  Input,
-  Button,
-  DatePicker,
-  Checkbox,
-  Row,
-  Col,
-  Radio,
-} from 'antd'
 import * as examAction from 'src/actions/exam'
-import { updateExam } from '../helper'
-import moment from 'moment'
 import api from 'src/utils/api'
-import { enforceLevelList, validateItems } from './helper'
+import { enforceLevelList, updateExam, validateItems } from './helper'
 import LevelExamItems from './LevelExamItems'
-import { parseSearches } from 'src/utils/common'
+import PageFormCustom from 'src/components/PageFormCustom'
+import useSearch from 'src/hooks/useSearch'
+import FormInput from 'src/components/FormInput'
+import FormEnableRadio from 'src/components/FormEnableRadio'
+import FormDateRange from 'src/components/FormDateRange'
+import LevelRangeItems from './LevelRangeItems'
+import { message, Button } from 'antd'
 import ImportExamModal from './ImportExamModal'
 
-const { TextArea } = Input
-const { RangePicker } = DatePicker
+const { usePageForm } = PageFormCustom
 
-const Exam = ({ match, history, form, location }) => {
+const Exam = ({ history }) => {
   const dispatch = useDispatch()
-  const { isFormal } = parseSearches(location)
+  const { isFormal } = useSearch()
   const [showImportExamModal, setShowImportExamModal] = useState(false)
+  const examType = isFormal === 'true' ? '正式' : '模拟'
+  const [examId, isEdit, status] = usePageForm()
   const { examItemList, examLevelList, examInEdit } = useSelector(
     (state) => state.exam
   )
   const checkedLevels = examLevelList.filter((level) => level.items)
-  const examId = match.params.id
-  const isEdit = !!examId
-  const status = isEdit ? EntityStatus.EDIT : EntityStatus.CREATE
-  const { getFieldDecorator } = form
-  const examType = isFormal === 'true' ? '正式' : '模拟'
 
   useEffect(() => {
     const fetchData = async () => {
@@ -67,19 +56,14 @@ const Exam = ({ match, history, form, location }) => {
     )
   }
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
+  const onFinish = (values) => {
     const itemsValid = validateItems(checkedLevels)
-    form.validateFields(async (err, values) => {
-      if (!err && itemsValid) {
-        values.isFormal = isFormal
-        updateExam(history, status, examId, values, checkedLevels)
-      }
-    })
-  }
-
-  const hideImportExam = () => {
-    setShowImportExamModal(false)
+    if (itemsValid) {
+      values.isFormal = isFormal
+      updateExam(history, status, examId, values, checkedLevels)
+    } else {
+      message.error('请保证每一个级别的考项比例之和为100')
+    }
   }
 
   // 如果编辑考试，需要等到获取到该考试后，再渲染考试。这样可以解决form初始值的问题
@@ -87,8 +71,23 @@ const Exam = ({ match, history, form, location }) => {
     return null
   }
 
+  const {
+    title,
+    address,
+    isEnable,
+    examStartTime,
+    examEndTime,
+    signStartTime,
+    signEndTime,
+    note,
+  } = examInEdit || {}
+
   return (
-    <div className="page exam">
+    <PageFormCustom
+      onFinish={onFinish}
+      title={`${examType}考试`}
+      customClass="exam"
+    >
       {examInEdit?.isFormal === false && (
         <Button
           type="primary"
@@ -99,138 +98,47 @@ const Exam = ({ match, history, form, location }) => {
           导入考试
         </Button>
       )}
-      <div className="exam__edit-title">
-        {status}
-        {examType}考试
-      </div>
-      <Form
-        onSubmit={handleSubmit}
-        {...formItemLayout}
-        className="exam__edit-form"
-      >
-        <Form.Item label="名称">
-          {getFieldDecorator('title', {
-            initialValue: isEdit ? examInEdit?.title : '',
-            rules: [{ required: true }],
-          })(<Input type="text" placeholder="请输入考试名称" />)}
-        </Form.Item>
-        <Form.Item label="地址">
-          {getFieldDecorator('address', {
-            initialValue: isEdit ? examInEdit?.address : '',
-            rules: [{ required: true }],
-          })(<Input type="text" placeholder="请输入考试地址" />)}
-        </Form.Item>
-        <Form.Item label="考试时间">
-          {getFieldDecorator('examTime', {
-            initialValue: isEdit
-              ? [
-                  moment(examInEdit?.examStartTime),
-                  moment(examInEdit?.examEndTime),
-                ]
-              : '',
-            rules: [{ required: true }],
-          })(
-            <RangePicker
-              showTime={{
-                format: 'HH:mm',
-                defaultValue: [
-                  moment('09:00', 'HH:mm'),
-                  moment('18:00', 'HH:mm'),
-                ],
-              }}
-              format="YYYY-MM-DD HH:mm"
-            />
-          )}
-        </Form.Item>
-        <Form.Item label="报名时间">
-          {getFieldDecorator('signTime', {
-            initialValue: isEdit
-              ? [
-                  moment(examInEdit?.signStartTime),
-                  moment(examInEdit?.signEndTime),
-                ]
-              : '',
-            rules: [{ required: true }],
-          })(
-            <RangePicker
-              showTime={{
-                format: 'HH:mm',
-                defaultValue: [
-                  moment('00:00', 'HH:mm'),
-                  moment('23:59', 'HH:mm'),
-                ],
-              }}
-              format="YYYY-MM-DD HH:mm"
-            />
-          )}
-        </Form.Item>
-        <Form.Item label="级别范围" className="exam__edit-form--level">
-          {getFieldDecorator('examLevels', {
-            initialValue: isEdit ? examInEdit?.levelsCanSign.split(',') : '',
-            validateTrigger: 'onChange',
-            rules: [{ required: true, message: '请选择级别范围' }],
-          })(
-            <Checkbox.Group style={{ width: '100%' }}>
-              {examLevelList &&
-                examLevelList.map((level) => (
-                  <Row key={level.id}>
-                    <Col>
-                      <Checkbox
-                        value={String(level.id)}
-                        onChange={(e) => handleLevelCheckChange(level.id, e)}
-                      >{`${level.name} (${level.alias})`}</Checkbox>
-                      <Input
-                        disabled
-                        value={level.price}
-                        addonAfter={<span>元</span>}
-                      />
-                    </Col>
-                  </Row>
-                ))}
-            </Checkbox.Group>
-          )}
-        </Form.Item>
-        {checkedLevels.map((level) => (
-          <LevelExamItems
-            getFieldDecorator={getFieldDecorator}
-            key={level.id}
-            level={level}
-            examItemList={examItemList}
-            selectItems={selectItems}
-            updateItemRatio={updateItemRatio}
-          />
-        ))}
-        <Form.Item label="启用">
-          {getFieldDecorator('isEnable', {
-            initialValue: isEdit ? examInEdit?.isEnable : false,
-            rules: [{ required: true }],
-          })(
-            <Radio.Group>
-              <Radio value={true}>是</Radio>
-              <Radio value={false}>否</Radio>
-            </Radio.Group>
-          )}
-        </Form.Item>
-        <Form.Item label="描述">
-          {getFieldDecorator('note', {
-            initialValue: isEdit ? examInEdit?.note : '',
-          })(<TextArea rows={2} placeholder="请输入描述" />)}
-        </Form.Item>
-        <Form.Item className="exam__edit-form--btns">
-          <Button
-            className="edit-cancel-btn"
-            onClick={() => history.push('/exams')}
-          >
-            取消
-          </Button>
-          <Button type="primary" htmlType="submit">
-            确定
-          </Button>
-        </Form.Item>
-      </Form>
-      {showImportExamModal && <ImportExamModal hideModal={hideImportExam} />}
-    </div>
+      <FormInput label="名称" name="title" initialValue={title} />
+      <FormInput label="地址" name="address" initialValue={address} />
+      <FormDateRange
+        label="考试时间"
+        name="examTime"
+        initialValue={[examStartTime, examEndTime]}
+        defaultHours={['09:00', '18:00']}
+      />
+      <FormDateRange
+        label="报名时间"
+        name="signTime"
+        initialValue={[signStartTime, signEndTime]}
+        defaultHours={['00:00', '23:59']}
+      />
+      <LevelRangeItems
+        examLevelList={examLevelList}
+        handleLevelCheckChange={handleLevelCheckChange}
+        initialValue={examInEdit?.levelsCanSign.split(',')}
+      />
+      {checkedLevels.map((level) => (
+        <LevelExamItems
+          key={level.id}
+          level={level}
+          examItemList={examItemList}
+          selectItems={selectItems}
+          updateItemRatio={updateItemRatio}
+        />
+      ))}
+      <FormEnableRadio initialValue={isEnable} />
+      <FormInput
+        type="textarea"
+        label="描述"
+        name="note"
+        initialValue={note}
+        required={false}
+      />
+      {showImportExamModal && (
+        <ImportExamModal hideModal={() => setShowImportExamModal(false)} />
+      )}
+    </PageFormCustom>
   )
 }
 
-export default Form.create()(Exam)
+export default Exam

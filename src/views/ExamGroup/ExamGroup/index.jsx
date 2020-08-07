@@ -1,72 +1,39 @@
-import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import * as examGroupAction from 'src/actions/examGroup'
-import ActionBar from './ActionBar'
-import { Table } from 'antd'
+import React from 'react'
+import Header from './Header'
+import PageList from 'src/components/PageList'
+import CustomTable from 'src/components/CustomTable'
+import { getActionRow, getRow, tableOrder } from 'src/utils/common'
+import useFetch from 'src/hooks/useFetch'
 import './index.less'
-import { groupStudentsColumns } from '../helper'
-import { pagConfig } from 'src/utils/const'
-import { useHistory } from 'react-router'
-import { useCallback } from 'react'
+
+const { useTableFetch } = CustomTable
 
 const ExamGroup = ({ match }) => {
-  const history = useHistory()
-  const dispatch = useDispatch()
-  const { exam, groupStudentList, filter, total } = useSelector(
-    (state) => state.examGroup
-  )
-  const examId = match.params.id
-  const { page, rows } = filter.paginator
-
-  useEffect(() => {
-    dispatch(examGroupAction.getExam(examId))
-  }, [dispatch, examId])
-
-  useEffect(() => {
-    return () => dispatch(examGroupAction.resetStore())
-  }, [dispatch])
-
-  const getGroupStudentList = useCallback(() => {
-    dispatch(examGroupAction.getGroupStudentList(examId, filter))
-  }, [dispatch, examId, filter])
-
-  useEffect(() => {
-    getGroupStudentList()
-  }, [getGroupStudentList])
-
-  const updateFilter = (field, value) => {
-    dispatch(examGroupAction.updateFilter(field, value))
-  }
+  const examinationId = match.params.id
+  const [exam] = useFetch(`/examination/item?id=${examinationId}`)
+  const groupStdList = useTableFetch(`/examination/examinationStudentGrouped`, {
+    examinationId,
+  })
 
   return (
-    <div className="page exam-group">
-      <div className="exam-group__title">考试分组列表</div>
-      {exam && (
-        <ActionBar
-          updateFilter={updateFilter}
-          exam={exam}
-          getGroupStudentList={getGroupStudentList}
-        />
-      )}
-      <Table
-        className="exam-group__table"
-        columns={groupStudentsColumns(history, examId)}
-        dataSource={groupStudentList}
-        rowKey="id"
-        size="middle"
-        bordered={true}
-        pagination={{
-          ...pagConfig,
-          current: page,
-          pageSize: rows,
-          total,
-        }}
-        onChange={({ current, pageSize }) =>
-          updateFilter('paginator', { page: current, rows: pageSize })
-        }
-      />
-    </div>
+    <PageList
+      defaultTableList={groupStdList}
+      columns={getColumns(examinationId)}
+    >
+      {exam && <Header fetchTable={groupStdList.fetchTable} exam={exam} />}
+    </PageList>
   )
 }
 
 export default ExamGroup
+
+const getColumns = (examId) => () => [
+  tableOrder,
+  getRow('姓名', 'studentName'),
+  getRow('教练', 'coachName'),
+  getRow('考评级别', 'levelName'),
+  getRow('带色', 'levelAlias'),
+  getRow('组号', 'roundNum'),
+  getRow('考试序号', 'subOrderNum'),
+  getActionRow((record) => `/exam/${examId}/group/${record.id}`),
+]

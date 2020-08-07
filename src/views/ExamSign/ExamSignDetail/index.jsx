@@ -1,73 +1,76 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import './index.less'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { findById, formatTime, getDomain } from 'src/utils/common'
 import { Descriptions, Button } from 'antd'
-import * as examSignAction from 'src/actions/examSign'
 import { Genders, Relationships } from 'src/utils/const'
+import useFetch from 'src/hooks/useFetch'
 
 const ExamSignDetail = ({ match, history }) => {
-  const dispatch = useDispatch()
-  const { allCoaches, allSigningExams } = useSelector((state) => state.app)
-  const { signInEdit } = useSelector((state) => state.examSign)
-  const examId = match.params.id
-  const signId = match.params.signId
+  const { id: examId, signId } = match.params
+  const { allCoaches } = useSelector((state) => state.app)
+  let [sign] = useFetch(`/exam/sign/signInfo?signId=${signId}`)
+  const [exam] = useFetch(`/examination/item?id=${examId}`, {})
   // 当前只有一个等级考试
-  const signLevel = (signInEdit && signInEdit.signLevels[0]) || {}
+  const signLevel = (sign && sign.signLevels[0]) || {}
   const examFinished = signLevel.resultScore !== -1
-
-  useEffect(() => {
-    dispatch(examSignAction.getExamSign(signId))
-  }, [dispatch, signId])
 
   const goToPrint = (type) => {
     history.push(`/exam/${examId}/sign/${signId}/print/${type}`)
   }
 
+  if (!sign) return null
+
+  sign = {
+    ...sign.signInfo,
+    ...sign.studentInfo,
+    signLevels: sign.signLevels,
+  }
+
   return (
     <>
-      {signInEdit && (
+      {sign && (
         <div className="page sign-detail">
           <Descriptions title="报名详情" bordered>
             <Descriptions.Item label="教练" span={3}>
-              {findById(allCoaches, signInEdit.coachId).username}
+              {findById(allCoaches, sign.coachId).username}
             </Descriptions.Item>
             <Descriptions.Item label="考试名称" span={3}>
-              {findById(allSigningExams, signInEdit.examinationId).title}
+              {exam.title}
             </Descriptions.Item>
             <Descriptions.Item label="考生姓名" span={3}>
-              {signInEdit.name}
+              {sign.name}
             </Descriptions.Item>
             <Descriptions.Item label="考生性别" span={3}>
-              {Genders[signInEdit.gender]}
+              {Genders[sign.gender]}
             </Descriptions.Item>
             <Descriptions.Item label="考生生日" span={3}>
-              {formatTime(signInEdit.birthday)}
+              {formatTime(sign.birthday)}
             </Descriptions.Item>
             <Descriptions.Item label="照片" span={3}>
               <img
-                src={`${getDomain()}${signInEdit.faceUrl}`}
+                src={`${getDomain()}${sign.faceUrl}`}
                 alt="avatar"
                 style={{ width: '70px' }}
               />
             </Descriptions.Item>
             <Descriptions.Item label="家长电话" span={3}>
-              {signInEdit.phone}
+              {sign.phone}
             </Descriptions.Item>
             <Descriptions.Item label="家长关系" span={3}>
-              {Relationships[signInEdit.relationship]}
+              {Relationships[sign.relationship]}
             </Descriptions.Item>
             <Descriptions.Item label="家长姓名" span={3}>
-              {signInEdit.parentName}
+              {sign.parentName}
             </Descriptions.Item>
             <Descriptions.Item label="报考级别" span={3}>
-              {signInEdit.signLevels.map((level) => level.levelName).join(',')}
+              {sign.signLevels.map((level) => level.levelName).join(',')}
             </Descriptions.Item>
             <Descriptions.Item label="住址" span={3}>
-              {signInEdit.address}
+              {sign.address}
             </Descriptions.Item>
             <Descriptions.Item label="已缴费" span={3}>
-              {signInEdit.currState > 0 ? '是' : '否'}
+              {sign.currState > 0 ? '是' : '否'}
             </Descriptions.Item>
           </Descriptions>
           <div className="sign-detail__btns">

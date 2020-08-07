@@ -1,66 +1,49 @@
 import React, { useState } from 'react'
-import ActionBar from './ActionBar'
-import { Modal, Table, message } from 'antd'
 import './index.less'
-import { classListColumns } from '../helper'
 import api from 'src/utils/api'
-import useListSearch from 'src/hooks/useListSearch'
-import { parseSearches } from 'src/utils/common'
+import {
+  buildParameters,
+  getDeleteRow,
+  getViewRow,
+  tableOrder,
+} from 'src/utils/common'
 import ClassExamineeList from './ClassExamineeList'
+import CustomTable from 'src/components/CustomTable'
+import AddClassModal from './AddClassModal'
+import PageList from 'src/components/PageList'
+import getEditClass from './EditClass'
 
-const { confirm } = Modal
+const { useTableFetch } = CustomTable
 
-const CoachClassList = ({ match, history, location }) => {
+const CoachClassList = ({ match }) => {
+  const coachId = match.params.id
+  const classList = useTableFetch(`/coach/class/page`, { coachId })
   const [classInEdit, setClassInEdit] = useState()
   const [selectedClass, setSelectedClass] = useState()
-  const coachId = match.params.id
-  const { coachName } = parseSearches(location)
-  const { data, refetchList, pagination } = useListSearch(`/coach/class/page`, {
-    coachId,
-  })
-
-  const confirmDeleteCoach = (coachClass) => {
-    confirm({
-      title: '请问您确认要删除该班级吗?',
-      content: `班级名: ${coachClass.name}`,
-      onOk: async () => {
-        await api.post(`/coach/class/del?id=${coachClass.id}`)
-        message.success('班级删除成功')
-      },
-      onCancel() {
-        console.log('Cancel')
-      },
-    })
-  }
+  const [showAddClassModal, setShowAddClassModal] = useState(false)
 
   const updateClass = async (classId, newClassName) => {
-    await api.post(
-      `/coach/class/edit?coachId=${coachId}&name=${newClassName}&id=${classId}`
-    )
+    const params = {
+      coachId,
+      name: newClassName,
+      id: classId,
+    }
+    await api.post(buildParameters('/coach/class/edit', params))
     setClassInEdit()
-    refetchList()
+    classList.fetchTable()
   }
 
   return (
-    <div className="page class-list">
-      <div className="class-list__title">{coachName}教练班级列表</div>
-      <ActionBar coachId={coachId} refetchList={refetchList} />
-      <Table
-        className="class-list__table"
-        columns={classListColumns(
-          history,
-          confirmDeleteCoach,
+    <>
+      <PageList
+        defaultTableList={classList}
+        columns={getColumns(
           classInEdit,
           setClassInEdit,
           updateClass,
           setSelectedClass
         )}
-        dataSource={data}
-        rowKey="id"
-        size="middle"
-        bordered={true}
-        pagination={pagination}
-        onChange={(value) => refetchList({ paginator: value })}
+        addCallback={() => setShowAddClassModal(true)}
       />
       {selectedClass && (
         <ClassExamineeList
@@ -69,8 +52,32 @@ const CoachClassList = ({ match, history, location }) => {
           setSelectedClass={setSelectedClass}
         />
       )}
-    </div>
+      {showAddClassModal && (
+        <AddClassModal
+          coachId={coachId}
+          callback={classList.fetchTable}
+          hideModal={() => setShowAddClassModal(false)}
+        />
+      )}
+    </>
   )
 }
 
 export default CoachClassList
+
+const getColumns = (
+  classInEdit,
+  setClassInEdit,
+  updateClass,
+  setSelectedClass
+) => (deleteClass) => [
+  tableOrder,
+  {
+    title: '班级名称',
+    dataIndex: 'name',
+    render: (text, record) =>
+      getEditClass(record, classInEdit, setClassInEdit, updateClass),
+  },
+  getViewRow('班级学生', setSelectedClass),
+  getDeleteRow(deleteClass),
+]

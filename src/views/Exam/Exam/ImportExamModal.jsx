@@ -4,6 +4,7 @@ import useFetch from 'src/hooks/useFetch'
 import api from 'src/utils/api'
 import { useDispatch } from 'react-redux'
 import { showLoadingBar, closeLoadingBar } from 'src/actions/app'
+import { tableOrder, getRow } from 'src/utils/common'
 
 const ImportExamModal = ({ hideModal }) => {
   const dispatch = useDispatch()
@@ -21,7 +22,6 @@ const ImportExamModal = ({ hideModal }) => {
 
   return (
     <Modal
-      wrapClassName="exam-qrcode"
       visible={true}
       onCancel={hideModal}
       footer={[
@@ -42,16 +42,8 @@ const ImportExamModal = ({ hideModal }) => {
 export default ImportExamModal
 
 const getColumns = (importExam) => [
-  {
-    title: '序号',
-    key: 'index',
-    render: (text, record, index) => `${index + 1}`,
-  },
-  {
-    title: '名称',
-    dataIndex: 'title',
-    key: 'title',
-  },
+  tableOrder,
+  getRow('名称', 'title'),
   {
     title: '操作',
     render: (text, record) => (

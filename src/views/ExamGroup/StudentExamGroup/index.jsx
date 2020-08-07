@@ -1,98 +1,60 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import './index.less'
 import api from 'src/utils/api'
-import { Form, message, Input, Button, Select } from 'antd'
-import { formItemLayout } from 'src/utils/const'
+import { Form, message } from 'antd'
+import useFetch from 'src/hooks/useFetch'
+import PageFormCustom from 'src/components/PageFormCustom'
+import FormInput from 'src/components/FormInput'
+import FormSelect from 'src/components/FormSelect'
+import {
+  pathExamRounds,
+  pathGroupedStudDetail,
+  pathChangeStudGroup,
+} from 'src/utils/httpUtil'
 
-const StudentExamGroup = ({ match, form, history }) => {
-  const [studExamGroup, setStudExamGroup] = useState()
-  const [examRoundInfo, setExamRoundInfo] = useState()
-  const examId = match.params.id
-  const examGroupId = match.params.examGroupId
-  const { getFieldDecorator } = form
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const result = await api.get(
-        `/examination/studentGroupedDetail?examinationGroupId=${examGroupId}`
-      )
-      setStudExamGroup(result)
-    }
-    fetchData()
-  }, [examGroupId])
+const StudentExamGroup = ({ match, history }) => {
+  const { id: examId, examGroupId } = match.params
+  const [form] = Form.useForm()
+  const [examRoundInfo] = useFetch(pathExamRounds(examId))
+  const [studExamGroup] = useFetch(pathGroupedStudDetail(examGroupId))
+  const backPath = `/exam/${examId}/group`
 
   useEffect(() => {
-    const fetchData = async () => {
-      const result = await api.get(
-        `/examination/examRoundInfo?examinationId=${examId}`
+    if (examRoundInfo && studExamGroup) {
+      const round = examRoundInfo.find(
+        (round) => round.roundNum === studExamGroup.currRoundNum
       )
-      setExamRoundInfo(result)
+      form.setFieldsValue({ toRoundNum: round.roundNum })
     }
-    fetchData()
-  }, [examId])
+  }, [form, examRoundInfo, studExamGroup])
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    form.validateFields(async (err, values) => {
-      if (!err) {
-        const { toRoundNum } = values
-        let path = `/examination/changeStudentGroup?examinationGroupId=${examGroupId}&toRoundNum=${toRoundNum}`
-        await api.post(path)
-        message.success(`修改场次成功`)
-        goBack()
-      }
-    })
-  }
-
-  const goBack = () => {
+  const onFinish = async ({ toRoundNum }) => {
+    await api.post(pathChangeStudGroup(examGroupId, toRoundNum))
+    message.success(`修改场次成功`)
     history.push(`/exam/${examId}/group`)
   }
 
+  if (!studExamGroup || !examRoundInfo) return null
+
   return (
-    <>
-      {studExamGroup && examRoundInfo && (
-        <div className="page exam-group">
-          <div className="exam-group__edit-title">考试分组</div>
-          <Form
-            onSubmit={handleSubmit}
-            {...formItemLayout}
-            className="exam-group__edit-form"
-          >
-            <Form.Item label="考生姓名">
-              <Input disabled value={studExamGroup.studentName} />
-            </Form.Item>
-            <Form.Item label="考评级别">
-              <Input disabled value={studExamGroup.levelName} />
-            </Form.Item>
-            <Form.Item label="组号">
-              {getFieldDecorator('toRoundNum', {
-                initialValue: examRoundInfo.find(
-                  (round) => round.roundNum === studExamGroup.currRoundNum
-                ).roundNum,
-                rules: [{ required: true }],
-              })(
-                <Select placeholder="请选择报考级别">
-                  {examRoundInfo.map((round) => (
-                    <Select.Option key={round.roundNum} value={round.roundNum}>
-                      {round.roundNum}
-                    </Select.Option>
-                  ))}
-                </Select>
-              )}
-            </Form.Item>
-            <Form.Item className="coach__edit-form--btns">
-              <Button className="edit-cancel-btn" onClick={goBack}>
-                取消
-              </Button>
-              <Button type="primary" htmlType="submit">
-                确定
-              </Button>
-            </Form.Item>
-          </Form>
-        </div>
-      )}
-    </>
+    <PageFormCustom
+      form={form}
+      onFinish={onFinish}
+      title="考试分组"
+      back={backPath}
+    >
+      <FormInput label="考生姓名" disabled value={studExamGroup.studentName} />
+      <FormInput label="考评级别" disabled value={studExamGroup.levelName} />
+      <FormSelect
+        label="组号"
+        name="toRoundNum"
+        options={examRoundInfo}
+        valueKey="roundNum"
+        titleKey="roundNum"
+        message="请选择报考级别"
+      />
+    </PageFormCustom>
   )
 }
 
-export default Form.create()(StudentExamGroup)
+export default StudentExamGroup

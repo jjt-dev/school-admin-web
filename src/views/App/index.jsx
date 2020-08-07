@@ -1,53 +1,41 @@
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect } from 'react'
 import { Spin } from 'antd'
-import Header from 'src/components/Header'
-import { parseSearches } from 'src/utils/common'
+import Header from 'src/views/App/Header'
 import { local, SCHOOL_CODE } from 'src/utils/storage'
 import { useSelector, useDispatch } from 'react-redux'
 import * as appAction from 'src/actions/app'
 import SideMenu from 'src/views/App/SideMenu'
 import useDidMount from 'src/hooks/useDidMount'
-import Router, { routes } from '../Router'
-import './index.less'
-import { useHistory, useLocation } from 'react-router'
 import ErrorBoundary from 'src/components/ErrorBoundary'
-import JjtBreadcrumb from 'src/components/JjtBreadcrumb'
-import { matchPath } from 'react-router'
+import JjtBreadcrumb from 'src/views/App/JjtBreadcrumb'
 import classnames from 'classnames'
+import useActiveRoute from 'src/hooks/useActiveRoute'
+import useLogin from 'src/hooks/useLogin'
+import useSearch from 'src/hooks/useSearch'
+import Router from '../Router'
+import './index.less'
 
 const App = () => {
-  const history = useHistory()
-  const location = useLocation()
   const dispatch = useDispatch()
+  const activeRoute = useActiveRoute()
+  const isLogin = useLogin()
   const { loading, user } = useSelector((state) => state.app)
-  const isLoginPage = useMemo(() => location.pathname.startsWith('/login'), [
-    location,
-  ])
-
-  const activeRoute = useMemo(() => {
-    return routes.find(
-      (route) =>
-        !!matchPath(location.pathname, { path: route.path, exact: true })
-    )
-  }, [location])
-
-  const hasBreadcrumb = activeRoute && activeRoute.back
+  const { schoolCode } = useSearch()
 
   /**
    * 从用户输入的url中拿到schoolCode
    */
   useDidMount(() => {
-    const { schoolCode } = parseSearches(location)
     if (schoolCode) {
       local.setItem(SCHOOL_CODE, schoolCode)
     }
   })
 
   useEffect(() => {
-    if (!isLoginPage) {
+    if (!isLogin) {
       dispatch(appAction.getUserInfo())
     }
-  }, [dispatch, isLoginPage])
+  }, [dispatch, isLogin])
 
   useEffect(() => {
     if (user) {
@@ -62,17 +50,17 @@ const App = () => {
   return (
     <div
       className={classnames('app', {
-        'breadcrumb-active': hasBreadcrumb,
-        'print-certificate': activeRoute?.isPrintCertif,
-        'login-page': isLoginPage,
+        'breadcrumb-active': activeRoute.back,
+        'print-certificate': activeRoute.isPrintCertif,
+        'login-page': isLogin,
       })}
     >
       <Header user={user} />
       <main>
-        <SideMenu history={history} location={location} />
+        <SideMenu />
         <ErrorBoundary>
-          <JjtBreadcrumb activeRoute={activeRoute} history={history} />
-          {isLoginPage || user ? <Router /> : <div></div>}
+          <JjtBreadcrumb />
+          {isLogin || user ? <Router /> : <div></div>}
         </ErrorBoundary>
       </main>
       {loading && <Spin />}

@@ -1,21 +1,26 @@
 import React from 'react'
-import { Button, Modal, Table } from 'antd'
-import { addNumPrefix, addRoundNumPrefix } from 'src/utils/common'
-import useListSearch from 'src/hooks/useListSearch'
+import { Button, Modal } from 'antd'
+import {
+  addNumPrefix,
+  addRoundNumPrefix,
+  getCustomRow,
+  getRow,
+  tableOrder,
+} from 'src/utils/common'
 import { Genders } from 'src/utils/const'
+import CustomTable from 'src/components/CustomTable'
+
+const { useTableFetch } = CustomTable
 
 const RoomExamineeModal = ({
   examinationId,
   selectedRoom,
   hideRoomExamineesModal,
 }) => {
-  const { data, refetchList, pagination } = useListSearch(
-    '/examination/pageStudentsOfSomeRoom',
-    {
-      examinationId,
-      roomId: selectedRoom.roomId,
-    }
-  )
+  const tableList = useTableFetch('/examination/pageStudentsOfSomeRoom', {
+    examinationId,
+    roomId: selectedRoom.roomId,
+  })
 
   return (
     <Modal
@@ -29,15 +34,7 @@ const RoomExamineeModal = ({
         </Button>,
       ]}
     >
-      <Table
-        columns={columns}
-        dataSource={data}
-        rowKey="studentId"
-        size="middle"
-        bordered={true}
-        pagination={pagination}
-        onChange={(value) => refetchList({ paginator: value })}
-      />
+      <CustomTable {...tableList} columns={columns} rowKey="studentId" />
     </Modal>
   )
 }
@@ -45,39 +42,11 @@ const RoomExamineeModal = ({
 export default RoomExamineeModal
 
 const columns = [
-  {
-    title: '序号',
-    key: 'index',
-    render: (text, record, index) => `${index + 1}`,
-  },
-  {
-    title: '姓名',
-    dataIndex: 'studentName',
-    key: 'studentName',
-  },
-  {
-    title: '性别',
-    key: 'gender',
-    render: (text, record) => `${Genders[record.gender]}`,
-  },
-  {
-    title: '申请等级',
-    key: 'levelName',
-    render: (text, record) => `${record.levelName}`,
-  },
-  {
-    title: '场次',
-    key: 'roundNum',
-    render: (text, record) => `${addRoundNumPrefix(record.roundNum)}`,
-  },
-  {
-    title: '电话',
-    dataIndex: 'phone',
-    key: 'phone',
-  },
-  {
-    title: '单位',
-    dataIndex: 'schoolName',
-    key: 'schoolName',
-  },
+  tableOrder,
+  getRow('姓名', 'studentName'),
+  getCustomRow('性别', (record) => Genders[record.gender]),
+  getRow('申请等级', 'levelName'),
+  getCustomRow('场次', (record) => addRoundNumPrefix(record.roundNum)),
+  getRow('电话', 'phone'),
+  getRow('单位', 'schoolName'),
 ]

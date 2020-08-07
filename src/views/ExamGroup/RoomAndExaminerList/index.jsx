@@ -1,27 +1,21 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import './index.less'
-import api from 'src/utils/api'
-import { Table } from 'antd'
-import { roomExaminerListColumns } from '../helper'
+import { Table, Divider, Tag } from 'antd'
 import RoomExamineeModal from './RoomExamineeModal'
 import RoomRoundModal from './RoomRoundModal'
+import useFetch from 'src/hooks/useFetch'
+import PageListCustom from 'src/components/PageListCustom'
+import { tableOrder, getRow } from 'src/utils/common'
+import { Link } from 'react-router-dom'
 
-const RoomAndExaminerList = ({ match, history }) => {
-  const [roomAndExaminers, setRoomAndExaminers] = useState()
+const RoomAndExaminerList = ({ match }) => {
+  const examId = match.params.id
   const [selectedRoom, setSelectedRoom] = useState()
   const [showRoomExaminees, setShowRoomExaminees] = useState(false)
   const [showRoomRounds, setShowRoomRounds] = useState(false)
-  const examId = match.params.id
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const result = await api.get(
-        `/examination/getExamRoomsAndItsExaminers?examinationId=${examId}`
-      )
-      setRoomAndExaminers(result)
-    }
-    fetchData()
-  }, [examId])
+  const [roomAndExaminers] = useFetch(
+    `/examination/getExamRoomsAndItsExaminers?examinationId=${examId}`
+  )
 
   const hideRoomExamineesModal = () => {
     setShowRoomExaminees(false)
@@ -42,12 +36,10 @@ const RoomAndExaminerList = ({ match, history }) => {
   }
 
   return (
-    <div className="page room-examiner-list">
-      <div className="room-examiner-list__title">考场和考官列表</div>
+    <PageListCustom title="考场和考官列表">
       <Table
-        className="room-examiner-list__table"
-        columns={roomExaminerListColumns(
-          history,
+        className="room-examiner-list-table"
+        columns={getColumns(
           examId,
           handleShowRoomExaminees,
           handleShowRoomRounds
@@ -71,8 +63,47 @@ const RoomAndExaminerList = ({ match, history }) => {
           hideRoomRoundsModal={hideRoomRoundsModal}
         />
       )}
-    </div>
+    </PageListCustom>
   )
 }
 
 export default RoomAndExaminerList
+
+const getColumns = (examId, handleShowRoomExaminees, handleShowRoomRounds) => [
+  tableOrder,
+  getRow('考场', 'name'),
+  {
+    title: '考官',
+    key: 'roomId',
+    render: (text, record) => (
+      <>
+        {record.examiners.map((examiner, index) => (
+          <Tag key={index}>{examiner.username}</Tag>
+        ))}
+      </>
+    ),
+  },
+  {
+    title: '操作',
+    width: 260,
+    render: (text, record) => (
+      <>
+        <Link to={`/exam/${examId}/room/${record.roomId}/examiners`}>编辑</Link>
+        <Divider type="vertical" />
+        <span
+          className="table-action"
+          onClick={() => handleShowRoomExaminees(record)}
+        >
+          查看考场考生
+        </span>
+        <Divider type="vertical" />
+        <span
+          className="table-action"
+          onClick={() => handleShowRoomRounds(record)}
+        >
+          查看场次
+        </span>
+      </>
+    ),
+  },
+]

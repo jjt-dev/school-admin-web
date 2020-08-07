@@ -1,84 +1,108 @@
-import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import * as examAction from 'src/actions/exam'
-import ActionBar from './ActionBar'
-import { Modal, Table, message } from 'antd'
+import React, { useState } from 'react'
+import Header from './Header'
+import { Button } from 'antd'
 import './index.less'
-import { examListColumns } from '../helper'
-import { pagConfig } from 'src/utils/const'
-import { useHistory } from 'react-router'
-import api from 'src/utils/api'
 import QRCodeModal from './QRCodeModal'
 import useFetch from 'src/hooks/useFetch'
+import PageList from 'src/components/PageList'
+import {
+  copyToClipboard,
+  getActionRow,
+  getCustomRow,
+  getDateRow,
+  getLinkRow,
+  getRow,
+  tableOrder,
+  confirmUpdate,
+  getSwitchRow,
+} from 'src/utils/common'
+import { ExamStates } from 'src/utils/const'
+import CustomTable from 'src/components/CustomTable'
+import { pathMockBtn, pathExamList, pathExamEnable } from 'src/utils/httpUtil'
 
-const { confirm } = Modal
+const { useTableFetch } = CustomTable
 
 const ExamList = () => {
-  const history = useHistory()
-  const dispatch = useDispatch()
-  const [canAddMockExam, refetch] = useFetch(`/examination/canShowMockBtn`)
+  const [canAddMockExam, refetch] = useFetch(pathMockBtn)
   const [selectedExam, setSelectedExam] = useState()
-  const { examList, filter, total } = useSelector((state) => state.exam)
-  const { page, rows } = filter.paginator
+  const examList = useTableFetch(pathExamList)
 
-  useEffect(() => {
-    dispatch(examAction.getExamList(filter))
-  }, [dispatch, filter])
-
-  useEffect(() => {
-    return () => dispatch(examAction.resetStore())
-  }, [dispatch])
-
-  const updateFilter = (field, value) => {
-    dispatch(examAction.updateFilter(field, value))
-  }
-
-  const confirmDeleteExam = (exam) => {
-    confirm({
-      title: '请问您确认要删除该考试吗?',
-      content: `考试名: ${exam.title}`,
-      onOk: async () => {
-        await api.post(`/examination/del?id=${exam.id}`)
-        message.success('删除考试成功')
-        dispatch(examAction.getExamList(filter))
-        refetch()
-      },
-      onCancel() {
-        console.log('Cancel')
-      },
-    })
+  const updateExamStatus = (exam) => {
+    const { isEnable } = exam
+    const entity = {
+      status: isEnable ? '禁用' : '启用',
+      title: '考试',
+      titleValue: exam.title,
+      path: pathExamEnable({ id: exam.id, isEnable: !isEnable }),
+      callback: () => examList.fetchTable(),
+    }
+    confirmUpdate(entity)
   }
 
   return (
-    <div className="page exam-list">
-      <div className="exam-list__title">考试列表</div>
-      <ActionBar
-        updateFilter={updateFilter}
-        filter={filter}
-        canAddMockExam={canAddMockExam}
-      />
-      <Table
-        className="exam-list__table"
-        columns={examListColumns(history, confirmDeleteExam, setSelectedExam)}
-        dataSource={examList}
-        rowKey="id"
-        size="middle"
-        bordered={true}
-        pagination={{
-          ...pagConfig,
-          current: page,
-          pageSize: rows,
-          total,
-        }}
-        onChange={({ current, pageSize }) =>
-          updateFilter('paginator', { page: current, rows: pageSize })
-        }
-      />
+    <>
+      <PageList
+        columns={getColumns(setSelectedExam, updateExamStatus)}
+        deleteCallback={refetch}
+        defaultTableList={examList}
+      >
+        <Header
+          fetchTable={examList.fetchTable}
+          canAddMockExam={canAddMockExam}
+        />
+      </PageList>
       {selectedExam && (
         <QRCodeModal exam={selectedExam} setSelectedExam={setSelectedExam} />
       )}
-    </div>
+    </>
   )
 }
 
 export default ExamList
+
+const getColumns = (setSelectedExam, updateExamStatus) => (deleteCoach) => [
+  tableOrder,
+  getRow('名称', 'title'),
+  getExamlinkRow(setSelectedExam),
+  getDateRow('考试时间', 'examStartTime'),
+  getDateRow('报名时间', 'signStartTime'),
+  getCustomRow('当前状态', (record) => ExamStates[record.currState]),
+  getSwitchRow(updateExamStatus),
+  getCustomRow('考试类型', (record) => (record.isFormal ? '正式' : '模拟')),
+  getLinkRow('考生列表', '/exam/::/signs', ['id']),
+  getLinkRow('考试分组', '/exam/::/group', ['id']),
+  getActionRow(
+    (record) => `/exam/${record.id}?isFormal=${record.isFormal}`,
+    deleteCoach
+  ),
+]
+
+const getExamlinkRow = (setSelectedExam) => ({
+  title: '考试链接',
+  dataIndex: 'hashCode',
+  key: 'hashCode',
+  render: (text, record) => {
+    const link = `${process.env.REACT_APP_EXAMINER_URL}${record.hashCode}`
+    return (
+      <span>
+        <Button
+          style={{ marginRight: '5px' }}
+          size="small"
+          onClick={() => window.open(link, '_blank')}
+        >
+          打开
+        </Button>
+        <Button
+          style={{ marginRight: '5px' }}
+          size="small"
+          onClick={() => copyToClipboard(link)}
+        >
+          复制
+        </Button>
+        <Button size="small" onClick={() => setSelectedExam(record)}>
+          二维码
+        </Button>
+      </span>
+    )
+  },
+})

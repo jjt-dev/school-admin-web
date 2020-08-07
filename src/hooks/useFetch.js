@@ -3,7 +3,11 @@ import api from 'src/utils/api'
 import { useDispatch } from 'react-redux'
 import { showLoadingBar, closeLoadingBar } from 'src/actions/app'
 
-const useFetch = (defaultPath, defaultValue, { params = null } = {}) => {
+const useFetch = (
+  defaultPath,
+  defaultValue,
+  { params = null, hasPagination = false } = {}
+) => {
   const dispatch = useDispatch()
   const [path, setPath] = useState(defaultPath)
   const [data, setData] = useState(defaultValue)
@@ -21,7 +25,7 @@ const useFetch = (defaultPath, defaultValue, { params = null } = {}) => {
       try {
         dispatch(showLoadingBar())
         const result = await api.get(path, params)
-        setData(result)
+        setData(hasPagination ? result.data : result)
         dispatch(closeLoadingBar())
       } catch (error) {
         console.log(error)
@@ -31,7 +35,7 @@ const useFetch = (defaultPath, defaultValue, { params = null } = {}) => {
     if (path) {
       fetchData({ path, params })
     }
-  }, [path, params, forceRefreshCount, dispatch])
+  }, [path, params, forceRefreshCount, dispatch, hasPagination])
 
   return [data, refetch]
 }

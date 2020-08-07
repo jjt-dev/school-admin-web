@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import './index.less'
 import api from 'src/utils/api'
-import { Table, message } from 'antd'
-import { roomExaminerColumns } from '../helper'
+import { Table, message, Checkbox, Radio } from 'antd'
 import { useSelector } from 'react-redux'
-import { deepClone } from 'src/utils/common'
-import ActionBar from './ActionBar'
+import { deepClone, getDateRow, getRow, tableOrder } from 'src/utils/common'
+import Header from './Header'
+import PageListCustom from 'src/components/PageListCustom'
 
 const RoomAndExaminer = ({ match, history }) => {
   const [search, setSearch] = useState('')
+  const { id: examId, roomId } = match.params
   const [roomAndExaminer, setRoomAndExaminer] = useState()
   const { allExaminers } = useSelector((state) => state.app)
-  const examId = match.params.id
-  const roomId = match.params.roomId
 
   useEffect(() => {
     const fetchData = async () => {
@@ -72,16 +71,12 @@ const RoomAndExaminer = ({ match, history }) => {
   }
 
   return (
-    <div className="page room-examiner">
-      <div className="room-examiner__title">绑定考官</div>
-      <ActionBar bindExaminers={bindExaminers} setSearch={setSearch} />
+    <PageListCustom title="绑定考官">
+      <Header bindExaminers={bindExaminers} setSearch={setSearch} />
       {roomAndExaminer && (
         <Table
-          className="room-examiner__table"
-          columns={roomExaminerColumns(
-            roomAndExaminer.examiners,
-            updateRoomExaminers
-          )}
+          className="room-examiner-table"
+          columns={getColumns(roomAndExaminer.examiners, updateRoomExaminers)}
           dataSource={filterAllExaminers()}
           rowKey="id"
           size="middle"
@@ -96,8 +91,47 @@ const RoomAndExaminer = ({ match, history }) => {
           )}
         />
       )}
-    </div>
+    </PageListCustom>
   )
 }
 
 export default RoomAndExaminer
+
+const getColumns = (roomExaminers, updateRoomExaminers) => {
+  const mainExaminer = roomExaminers.find((item) => item.isMain) || {}
+  return [
+    tableOrder,
+    getRow('姓名', 'username'),
+    getRow('电话', 'phone'),
+    getDateRow('创建时间', 'createTime'),
+    {
+      title: '选择',
+      render: (text, record) => (
+        <Checkbox
+          checked={roomExaminers.some((item) => item.id === record.id)}
+          onChange={() =>
+            updateRoomExaminers(
+              record,
+              isRoomExaminer(roomExaminers, record) ? 'delete' : 'add'
+            )
+          }
+        />
+      ),
+    },
+    {
+      title: '是否是主考官',
+      render: (text, record) => (
+        <Radio
+          checked={mainExaminer.id === record.id}
+          onChange={() => {
+            updateRoomExaminers(record, 'add', true)
+          }}
+        />
+      ),
+    },
+  ]
+}
+
+const isRoomExaminer = (examiners, examiner) => {
+  return examiners.some((item) => item.id === examiner.id)
+}
