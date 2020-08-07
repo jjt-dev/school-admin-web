@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import './index.less'
 import api from 'src/utils/api'
 import { Form, message } from 'antd'
@@ -6,39 +6,43 @@ import useFetch from 'src/hooks/useFetch'
 import PageFormCustom from 'src/components/PageFormCustom'
 import FormInput from 'src/components/FormInput'
 import FormSelect from 'src/components/FormSelect'
+import {
+  pathExamRounds,
+  pathGroupedStudDetail,
+  pathChangeStudGroup,
+} from 'src/utils/httpUtil'
 
 const StudentExamGroup = ({ match, history }) => {
-  const examId = match.params.id
-  const examGroupId = match.params.examGroupId
+  const { id: examId, examGroupId } = match.params
   const [form] = Form.useForm()
-  const [examRoundInfo] = useFetch(
-    `/examination/examRoundInfo?examinationId=${examId}`
-  )
-  const [studExamGroup] = useFetch(
-    `/examination/studentGroupdDetail?examinationGroupId=${examGroupId}`
-  )
+  const [examRoundInfo] = useFetch(pathExamRounds(examId))
+  const [studExamGroup] = useFetch(pathGroupedStudDetail(examGroupId))
+  const backPath = `/exam/${examId}/group`
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    form.validateFields(async (err, values) => {
-      if (!err) {
-        const { toRoundNum } = values
-        let path = `/examination/changeStudentGroup?examinationGroupId=${examGroupId}&toRoundNum=${toRoundNum}`
-        await api.post(path)
-        message.success(`修改场次成功`)
-        goBack()
-      }
-    })
-  }
+  useEffect(() => {
+    if (examRoundInfo && studExamGroup) {
+      const round = examRoundInfo.find(
+        (round) => round.roundNum === studExamGroup.currRoundNum
+      )
+      form.setFieldsValue({ toRoundNum: round.roundNum })
+    }
+  }, [form, examRoundInfo, studExamGroup])
 
-  const goBack = () => {
+  const onFinish = async ({ toRoundNum }) => {
+    await api.post(pathChangeStudGroup(examGroupId, toRoundNum))
+    message.success(`修改场次成功`)
     history.push(`/exam/${examId}/group`)
   }
 
   if (!studExamGroup || !examRoundInfo) return null
 
   return (
-    <PageFormCustom form={form} title="考试分组">
+    <PageFormCustom
+      form={form}
+      onFinish={onFinish}
+      title="考试分组"
+      back={backPath}
+    >
       <FormInput label="考生姓名" disabled value={studExamGroup.studentName} />
       <FormInput label="考评级别" disabled value={studExamGroup.levelName} />
       <FormSelect
@@ -46,13 +50,8 @@ const StudentExamGroup = ({ match, history }) => {
         name="toRoundNum"
         options={examRoundInfo}
         valueKey="roundNum"
-        tileKey="roundNUm"
+        titleKey="roundNum"
         message="请选择报考级别"
-        initialValue={
-          examRoundInfo.find(
-            (round) => round.roundNum === studExamGroup.currRoundNum
-          ).roundNum
-        }
       />
     </PageFormCustom>
   )

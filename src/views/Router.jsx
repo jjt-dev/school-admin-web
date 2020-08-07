@@ -238,23 +238,23 @@ export const routes = [
     comp: Room,
     back: { path: '/rooms', breadcrumbs: ['考场管理', '编辑考场'] },
   },
-  // {
-  //   path: '/certificate',
-  //   comp: Certificate,
-  //   back: {
-  //     path: '/certificates',
-  //     breadcrumbs: ['证书管理', '新增模板'],
-  //   },
-  // },
-  // {
-  //   path: '/certificate/:id',
-  //   comp: Certificate,
-  //   back: {
-  //     path: '/certificates',
-  //     breadcrumbs: ['证书管理', '模板管理'],
-  //   },
-  // },
-  // { path: '/certificates', comp: Certificates },
+  {
+    path: '/certificate',
+    comp: Certificate,
+    back: {
+      path: '/certificates',
+      breadcrumbs: ['证书管理', '新增模板'],
+    },
+  },
+  {
+    path: '/certificate/:id',
+    comp: Certificate,
+    back: {
+      path: '/certificates',
+      breadcrumbs: ['证书管理', '模板管理'],
+    },
+  },
+  { path: '/certificates', comp: Certificates },
   {
     path: '/parameter/:id',
     title: '学校',

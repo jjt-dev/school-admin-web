@@ -14,9 +14,11 @@ const PageFormCustom = ({
   customClass,
   form,
   onFinish,
+  back,
+  onFieldsChange,
 }) => {
   const match = useRouteMatch()
-  const { title: defaultTitle, back } = useActiveRoute()
+  const { title: defaultTitle, back: defaultBack } = useActiveRoute()
   const [defaultForm] = Form.useForm()
   const entityId = match.params.id
   const isEdit = !!entityId
@@ -30,9 +32,14 @@ const PageFormCustom = ({
   return (
     <div className={`page jjt-form ${customClass}`}>
       <div className="jjt-form-title">{finalTitle}</div>
-      <Form {...formLayout} form={form ?? defaultForm} onFinish={onFinish}>
+      <Form
+        {...formLayout}
+        form={form ?? defaultForm}
+        onFinish={onFinish}
+        onFieldsChange={onFieldsChange}
+      >
         {children}
-        <FormBottom path={back} />
+        <FormBottom path={back ?? defaultBack} />
       </Form>
     </div>
   )

@@ -98,7 +98,7 @@ const RoomRoundModal = ({
       {selectedRound && (
         <RoundExamineeList
           examinationId={examinationId}
-          roundNum={selectedRound.round_num}
+          roundNum={selectedRound.roundNum}
         />
       )}
     </Modal>
