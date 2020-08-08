@@ -40,6 +40,7 @@ const Exam = ({ history }) => {
       dispatch(examAction.getExamLevelList(examLevelList))
     }
     fetchData()
+    return () => dispatch(examAction.resetStore())
   }, [dispatch, examId])
 
   const updateItemRatio = (levelId, itemId, ratio) => {

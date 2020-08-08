@@ -16,6 +16,7 @@ const PageList = ({
   rowKey = 'id',
   path,
   children,
+  size = 'middle',
 }) => {
   const {
     editPath,
@@ -68,6 +69,7 @@ const PageList = ({
         {...tableList}
         columns={columns(deleteEntity)}
         rowKey={rowKey}
+        size={size}
       />
     </div>
   )

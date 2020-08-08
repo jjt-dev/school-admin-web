@@ -45,6 +45,7 @@ const ExamList = () => {
         columns={getColumns(setSelectedExam, updateExamStatus)}
         deleteCallback={refetch}
         defaultTableList={examList}
+        size="small"
       >
         <Header
           fetchTable={examList.fetchTable}
