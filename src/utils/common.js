@@ -230,10 +230,11 @@ export const getLinkRow = (title, link, placeholderNames) => {
   return {
     title,
     render: (text, record) => {
+      let finalLink = link
       placeholderNames.forEach((item) => {
-        link = link.replace('::', record[item])
+        finalLink = finalLink.replace('::', record[item])
       })
-      return <Link to={link}>查看</Link>
+      return <Link to={finalLink}>查看</Link>
     },
   }
 }
