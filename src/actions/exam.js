@@ -1,8 +1,5 @@
 import { createAction } from 'redux-actions'
-import api from 'src/utils/api'
-import { ExamStates } from 'src/utils/const'
 
-export const GET_EXAM_LIST = 'GET_EXAM_LIST'
 export const GET_EXAM = 'GET_EXAM'
 export const GET_EXAM_ITEM_LIST = 'GET_EXAM_ITEM_LIST'
 export const GET_EXAM_LEVEL_LIST = 'GET_EXAM_LEVEL_LIST'
@@ -24,27 +21,6 @@ export const getExamItemList = createAction(
 export const getExamLevelList = createAction(
   GET_EXAM_LEVEL_LIST,
   (params) => params
-)
-
-export const getExamList = createAction(GET_EXAM_LIST, (filter) => {
-  const { paginator, search, examState } = filter
-  const { page, rows } = paginator
-  let path = `/examination/page?page=${page}&rows=${rows}`
-  if (search) {
-    path += `&keyword=${search}`
-  }
-  if (ExamStates[examState]) {
-    path += `&currState=${examState}`
-  }
-  return api.get(path)
-})
-
-export const updateFilter = createAction(
-  EXAM_UPDATE_FILTER,
-  (field, value) => ({
-    field,
-    value,
-  })
 )
 
 export const updateItemRatio = createAction(

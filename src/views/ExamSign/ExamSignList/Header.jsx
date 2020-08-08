@@ -2,7 +2,6 @@ import React from 'react'
 import { Button, Select } from 'antd'
 import { useState } from 'react'
 import { SignStates, ExamStatus } from 'src/utils/const'
-import { findExamStateId } from 'src/utils/common'
 import CoachClassSelect from './CoachClassSelect'
 import ListHeaderCustom from 'src/components/ListHeaderCustom'
 import ListHeaderLeft from 'src/components/ListHeaderLeft'
@@ -33,9 +32,14 @@ const Header = ({
   return (
     <ListHeaderCustom>
       <ListHeaderLeft>
-        {examState <= findExamStateId('报名中') && (
+        {examState <= ExamStatus.signing.id && (
           <Button size="small" type="primary" onClick={handleSign}>
             报名
+          </Button>
+        )}
+        {examState === ExamStatus.examing.id && (
+          <Button size="small" onClick={downloadExamineeInfo}>
+            临时报名
           </Button>
         )}
         {examSignList.length > 0 && (
@@ -43,7 +47,7 @@ const Header = ({
             打印准考证
           </Button>
         )}
-        {examState === ExamStatus.finish && (
+        {examState === ExamStatus.finish.id && (
           <Button size="small" onClick={downloadExamineeInfo}>
             下载考试信息
           </Button>

@@ -36,20 +36,12 @@ export const pagConfig = JSON.parse(
   })
 )
 
-export const ExamStates = {
-  0: '等待报名',
-  10: '报名中',
-  20: '等待考试',
-  30: '考试中',
-  40: '完成',
-}
-
 export const ExamStatus = {
-  waitForSign: 0,
-  signing: 10,
-  waitForExam: 20,
-  examing: 30,
-  finish: 40,
+  waitForSign: { id: 0, title: '等待考试' },
+  signing: { id: 10, title: '报名中' },
+  waitForExam: { id: 20, title: '等待考试' },
+  examing: { id: 30, title: '考试中' },
+  finish: { id: 40, title: '完成' },
 }
 
 export const SignStates = {

@@ -15,8 +15,8 @@ import {
   tableOrder,
   confirmUpdate,
   getSwitchRow,
+  findExamStatus,
 } from 'src/utils/common'
-import { ExamStates } from 'src/utils/const'
 import CustomTable from 'src/components/CustomTable'
 import { pathMockBtn, pathExamList, pathExamEnable } from 'src/utils/httpUtil'
 
@@ -67,7 +67,7 @@ const getColumns = (setSelectedExam, updateExamStatus) => (deleteCoach) => [
   getExamlinkRow(setSelectedExam),
   getDateRow('考试时间', 'examStartTime'),
   getDateRow('报名时间', 'signStartTime'),
-  getCustomRow('当前状态', (record) => ExamStates[record.currState]),
+  getCustomRow('当前状态', (record) => findExamStatus(record.currState).title),
   getSwitchRow(updateExamStatus),
   getCustomRow('考试类型', (record) => (record.isFormal ? '正式' : '模拟')),
   getLinkRow('考生列表', '/exam/::/signs', ['id']),

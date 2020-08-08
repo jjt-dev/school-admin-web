@@ -2,7 +2,7 @@ import React from 'react'
 import * as queryString from 'query-string'
 import moment from 'moment'
 import { Divider, message, Switch } from 'antd'
-import { EntityStatus, ExamStates, SignStates } from './const'
+import { EntityStatus, ExamStatus } from './const'
 import domtoimage from 'dom-to-image'
 import confirm from 'antd/lib/modal/confirm'
 import api from './api'
@@ -114,31 +114,6 @@ export const copyToClipboard = (clipboardContent) => {
     message.error('不能使用这种方法复制内容')
   }
   document.body.removeChild(textArea)
-}
-
-export const findExamStateId = (title) => {
-  let result
-  Object.keys(ExamStates).forEach((key) => {
-    if (ExamStates[key] === title) {
-      result = key
-    }
-  })
-  return Number(result)
-}
-
-export const findSignStateId = (title) => {
-  let result
-  Object.keys(SignStates).forEach((key) => {
-    if (SignStates[key] === title) {
-      result = key
-    }
-  })
-  return Number(result)
-}
-
-export const DefaultPaginator = {
-  page: 1,
-  rows: 10,
 }
 
 /**
@@ -342,3 +317,7 @@ export const getCustomRow = (title, getValue, width) => ({
   width,
   render: (text, record) => <span>{getValue(record)}</span>,
 })
+
+export const findExamStatus = (examStatusId) => {
+  return Object.values(ExamStatus).find((status) => status.id === examStatusId)
+}

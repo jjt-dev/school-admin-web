@@ -3,7 +3,6 @@ import set from 'lodash/fp/set'
 import flow from 'lodash/fp/flow'
 import { findIndexById } from 'src/utils/common'
 import {
-  GET_EXAM_LIST,
   EXAM_UPDATE_FILTER,
   GET_EXAM,
   GET_EXAM_ITEM_LIST,
@@ -37,12 +36,6 @@ const exam = handleActions(
         ...state,
         examInEdit: payload,
       }
-    },
-    [GET_EXAM_LIST]: (state, { payload }) => {
-      return flow(
-        set(`examList`, payload.data),
-        set(`total`, payload.totalRecords)
-      )(state)
     },
     [GET_EXAM_ITEM_LIST]: (state, { payload }) => {
       return {

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Select } from 'antd'
-import { ExamStates } from 'src/utils/const'
+import { ExamStatus } from 'src/utils/const'
 import ListHeaderRight from 'src/components/ListHeaderRight'
 import ListHeaderCustom from 'src/components/ListHeaderCustom'
 import ListHeaderLeft from 'src/components/ListHeaderLeft'
@@ -36,9 +36,9 @@ const Header = ({ fetchTable, canAddMockExam }) => {
             onChange={handleChangeState}
           >
             <Option value="">所有</Option>
-            {Object.keys(ExamStates).map((key) => (
-              <Option key={key} value={key}>
-                {ExamStates[key]}
+            {Object.keys(ExamStatus).map((key) => (
+              <Option key={key} value={ExamStatus[key].id}>
+                {ExamStatus[key].title}
               </Option>
             ))}
           </Select>
