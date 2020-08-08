@@ -63,10 +63,11 @@ export const deepClone = (obj) => {
 }
 
 export const isNotEmpty = (value) => {
-  if (!value) return false
+  if (value === null || value === undefined) return false
   if (Array.isArray(value)) {
     return value.length > 0
   }
+  if (value === 0) return true
   if (typeof value === 'boolean' || typeof value === 'number') return value
   if (value instanceof Object) return value
 

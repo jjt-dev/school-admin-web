@@ -36,9 +36,9 @@ const Header = ({ fetchTable, canAddMockExam }) => {
             onChange={handleChangeState}
           >
             <Option value="">所有</Option>
-            {Object.keys(ExamStatus).map((key) => (
-              <Option key={key} value={ExamStatus[key].id}>
-                {ExamStatus[key].title}
+            {Object.values(ExamStatus).map((status) => (
+              <Option key={status.id} value={status.id}>
+                {status.title}
               </Option>
             ))}
           </Select>
