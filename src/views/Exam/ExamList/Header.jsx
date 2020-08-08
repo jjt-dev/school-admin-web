@@ -15,7 +15,7 @@ const Header = ({ fetchTable, canAddMockExam }) => {
 
   const getBtn = (isFormal, examType) => {
     return (
-      <LinkBtn type="primary" path={`/exam/isFormal=${isFormal}`} size="small">
+      <LinkBtn type="primary" path={`/exam?isFormal=${isFormal}`} size="small">
         新增{examType}考试
       </LinkBtn>
     )
