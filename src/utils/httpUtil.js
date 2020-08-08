@@ -1,4 +1,5 @@
 import { buildParameters } from './common'
+import { local, TOKEN } from './storage'
 
 /**
  * exam group
@@ -26,3 +27,35 @@ export const pathExamList = `/examination/page`
 
 export const pathExamEnable = (params) =>
   buildParameters(`/examination/enable`, params)
+
+export const pathExam = (examId) => `/examination/item?id=${examId}`
+
+/**
+ * exam sign
+ */
+export const pathExamSignList = '/exam/sign/signPage'
+
+export const pathExamSign = (signId) =>
+  signId ? `/exam/sign/signInfo?signId=${signId}` : ''
+
+export const pathDelSign = (examSign) =>
+  `/exam/sign/delSign?signId=${examSign.signId}`
+
+export const pathDownloadResults = (examinationId) =>
+  `${
+    process.env.REACT_APP_API_ROOT
+  }/statistics/getSomeExamAllResults?examinationId=${examinationId}&token=${encodeURIComponent(
+    local.getItem(TOKEN)
+  )}`
+
+export const pathCanSignLevels = (examId) =>
+  `/exam/sign/canSignLevelList?examinationId=${examId}`
+
+export const pathSignOffline = (values) =>
+  buildParameters(`/exam/sign/signOffLine`, values)
+
+/**
+ * coach
+ */
+export const pathCoachClasses = (coachId) =>
+  `/coach/class/page?page=1&rows=10000&coachId=${coachId}`

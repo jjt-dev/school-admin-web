@@ -179,16 +179,35 @@ export const downloadImg = async (url) => {
   document.body.removeChild(a)
 }
 
+export const confirmDelete = (
+  title,
+  titleValue,
+  path,
+  callback,
+  contentTitle
+) => {
+  const entity = {
+    status: '删除',
+    title,
+    titleValue: titleValue,
+    path,
+    callback,
+    contentTitle,
+  }
+  confirmUpdate(entity)
+}
+
 export const confirmUpdate = ({
   status,
   title,
   titleValue,
   path,
   callback,
+  contentTitle,
 }) => {
   confirm({
     title: `请问您确认要${status}该${title}吗?`,
-    content: `${title}名: ${titleValue}`,
+    content: `${contentTitle ?? title}名: ${titleValue}`,
     okText: '确定',
     cancelText: '取消',
     onOk: async () => {

@@ -14,24 +14,27 @@ import { useParams } from 'react-router'
 import { buildParameters } from 'src/utils/common'
 import api from 'src/utils/api'
 import moment from 'moment'
+import {
+  pathExamSign,
+  pathExam,
+  pathCanSignLevels,
+  pathCoachClasses,
+  pathSignOffline,
+} from 'src/utils/httpUtil'
+import { routeExamSignList } from 'src/utils/routeUtil'
 
 const ExamSign = ({ history }) => {
   const { id: examId, signId } = useParams()
   const { allCoaches, allExamLevels } = useSelector((state) => state.app)
-  const [sign] = useFetch(signId ? `/exam/sign/signInfo?signId=${signId}` : '')
-  const [exam] = useFetch(`/examination/item?id=${examId}`, {})
+  const [sign] = useFetch(pathExamSign(signId))
+  const [exam = {}] = useFetch(pathExam(examId))
   const [{ data: coachClasses = [] }, fetchClasses] = useFetch('', {})
-  const [availableExamLevels] = useFetch(
-    `/exam/sign/canSignLevelList?examinationId=${examId}`,
-    []
-  )
+  const [availableExamLevels = []] = useFetch(pathCanSignLevels(examId))
 
   const [form] = Form.useForm()
 
   const getClasses = useCallback(
-    (coachId) => {
-      fetchClasses(`/coach/class/page?page=1&rows=10000&coachId=${coachId}`)
-    },
+    (coachId) => fetchClasses(pathCoachClasses(coachId)),
     [fetchClasses]
   )
 
@@ -60,9 +63,9 @@ const ExamSign = ({ history }) => {
     values.examinationId = examId
     values.levels = values.levels.join(',')
     values.birthday = values.birthday.format(dateFormat)
-    await api.post(buildParameters(`/exam/sign/signOffLine`, values))
+    await api.post(pathSignOffline(values))
     message.success(`报名成功`)
-    history.push(`/exam/${examId}/signs`)
+    history.push(routeExamSignList(examId))
   }
 
   return (
