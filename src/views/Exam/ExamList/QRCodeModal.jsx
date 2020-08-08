@@ -2,6 +2,8 @@ import React from 'react'
 import { Modal } from 'antd'
 import { domToImage } from 'src/utils/common'
 import * as QRCode from 'qrcode.react'
+// import { QRCode } from 'react-qrcode-logo'
+import logo from 'src/images/logo4.png'
 
 const QRCodeModal = ({ exam, setSelectedExam }) => {
   const { title, hashCode } = exam
@@ -29,7 +31,11 @@ const QRCodeModal = ({ exam, setSelectedExam }) => {
       <div id={hashCode} className="exam-qrcode__content">
         <div className="exam-qrcode__content-title">考试: {title}</div>
         <div className="exam-qrcode__content-code">
-          <QRCode value={qrCodeValue} size={350} />
+          <QRCode
+            value={qrCodeValue}
+            size={350}
+            imageSettings={{ src: logo, height: 80, width: 80 }}
+          />
         </div>
       </div>
     </Modal>

@@ -44,7 +44,9 @@ const Header = ({
           </Button>
         )}
         {examState === ExamStatus.finish && (
-          <Button onClick={downloadExamineeInfo}>下载考试信息</Button>
+          <Button size="small" onClick={downloadExamineeInfo}>
+            下载考试信息
+          </Button>
         )}
       </ListHeaderLeft>
       <ListHeaderRight
