@@ -1,9 +1,7 @@
 import { handleActions } from 'redux-actions'
 import set from 'lodash/fp/set'
-import flow from 'lodash/fp/flow'
 import { findIndexById } from 'src/utils/common'
 import {
-  EXAM_UPDATE_FILTER,
   GET_EXAM,
   GET_EXAM_ITEM_LIST,
   GET_EXAM_LEVEL_LIST,
@@ -15,17 +13,8 @@ import {
 
 const initState = {
   examList: [],
-  total: 0,
   examItemList: [],
   examLevelList: [],
-  filter: {
-    search: '',
-    examState: 'all',
-    paginator: {
-      page: 1,
-      rows: 10,
-    },
-  },
   examInEdit: null,
 }
 
@@ -48,9 +37,6 @@ const exam = handleActions(
         ...state,
         examLevelList: payload,
       }
-    },
-    [EXAM_UPDATE_FILTER]: (state, { payload }) => {
-      return set(`filter[${payload.field}]`, payload.value, state)
     },
     [EXAM_UPDATE_ITEM_RATIO]: (state, { payload }) => {
       const { levelId, itemId, ratio } = payload

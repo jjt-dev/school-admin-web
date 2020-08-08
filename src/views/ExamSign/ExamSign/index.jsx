@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react'
+import React, { useEffect, useCallback, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { Form, Select, Input, message } from 'antd'
 import useFetch from 'src/hooks/useFetch'
@@ -11,7 +11,6 @@ import FormImage from 'src/components/FormImage'
 import { Relationships, dateFormat, ExamStatus } from 'src/utils/const'
 import FormRadioGroup from 'src/components/FormRadio'
 import { useParams } from 'react-router'
-import { buildParameters } from 'src/utils/common'
 import api from 'src/utils/api'
 import moment from 'moment'
 import {
@@ -20,19 +19,21 @@ import {
   pathCanSignLevels,
   pathCoachClasses,
   pathSignOffline,
+  pathSignOfflineWhenExaming,
 } from 'src/utils/httpUtil'
 import { routeExamSignList } from 'src/utils/routeUtil'
+import LevelRoom from './LevelRoom'
 
 const ExamSign = ({ history }) => {
   const { id: examId, signId } = useParams()
+  const [form] = Form.useForm()
   const { allCoaches, allExamLevels } = useSelector((state) => state.app)
+  const [selectedLevelIds, setSelectedLevelIds] = useState([])
   const [sign] = useFetch(pathExamSign(signId))
-  const [exam = {}] = useFetch(pathExam(examId))
+  const [exam] = useFetch(pathExam(examId))
   const [{ data: coachClasses = [] }, fetchClasses] = useFetch('', {})
   const [availableExamLevels = []] = useFetch(pathCanSignLevels(examId))
-  const isExaming = exam.currState === ExamStatus.examing.id
-
-  const [form] = Form.useForm()
+  const isExaming = exam?.currState === ExamStatus.examing.id
 
   const getClasses = useCallback(
     (coachId) => fetchClasses(pathCoachClasses(coachId)),
@@ -59,14 +60,34 @@ const ExamSign = ({ history }) => {
     getClasses(coachId)
   }
 
+  const onLevelChange = (levels) => {
+    form.setFieldsValue({ levels })
+    setSelectedLevelIds(levels)
+  }
+
   const onFinish = async (values) => {
     values.currState = values.isPayed ? 10 : 0
     values.examinationId = examId
     values.levels = values.levels.join(',')
     values.birthday = values.birthday.format(dateFormat)
-    await api.post(pathSignOffline(values))
+    if (!isExaming) {
+      await api.post(pathSignOffline(values))
+    } else {
+      await signWhenExaming(values)
+    }
     message.success(`报名成功`)
     history.push(routeExamSignList(examId))
+  }
+
+  const signWhenExaming = async (values) => {
+    const levelRoomMap = {}
+    selectedLevelIds.forEach((levelId) => {
+      levelRoomMap[levelId] = values[`level_${levelId}_room`]
+    })
+    await api.post(pathSignOfflineWhenExaming, {
+      examinationSignInfo: values,
+      levelRoomMap,
+    })
   }
 
   return (
@@ -91,7 +112,7 @@ const ExamSign = ({ history }) => {
         titleKey="name"
       />
       <Form.Item label="考试名称">
-        <Input readOnly={true} value={exam.title}></Input>
+        <Input readOnly={true} value={exam?.title}></Input>
       </Form.Item>
       <FormInput label="考试姓名" name="name" />
       <FormGender />
@@ -125,13 +146,27 @@ const ExamSign = ({ history }) => {
         options={allExamLevels}
         titleKey="name"
       />
-      <FormSelect
-        label="报考级别"
-        name="levels"
-        options={availableExamLevels}
-        titleKey="name"
-        mode="multiple"
-      />
+      <Form.Item name="levels" label="报考级别" rules={[{ required: true }]}>
+        <Select
+          placeholder="请选择报考级别"
+          onChange={onLevelChange}
+          mode="multiple"
+        >
+          {availableExamLevels.map((level) => (
+            <Select.Option key={level.id} value={level.id}>
+              {level.name}
+            </Select.Option>
+          ))}
+        </Select>
+      </Form.Item>
+      {/* 临时报名需要给每一个等级选择考场 */}
+      {isExaming && (
+        <LevelRoom
+          exam={exam}
+          levelIds={selectedLevelIds}
+          levels={availableExamLevels}
+        />
+      )}
       <FormInput label="住址" name="address" type="textarea" />
       <FormRadioGroup label="已缴费" name="isPayed" options={payedOptions} />
       <FormInput label="备注" name="note" type="textarea" required={false} />

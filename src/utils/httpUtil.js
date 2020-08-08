@@ -57,6 +57,11 @@ export const pathCanSignLevels = (examId) =>
 export const pathSignOffline = (values) =>
   buildParameters(`/exam/sign/signOffLine`, values)
 
+export const pathSignOfflineWhenExaming = `/exam/sign/signOffLineAfterStartExam`
+
+export const pathExamRooms = (examId) =>
+  `/examination/getExamRooms?examinationId=${examId}`
+
 /**
  * coach
  */
