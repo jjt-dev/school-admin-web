@@ -11,8 +11,10 @@ import {
   getDomain,
   getDateRow,
   confirmDelete,
+  confirmUpdate,
+  findSignStatus,
 } from 'src/utils/common'
-import { SignStates } from 'src/utils/const'
+import { SignStatus } from 'src/utils/const'
 import { Link } from 'react-router-dom'
 import PageListCustom from 'src/components/PageListCustom'
 import {
@@ -20,6 +22,7 @@ import {
   pathExamSignList,
   pathDelSign,
   pathDownloadResults,
+  pathPaySign,
 } from 'src/utils/httpUtil'
 import { routePrintExamCertif, routeExamSign } from 'src/utils/routeUtil'
 
@@ -43,14 +46,20 @@ const ExamSignList = ({ match, history }) => {
     history.push(routePrintExamCertif(examinationId, { coachId, coachClassId }))
   }
 
-  const confirmDeleteExamSign = (examSign) => {
-    confirmDelete(
-      '报名',
-      examSign.name,
-      pathDelSign(examSign),
-      fetchTable,
-      '考生'
-    )
+  const confirmPayExamSign = (sign) => {
+    const entity = {
+      status: '支付',
+      title: '报名',
+      titleValue: sign.name,
+      path: pathPaySign(sign),
+      callback: fetchTable,
+      contentTitle: '考生',
+    }
+    confirmUpdate(entity)
+  }
+
+  const confirmDeleteExamSign = (sign) => {
+    confirmDelete('报名', sign.name, pathDelSign(sign), fetchTable, '考生')
   }
 
   const downloadExamineeInfo = () => {
@@ -70,7 +79,11 @@ const ExamSignList = ({ match, history }) => {
       />
       <CustomTable
         {...signTableList}
-        columns={getColumns(examinationId, confirmDeleteExamSign)}
+        columns={getColumns(
+          examinationId,
+          confirmPayExamSign,
+          confirmDeleteExamSign
+        )}
         rowKey="signId"
         size="small"
       />
@@ -80,7 +93,7 @@ const ExamSignList = ({ match, history }) => {
 
 export default ExamSignList
 
-const getColumns = (examId, deleteSign) => [
+const getColumns = (examId, payExamSign, deleteSign) => [
   tableOrder,
   getRow('姓名', 'name'),
   getRow('身份证号', 'cardId'),
@@ -88,7 +101,7 @@ const getColumns = (examId, deleteSign) => [
     <Avatar size={45} src={`${getDomain()}${record.faceUrl}`} />
   )),
   getDateRow('报名时间', 'signTime'),
-  getCustomRow('当前状态', (record) => SignStates[record.currState]),
+  getCustomRow('当前状态', (record) => findSignStatus(record.currState).title),
   getRow('联系电话', 'phone'),
   {
     title: '操作',
@@ -98,6 +111,14 @@ const getColumns = (examId, deleteSign) => [
         <Divider type="vertical" />
         <Link to={`/exam/${examId}/sign/${record.signId}/detail`}>详情</Link>
         <Divider type="vertical" />
+        {record.currState === SignStatus.notPay.id && (
+          <>
+            <span className="table-action" onClick={() => payExamSign(record)}>
+              支付考试报名
+            </span>
+            <Divider type="vertical" />
+          </>
+        )}
         <span
           className="table-action"
           onClick={() => {

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button, Select } from 'antd'
 import { useState } from 'react'
-import { SignStates, ExamStatus } from 'src/utils/const'
+import { SignStatus, ExamStatus } from 'src/utils/const'
 import CoachClassSelect from './CoachClassSelect'
 import ListHeaderCustom from 'src/components/ListHeaderCustom'
 import ListHeaderLeft from 'src/components/ListHeaderLeft'
@@ -25,8 +25,8 @@ const Header = ({
     fetchTable({ coachId: '', coachClassId: '', keyword: '' })
   }
 
-  const handleChangeSignState = (signState) => {
-    fetchTable({ currState: SignStates[signState] ? signState : '' })
+  const handleChangeSignStatus = (signStatusId) => {
+    fetchTable({ currState: signStatusId })
   }
 
   return (
@@ -38,7 +38,7 @@ const Header = ({
           </Button>
         )}
         {examState === ExamStatus.examing.id && (
-          <Button size="small" onClick={downloadExamineeInfo}>
+          <Button size="small" type="primary" onClick={handleSign}>
             临时报名
           </Button>
         )}
@@ -61,12 +61,12 @@ const Header = ({
         <Select
           defaultValue="all"
           style={{ width: 140 }}
-          onChange={handleChangeSignState}
+          onChange={handleChangeSignStatus}
         >
           <Option value="all">所有</Option>
-          {Object.keys(SignStates).map((key) => (
-            <Option key={key} value={key}>
-              {SignStates[key]}
+          {Object.values(SignStatus).map((status) => (
+            <Option key={status.id} value={status.id}>
+              {status.title}
             </Option>
           ))}
         </Select>

@@ -41,6 +41,9 @@ export const pathExamSign = (signId) =>
 export const pathDelSign = (examSign) =>
   `/exam/sign/delSign?signId=${examSign.signId}`
 
+export const pathPaySign = (examSign) =>
+  `/exam/sign/payOffline?signId=${examSign.signId}`
+
 export const pathDownloadResults = (examinationId) =>
   `${
     process.env.REACT_APP_API_ROOT

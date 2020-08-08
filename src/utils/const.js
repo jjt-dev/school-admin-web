@@ -44,12 +44,12 @@ export const ExamStatus = {
   finish: { id: 40, title: '完成' },
 }
 
-export const SignStates = {
-  0: '待付款',
-  10: '已支付等待分组',
-  20: '已分组等待考试',
-  30: '考试中',
-  40: '考试结束',
+export const SignStatus = {
+  notPay: { id: 0, title: '待付款' },
+  waitForGroup: { id: 10, title: '已支付等待分组' },
+  waitForExam: { id: 20, title: '已分组等待考试' },
+  examing: { id: 30, title: '考试中' },
+  finish: { id: 40, title: '考试结束' },
 }
 
 export const EntityStatus = {

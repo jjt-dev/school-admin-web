@@ -8,7 +8,7 @@ import FormInput from 'src/components/FormInput'
 import FormGender from 'src/components/FormGender'
 import FormDate from 'src/components/FormDate'
 import FormImage from 'src/components/FormImage'
-import { Relationships, dateFormat } from 'src/utils/const'
+import { Relationships, dateFormat, ExamStatus } from 'src/utils/const'
 import FormRadioGroup from 'src/components/FormRadio'
 import { useParams } from 'react-router'
 import { buildParameters } from 'src/utils/common'
@@ -30,6 +30,7 @@ const ExamSign = ({ history }) => {
   const [exam = {}] = useFetch(pathExam(examId))
   const [{ data: coachClasses = [] }, fetchClasses] = useFetch('', {})
   const [availableExamLevels = []] = useFetch(pathCanSignLevels(examId))
+  const isExaming = exam.currState === ExamStatus.examing.id
 
   const [form] = Form.useForm()
 

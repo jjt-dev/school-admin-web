@@ -2,7 +2,7 @@ import React from 'react'
 import * as queryString from 'query-string'
 import moment from 'moment'
 import { Divider, message, Switch } from 'antd'
-import { EntityStatus, ExamStatus } from './const'
+import { EntityStatus, ExamStatus, SignStatus } from './const'
 import domtoimage from 'dom-to-image'
 import confirm from 'antd/lib/modal/confirm'
 import api from './api'
@@ -321,4 +321,8 @@ export const getCustomRow = (title, getValue, width) => ({
 
 export const findExamStatus = (examStatusId) => {
   return Object.values(ExamStatus).find((status) => status.id === examStatusId)
+}
+
+export const findSignStatus = (signStatusId) => {
+  return Object.values(SignStatus).find((status) => status.id === signStatusId)
 }
