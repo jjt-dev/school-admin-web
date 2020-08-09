@@ -59,11 +59,11 @@ const Header = ({
       >
         <span className="mr-15">当前状态</span>
         <Select
-          defaultValue="all"
+          defaultValue=""
           style={{ width: 140 }}
           onChange={handleChangeSignStatus}
         >
-          <Option value="all">所有</Option>
+          <Option value="">所有</Option>
           {Object.values(SignStatus).map((status) => (
             <Option key={status.id} value={status.id}>
               {status.title}
