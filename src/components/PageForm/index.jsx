@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { Form, message } from 'antd'
 import { formLayout } from 'src/utils/const'
-import { buildParameters, getStatus } from 'src/utils/common'
+import { getStatus, buildFormPath } from 'src/utils/common'
 import api from 'src/utils/api'
 import FormBottom from 'src/components/FormBottom'
 import useFetch from 'src/hooks/useFetch'
@@ -32,7 +32,7 @@ const PageForm = ({ callback, formItems }) => {
     if (!!entityId) {
       values.id = entityId
     }
-    await api.post(buildParameters(`${defaultPath}/edit`, values))
+    await api.post(buildFormPath(`${defaultPath}/edit`, values))
     message.success(`${status}${title}成功`)
     if (back) {
       history.push(back.path)

@@ -1,4 +1,4 @@
-import { buildParameters } from './common'
+import { buildFormPath } from './common'
 import { local, TOKEN } from './storage'
 
 /**
@@ -52,7 +52,7 @@ export const pathCanSignLevels = (examId) =>
   `/exam/sign/canSignLevelList?examinationId=${examId}`
 
 export const pathSignOffline = (values) =>
-  buildParameters(`/exam/sign/signOffLine`, values)
+  buildFormPath(`/exam/sign/signOffLine`, values)
 
 export const pathSignOfflineWhenExaming = `/exam/sign/signOffLineAfterStartExam`
 

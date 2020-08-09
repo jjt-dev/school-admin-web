@@ -92,6 +92,14 @@ export const buildParameters = (path, parameters) => {
   return path
 }
 
+export const buildFormPath = (path, parameters) => {
+  path += '?'
+  Object.keys(parameters).forEach((key) => {
+    path += `&${key}=${encodeURIComponent(parameters[key])}`
+  })
+  return path
+}
+
 // 复制指定内容
 export const copyToClipboard = (clipboardContent) => {
   var textArea = document.createElement('textarea')
