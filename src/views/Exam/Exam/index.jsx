@@ -11,13 +11,15 @@ import FormInput from 'src/components/FormInput'
 import FormEnableRadio from 'src/components/FormEnableRadio'
 import FormDateRange from 'src/components/FormDateRange'
 import LevelRangeItems from './LevelRangeItems'
-import { message, Button } from 'antd'
+import { message, Button, Form } from 'antd'
 import ImportExamModal from './ImportExamModal'
+import moment from 'moment'
 
 const { usePageForm } = PageFormCustom
 
 const Exam = ({ history }) => {
   const dispatch = useDispatch()
+  const [form] = Form.useForm()
   const { isFormal } = useSearch()
   const [showImportExamModal, setShowImportExamModal] = useState(false)
   const examType = isFormal === 'true' ? '正式' : '模拟'
@@ -42,6 +44,20 @@ const Exam = ({ history }) => {
     fetchData()
     return () => dispatch(examAction.resetStore())
   }, [dispatch, examId])
+
+  useEffect(() => {
+    if (examInEdit) {
+      examInEdit.examTime = [
+        moment(examInEdit.examStartTime),
+        moment(examInEdit.examEndTime),
+      ]
+      examInEdit.signTime = [
+        moment(examInEdit.signStartTime),
+        moment(examInEdit.signEndTime),
+      ]
+      form.setFieldsValue(examInEdit)
+    }
+  }, [examInEdit, form])
 
   const updateItemRatio = (levelId, itemId, ratio) => {
     dispatch(examAction.updateItemRatio({ levelId, itemId, ratio }))
@@ -72,19 +88,9 @@ const Exam = ({ history }) => {
     return null
   }
 
-  const {
-    title,
-    address,
-    isEnable,
-    examStartTime,
-    examEndTime,
-    signStartTime,
-    signEndTime,
-    note,
-  } = examInEdit || {}
-
   return (
     <PageFormCustom
+      form={form}
       onFinish={onFinish}
       title={`${examType}考试`}
       customClass="exam"
@@ -99,18 +105,16 @@ const Exam = ({ history }) => {
           导入考试
         </Button>
       )}
-      <FormInput label="名称" name="title" initialValue={title} />
-      <FormInput label="地址" name="address" initialValue={address} />
+      <FormInput label="名称" name="title" />
+      <FormInput label="地址" name="address" />
       <FormDateRange
         label="考试时间"
         name="examTime"
-        initialValue={[examStartTime, examEndTime]}
         defaultHours={['09:00', '18:00']}
       />
       <FormDateRange
         label="报名时间"
         name="signTime"
-        initialValue={[signStartTime, signEndTime]}
         defaultHours={['00:00', '23:59']}
       />
       <LevelRangeItems
@@ -127,14 +131,8 @@ const Exam = ({ history }) => {
           updateItemRatio={updateItemRatio}
         />
       ))}
-      <FormEnableRadio initialValue={isEnable} />
-      <FormInput
-        type="textarea"
-        label="描述"
-        name="note"
-        initialValue={note}
-        required={false}
-      />
+      <FormEnableRadio />
+      <FormInput type="textarea" label="描述" name="note" required={false} />
       {showImportExamModal && (
         <ImportExamModal hideModal={() => setShowImportExamModal(false)} />
       )}
