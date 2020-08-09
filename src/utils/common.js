@@ -68,7 +68,7 @@ export const isNotEmpty = (value) => {
     return value.length > 0
   }
   if (value === 0) return true
-  if (typeof value === 'boolean' || typeof value === 'number') return value
+  if (typeof value === 'boolean' || typeof value === 'number') return true
   if (value instanceof Object) return value
 
   return value.trim() !== ''
@@ -165,10 +165,27 @@ export const confirmDelete = (
   const entity = {
     status: '删除',
     title,
-    titleValue: titleValue,
+    titleValue,
     path,
     callback,
     contentTitle,
+  }
+  confirmUpdate(entity)
+}
+
+export const confirmChangeStatus = (
+  isEnable,
+  title,
+  titleValue,
+  path,
+  callback
+) => {
+  const entity = {
+    status: isEnable ? '禁用' : '启用',
+    title,
+    titleValue,
+    path,
+    callback,
   }
   confirmUpdate(entity)
 }

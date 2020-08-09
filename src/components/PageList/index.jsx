@@ -39,6 +39,18 @@ const PageList = ({
     addCallback = editPath
   }
 
+  const updateEntityStatus = (entity) => {
+    const { isEnable } = entity
+    const payload = {
+      status: isEnable ? '禁用' : '启用',
+      title,
+      titleValue: entity[titleProp],
+      path: `${apiPath}/enable?id=${entity.id}&isEnable=${!isEnable}`,
+      callback: tableList.fetchTable,
+    }
+    confirmUpdate(payload)
+  }
+
   const deleteEntity = (entity) => {
     const payload = {
       status: '删除',
@@ -67,7 +79,7 @@ const PageList = ({
       )}
       <CustomTable
         {...tableList}
-        columns={columns(deleteEntity)}
+        columns={columns(deleteEntity, updateEntityStatus)}
         rowKey={rowKey}
         size={size}
       />

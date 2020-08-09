@@ -61,6 +61,7 @@ export const routes = [
     editPath: '/exam',
     title: '考试',
     titleProp: 'title',
+    apiPath: '/examination',
     comp: ExamList,
   },
   {

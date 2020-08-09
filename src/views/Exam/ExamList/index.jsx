@@ -13,12 +13,11 @@ import {
   getLinkRow,
   getRow,
   tableOrder,
-  confirmUpdate,
   getSwitchRow,
   findExamStatus,
 } from 'src/utils/common'
 import CustomTable from 'src/components/CustomTable'
-import { pathMockBtn, pathExamList, pathExamEnable } from 'src/utils/httpUtil'
+import { pathMockBtn, pathExamList } from 'src/utils/httpUtil'
 
 const { useTableFetch } = CustomTable
 
@@ -27,22 +26,10 @@ const ExamList = () => {
   const [selectedExam, setSelectedExam] = useState()
   const examList = useTableFetch(pathExamList)
 
-  const updateExamStatus = (exam) => {
-    const { isEnable } = exam
-    const entity = {
-      status: isEnable ? '禁用' : '启用',
-      title: '考试',
-      titleValue: exam.title,
-      path: pathExamEnable({ id: exam.id, isEnable: !isEnable }),
-      callback: () => examList.fetchTable(),
-    }
-    confirmUpdate(entity)
-  }
-
   return (
     <>
       <PageList
-        columns={getColumns(setSelectedExam, updateExamStatus)}
+        columns={getColumns(setSelectedExam)}
         deleteCallback={refetch}
         defaultTableList={examList}
         size="small"
@@ -61,7 +48,7 @@ const ExamList = () => {
 
 export default ExamList
 
-const getColumns = (setSelectedExam, updateExamStatus) => (deleteCoach) => [
+const getColumns = (setSelectedExam) => (deleteCoach, updateExamStatus) => [
   tableOrder,
   getRow('名称', 'title'),
   getExamlinkRow(setSelectedExam),

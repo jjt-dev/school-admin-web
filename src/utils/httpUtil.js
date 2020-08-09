@@ -25,9 +25,6 @@ export const pathUpdRoundRoom = (sourceId, newRoomId) =>
 export const pathMockBtn = `/examination/canShowMockBtn`
 export const pathExamList = `/examination/page`
 
-export const pathExamEnable = (params) =>
-  buildParameters(`/examination/enable`, params)
-
 export const pathExam = (examId) => `/examination/item?id=${examId}`
 
 /**
