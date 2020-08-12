@@ -13,7 +13,7 @@ import LinkBtn from 'src/components/LinkBtn'
 
 const { Option } = Select
 
-const Header = ({ fetchTable, exam }) => {
+const Header = ({ fetchTable, exam, defaultSearch }) => {
   const [callWithLoading] = useLoading()
   const examId = exam.id
   const [groupNum, setGroupNum] = useState(exam.groupNum)
@@ -51,7 +51,7 @@ const Header = ({ fetchTable, exam }) => {
         <LinkBtn path={`/exam/${examId}/round-room`}>考场分配</LinkBtn>
         <LinkBtn path={`/exam/${examId}/room-examiner`}>考场和考官</LinkBtn>
       </ListHeaderLeft>
-      <ListHeaderRight fetchTable={fetchTable}>
+      <ListHeaderRight fetchTable={fetchTable} keyword={defaultSearch.keyword}>
         <div className="number-by-group">
           <span>考评分组人数</span>
           <Select

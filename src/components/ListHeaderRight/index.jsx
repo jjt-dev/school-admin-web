@@ -5,9 +5,10 @@ const ListHeaderRight = ({
   fetchTable,
   placeholder = '请输入查询条件',
   clearSearchCallback,
+  keyword = '',
   children,
 }) => {
-  const [search, setSearch] = useState('')
+  const [search, setSearch] = useState(keyword)
 
   const handleSearch = () => {
     fetchTable({ keyword: search })

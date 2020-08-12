@@ -17,8 +17,16 @@ const Header = ({
   allCoaches,
   printExamCertifs,
   downloadExamineeInfo,
+  defaultSearch,
 }) => {
-  const [selectedClasses, setSelectedClasses] = useState([])
+  const { coachId } = defaultSearch
+  const defaultSelectedClasses = []
+  if (coachId) {
+    defaultSelectedClasses.push(coachId)
+  }
+  const [selectedClasses, setSelectedClasses] = useState(defaultSelectedClasses)
+
+  console.log('selectedClasses', selectedClasses)
 
   const clearSearch = () => {
     setSelectedClasses([])
@@ -56,10 +64,11 @@ const Header = ({
       <ListHeaderRight
         fetchTable={fetchTable}
         clearSearchCallback={clearSearch}
+        keyword={defaultSearch.keyword}
       >
         <span className="mr-15">当前状态</span>
         <Select
-          defaultValue=""
+          defaultValue={defaultSearch.currState ?? ''}
           style={{ width: 140 }}
           onChange={handleChangeSignStatus}
         >
@@ -76,6 +85,7 @@ const Header = ({
             fetchSignList={fetchTable}
             selectedClasses={selectedClasses}
             setSelectedClasses={setSelectedClasses}
+            defaultSearch={defaultSearch}
           />
         )}
       </ListHeaderRight>

@@ -8,7 +8,7 @@ import LinkBtn from 'src/components/LinkBtn'
 
 const { Option } = Select
 
-const Header = ({ fetchTable, canAddMockExam }) => {
+const Header = ({ fetchTable, canAddMockExam, defaultSearch }) => {
   const handleChangeState = (examState) => {
     fetchTable({ currState: examState })
   }
@@ -27,11 +27,11 @@ const Header = ({ fetchTable, canAddMockExam }) => {
         {getBtn('true', '正式')}
         {canAddMockExam && getBtn('false', '模拟')}
       </ListHeaderLeft>
-      <ListHeaderRight fetchTable={fetchTable}>
+      <ListHeaderRight fetchTable={fetchTable} keyword={defaultSearch.keyword}>
         <div className="exam-select-state">
           <span>当前状态</span>
           <Select
-            defaultValue=""
+            defaultValue={defaultSearch.currState ?? ''}
             style={{ width: 120 }}
             onChange={handleChangeState}
           >

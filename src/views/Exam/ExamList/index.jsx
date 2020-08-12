@@ -37,6 +37,7 @@ const ExamList = () => {
         <Header
           fetchTable={examList.fetchTable}
           canAddMockExam={canAddMockExam}
+          defaultSearch={examList.search}
         />
       </PageList>
       {selectedExam && (

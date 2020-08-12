@@ -71,7 +71,7 @@ const PageList = ({
       {children}
       {!children && (
         <ListHeader
-          fetchTable={tableList.fetchTable}
+          {...tableList}
           showAdd={showAdd}
           addCallback={addCallback}
           placeholder={placeholder}

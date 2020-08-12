@@ -8,10 +8,6 @@ import { ConnectedRouter } from 'connected-react-router'
 import configStore from './store'
 import App from './views/App'
 import '../node_modules/font-awesome/css/font-awesome.min.css'
-import CustomTable from 'src/components/CustomTable'
-import api from './utils/api'
-
-CustomTable.api = api
 
 const history = createHashHistory()
 const store = configStore(history)

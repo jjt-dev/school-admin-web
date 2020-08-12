@@ -20,7 +20,13 @@ const ExamGroup = ({ match }) => {
       defaultTableList={groupStdList}
       columns={getColumns(examinationId)}
     >
-      {exam && <Header fetchTable={groupStdList.fetchTable} exam={exam} />}
+      {exam && (
+        <Header
+          fetchTable={groupStdList.fetchTable}
+          exam={exam}
+          defaultSearch={groupStdList.search}
+        />
+      )}
     </PageList>
   )
 }

@@ -4,12 +4,13 @@ import { useHistory } from 'react-router'
 
 const ListHeader = ({
   fetchTable,
+  search: defaultSearch,
   showAdd,
   addCallback,
   placeholder = '请输入查询条件',
 }) => {
   const history = useHistory()
-  const [search, setSearch] = useState('')
+  const [search, setSearch] = useState(defaultSearch?.keyword ?? '')
 
   const handleSearch = () => {
     fetchTable({ keyword: search })

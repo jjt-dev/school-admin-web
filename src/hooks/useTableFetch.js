@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import { debounce } from 'lodash'
 import { isNotEmpty } from 'src/utils/common'
 import api from 'src/utils/api'
+import { session } from 'src/utils/storage'
 
 const defaultPageSizeOptions = ['10', '20', '30', '50', '100']
 
@@ -13,13 +14,13 @@ const useTableFetch = (defaultPath = null, options = {}) => {
   const [refreshInterval, setRefreshInterval] = useState()
   const [total, setTotal] = useState(0)
   const [forceRefreshCount, setForceRefreshCount] = useState(0)
-  const [paginator, setPaignator] = useState({
-    current: 1,
-    pageSize: Number(defaultPageSizeOptions[0]),
-  })
+  const [paginator, setPaignator] = useState(getSavedPaginator(defaultPath))
   const [filters, setFilters] = useState({})
   const defaultSearchRef = useRef(defaultSearch)
-  const [search, setSearch] = useState(defaultSearchRef.current)
+  const [search, setSearch] = useState({
+    ...defaultSearchRef.current,
+    ...getSavedSearch(defaultPath),
+  })
   const [loading, setLoading] = useState(false)
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
   const rowSelection = {
@@ -33,6 +34,10 @@ const useTableFetch = (defaultPath = null, options = {}) => {
       pageSize: pre.pageSize,
     }))
   }, [])
+
+  useEffect(() => {
+    session.setItem(defaultPath, { paginator, search })
+  }, [defaultPath, paginator, search])
 
   /**
    * __tableChange__的命名方式是为了不被用户碰巧同名
@@ -206,3 +211,17 @@ const useTableFetch = (defaultPath = null, options = {}) => {
 }
 
 export default useTableFetch
+
+const getSavedPaginator = (defaultPath) => {
+  const savedFilter = session.getItem(defaultPath)
+  const defaultPaginator = {
+    current: 1,
+    pageSize: Number(defaultPageSizeOptions[0]),
+  }
+  return savedFilter?.paginator ?? defaultPaginator
+}
+
+const getSavedSearch = (defaultPath) => {
+  const savedFilter = session.getItem(defaultPath)
+  return savedFilter?.search ?? {}
+}

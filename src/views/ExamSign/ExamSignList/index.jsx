@@ -71,6 +71,7 @@ const ExamSignList = ({ match, history }) => {
       <Header
         examSignList={signTableList.dataSource}
         fetchTable={fetchTable}
+        defaultSearch={signTableList.search}
         handleSign={handleSign}
         examState={exam.currState}
         allCoaches={allCoaches}

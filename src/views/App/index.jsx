@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { Spin } from 'antd'
 import Header from 'src/views/App/Header'
-import { local, SCHOOL_CODE } from 'src/utils/storage'
+import { local, SCHOOL_CODE, session } from 'src/utils/storage'
 import { useSelector, useDispatch } from 'react-redux'
 import * as appAction from 'src/actions/app'
 import SideMenu from 'src/views/App/SideMenu'
@@ -29,6 +29,7 @@ const App = () => {
     if (schoolCode) {
       local.setItem(SCHOOL_CODE, schoolCode)
     }
+    session.clear()
   })
 
   useEffect(() => {
