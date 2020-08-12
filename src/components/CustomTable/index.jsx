@@ -1,6 +1,6 @@
 import React from 'react'
 import { Table } from 'antd'
-import useTableFetch from './useTableFetch'
+import useTableFetch from 'src/hooks/useTableFetch'
 
 const CustomTable = ({
   pagination,

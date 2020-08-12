@@ -8,24 +8,21 @@ import {
   getCustomRow,
   getDateRow,
 } from 'src/utils/common'
-import useListSearch from 'src/hooks/useListSearch'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import update from 'immutability-helper'
 import useMutation from 'src/hooks/useMutation'
 import { dragBodyRowComponents } from 'src/utils/dragBodyRow'
 import { Genders } from 'src/utils/const'
+import useTableFetch from 'src/hooks/useTableFetch'
 
 const RoundExamineeModal = ({ examinationId, roundNum, hideModal }) => {
   const [state, setState] = useState({ examinees: [] })
   const { postApi } = useMutation()
-  const { data, refetchList, pagination } = useListSearch(
-    '/examination/examinationStudentGrouped',
-    {
-      examinationId,
-      roundNum,
-    }
-  )
+  const tableList = useTableFetch('/examination/examinationStudentGrouped', {
+    examinationId,
+    roundNum,
+  })
 
   const reorderExaminees = async (examinees) => {
     const payload = examinees.map((item, index) => ({
@@ -36,8 +33,8 @@ const RoundExamineeModal = ({ examinationId, roundNum, hideModal }) => {
   }
 
   useEffect(() => {
-    setState((prev) => ({ ...prev, examinees: data }))
-  }, [data])
+    setState((prev) => ({ ...prev, examinees: tableList.dataSource }))
+  }, [tableList.dataSource])
 
   const moveRow = (dragIndex, hoverIndex) => {
     const { examinees } = state
@@ -69,6 +66,7 @@ const RoundExamineeModal = ({ examinationId, roundNum, hideModal }) => {
     >
       <DndProvider backend={HTML5Backend}>
         <Table
+          {...tableList}
           columns={columns}
           dataSource={state.examinees}
           components={dragBodyRowComponents}
@@ -77,9 +75,6 @@ const RoundExamineeModal = ({ examinationId, roundNum, hideModal }) => {
             moveRow,
           })}
           rowKey="studentId"
-          size="middle"
-          pagination={pagination}
-          onChange={(value) => refetchList({ paginator: value })}
         />
       </DndProvider>
     </Modal>

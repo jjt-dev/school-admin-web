@@ -4,7 +4,6 @@ import { CertificateTypes } from '../Certificate/helper'
 import useFetch from 'src/hooks/useFetch'
 import { Empty } from 'antd'
 import { buildPath } from './helper'
-import useListSearch from 'src/hooks/useListSearch'
 import './index.less'
 import api from 'src/utils/api'
 import { useDispatch } from 'react-redux'
@@ -15,9 +14,7 @@ const PrintExamCertif = ({ match, location }) => {
   const ExamCertifType = CertificateTypes[2]
   const [template, setTemplate] = useState()
   const [schoolConfig] = useFetch(`/school/item`)
-  const { data: templates } = useListSearch(`/config/file/page`, {
-    pageSize: 1000,
-  })
+  const [templates] = useFetch(`/config/file/page?page=1&rows=1000`)
   const [examCertifInfos, setExamCertifInfos] = useState()
 
   useEffect(() => {
