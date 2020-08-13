@@ -1,7 +1,6 @@
 import React from 'react'
 import { Button, Modal } from 'antd'
 import {
-  addNumPrefix,
   addRoundNumPrefix,
   getCustomRow,
   getRow,
@@ -15,7 +14,7 @@ const { useTableFetch } = CustomTable
 
 const RoomExamineeModal = ({
   examinationId,
-  selectedRoom: { roomId },
+  selectedRoom: { roomId, name },
   hide,
 }) => {
   const tableList = useTableFetch(pathRoomStudents, {
@@ -31,7 +30,7 @@ const RoomExamineeModal = ({
   return (
     <Modal
       width={900}
-      title={`${addNumPrefix(roomId)}考场考生列表`}
+      title={`${name}考生列表`}
       visible={true}
       onCancel={hide}
       footer={[

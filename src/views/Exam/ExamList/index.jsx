@@ -16,10 +16,8 @@ import {
   getSwitchRow,
   findExamStatus,
 } from 'src/utils/common'
-import CustomTable from 'src/components/CustomTable'
 import { pathMockBtn, pathExamList } from 'src/utils/httpUtil'
-
-const { useTableFetch } = CustomTable
+import useTableFetch from 'src/hooks/useTableFetch'
 
 const ExamList = () => {
   const [canAddMockExam, refetch] = useFetch(pathMockBtn)

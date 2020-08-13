@@ -1,12 +1,10 @@
 import React from 'react'
 import Header from './Header'
 import PageList from 'src/components/PageList'
-import CustomTable from 'src/components/CustomTable'
 import { getActionRow, getRow, tableOrder } from 'src/utils/common'
 import useFetch from 'src/hooks/useFetch'
 import './index.less'
-
-const { useTableFetch } = CustomTable
+import useTableFetch from 'src/hooks/useTableFetch'
 
 const ExamGroup = ({ match }) => {
   const examinationId = match.params.id

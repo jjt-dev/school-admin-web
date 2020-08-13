@@ -18,8 +18,8 @@ const useTableFetch = (defaultPath = null, options = {}) => {
   const [filters, setFilters] = useState({})
   const defaultSearchRef = useRef(defaultSearch)
   const [search, setSearch] = useState({
-    ...defaultSearchRef.current,
     ...getSavedSearch(defaultPath),
+    ...defaultSearchRef.current,
   })
   const [loading, setLoading] = useState(false)
   const [selectedRowKeys, setSelectedRowKeys] = useState([])

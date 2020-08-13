@@ -25,7 +25,7 @@ const RoundAndRoom = ({ match }) => {
   }
 
   return (
-    <PageListCustom title="考场分配">
+    <PageListCustom title="考场分配" customClass="round-room-list">
       <Table
         className="round-room-table"
         columns={getColumns(allRooms, updateRoundRoom, setSelectedRound)}

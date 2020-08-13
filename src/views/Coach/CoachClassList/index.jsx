@@ -8,12 +8,10 @@ import {
   tableOrder,
 } from 'src/utils/common'
 import ClassExamineeList from './ClassExamineeList'
-import CustomTable from 'src/components/CustomTable'
 import AddClassModal from './AddClassModal'
 import PageList from 'src/components/PageList'
 import getEditClass from './EditClass'
-
-const { useTableFetch } = CustomTable
+import useTableFetch from 'src/hooks/useTableFetch'
 
 const CoachClassList = ({ match }) => {
   const coachId = match.params.id
