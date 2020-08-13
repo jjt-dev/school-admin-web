@@ -9,28 +9,37 @@ import {
 } from 'src/utils/common'
 import { Genders } from 'src/utils/const'
 import CustomTable from 'src/components/CustomTable'
+import { pathRoomStudents, pathDownloadRoomStudInfos } from 'src/utils/httpUtil'
 
 const { useTableFetch } = CustomTable
 
 const RoomExamineeModal = ({
   examinationId,
-  selectedRoom,
-  hideRoomExamineesModal,
+  selectedRoom: { roomId },
+  hide,
 }) => {
-  const tableList = useTableFetch('/examination/pageStudentsOfSomeRoom', {
+  const tableList = useTableFetch(pathRoomStudents, {
     examinationId,
-    roomId: selectedRoom.roomId,
+    roomId,
   })
+
+  const downloadRoomStudInfo = () => {
+    window.open(pathDownloadRoomStudInfos(examinationId, roomId), '_blank')
+    hide()
+  }
 
   return (
     <Modal
       width={900}
-      title={`${addNumPrefix(selectedRoom.roomId)}考场考生列表`}
+      title={`${addNumPrefix(roomId)}考场考生列表`}
       visible={true}
-      onCancel={hideRoomExamineesModal}
+      onCancel={hide}
       footer={[
-        <Button key="back" onClick={hideRoomExamineesModal}>
+        <Button key="back" onClick={hide}>
           取消
+        </Button>,
+        <Button key="ok" type="primary" onClick={downloadRoomStudInfo}>
+          下载考生信息
         </Button>,
       ]}
     >

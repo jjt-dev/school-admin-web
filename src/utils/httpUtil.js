@@ -19,6 +19,15 @@ export const pathRoundAndRoom = (examId) =>
 export const pathUpdRoundRoom = (sourceId, newRoomId) =>
   `/examination/updateRoundRoom?sourceId=${sourceId}&newRoomId=${newRoomId}`
 
+export const pathRoomStudents = '/examination/pageStudentsOfSomeRoom'
+
+export const pathDownloadRoomStudInfos = (examId, roomId) =>
+  `${
+    process.env.REACT_APP_API_ROOT
+  }/statistics/exportSomeRoomStudent?examinationId=${examId}&roomId=${roomId}&token=${encodeURIComponent(
+    local.getItem(TOKEN)
+  )}`
+
 /**
  * exam
  */

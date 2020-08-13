@@ -53,7 +53,7 @@ const RoomAndExaminerList = ({ match }) => {
         <RoomExamineeModal
           examinationId={examId}
           selectedRoom={selectedRoom}
-          hideRoomExamineesModal={hideRoomExamineesModal}
+          hide={hideRoomExamineesModal}
         />
       )}
       {showRoomRounds && (
