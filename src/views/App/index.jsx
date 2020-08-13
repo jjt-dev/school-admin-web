@@ -14,6 +14,7 @@ import useLogin from 'src/hooks/useLogin'
 import useSearch from 'src/hooks/useSearch'
 import Router from '../Router'
 import './index.less'
+import ChromeCheck from './ChromeCheck'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -65,6 +66,7 @@ const App = () => {
         </ErrorBoundary>
       </main>
       {loading && <Spin />}
+      <ChromeCheck />
     </div>
   )
 }
