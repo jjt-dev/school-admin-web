@@ -14,7 +14,9 @@ const PrintExamCertif = ({ match, location }) => {
   const ExamCertifType = CertificateTypes[2]
   const [template, setTemplate] = useState()
   const [schoolConfig] = useFetch(`/school/item`)
-  const [templates] = useFetch(`/config/file/page?page=1&rows=1000`)
+  const [templates = []] = useFetch(`/config/file/page?page=1&rows=1000`, {
+    hasPagination: true,
+  })
   const [examCertifInfos, setExamCertifInfos] = useState()
 
   useEffect(() => {

@@ -5,12 +5,11 @@ import { showLoadingBar, closeLoadingBar } from 'src/actions/app'
 
 const useFetch = (
   defaultPath,
-  defaultValue,
   { params = null, hasPagination = false } = {}
 ) => {
   const dispatch = useDispatch()
   const [path, setPath] = useState(defaultPath)
-  const [data, setData] = useState(defaultValue)
+  const [data, setData] = useState()
   const [forceRefreshCount, setForceRefreshCount] = useState(0)
 
   const refetch = useCallback((path) => {

@@ -31,7 +31,7 @@ const ExamSign = ({ history }) => {
   const [selectedLevelIds, setSelectedLevelIds] = useState([])
   const [sign] = useFetch(pathExamSign(signId))
   const [exam] = useFetch(pathExam(examId))
-  const [{ data: coachClasses = [] }, fetchClasses] = useFetch('', {})
+  const [{ data: coachClasses = [] } = {}, fetchClasses] = useFetch('')
   const [availableExamLevels = []] = useFetch(pathCanSignLevels(examId))
   const isExaming = exam?.currState === ExamStatus.examing.id
 
@@ -49,7 +49,6 @@ const ExamSign = ({ history }) => {
       }
       formSign.isPayed = formSign.currState > 0
       formSign.birthday = moment(formSign.birthday)
-      console.log('formsign', formSign)
       getClasses(formSign.coachId)
       form.setFieldsValue(formSign)
     }

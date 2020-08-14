@@ -26,8 +26,6 @@ const Header = ({
   }
   const [selectedClasses, setSelectedClasses] = useState(defaultSelectedClasses)
 
-  console.log('selectedClasses', selectedClasses)
-
   const clearSearch = () => {
     setSelectedClasses([])
     fetchTable({ coachId: '', coachClassId: '', keyword: '' })

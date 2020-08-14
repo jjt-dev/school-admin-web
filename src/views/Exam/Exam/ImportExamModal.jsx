@@ -8,7 +8,7 @@ import { tableOrder, getRow } from 'src/utils/common'
 
 const ImportExamModal = ({ hideModal }) => {
   const dispatch = useDispatch()
-  const [exams] = useFetch(`/examination/page?isFormal=true&page=1&rows=5`, [])
+  const [exams = []] = useFetch(`/examination/page?isFormal=true&page=1&rows=5`)
 
   const importExam = async (record) => {
     dispatch(showLoadingBar())

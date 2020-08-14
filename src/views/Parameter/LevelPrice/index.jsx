@@ -8,7 +8,7 @@ import { getRow } from 'src/utils/common'
 const columnWidth = '100px'
 
 const LevelPrice = () => {
-  const [levelPrices, refetchPrices] = useFetch(`/config/level/price/list`, [])
+  const [levelPrices = [], refetchPrices] = useFetch(`/config/level/price/list`)
   const [levelInEditing, setLevelInEditing] = useState(null)
   const [newPrice, setNewPrice] = useState(null)
 

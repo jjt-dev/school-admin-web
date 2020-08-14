@@ -10,7 +10,7 @@ const ExamSignDetail = ({ match, history }) => {
   const { id: examId, signId } = match.params
   const { allCoaches } = useSelector((state) => state.app)
   let [sign] = useFetch(`/exam/sign/signInfo?signId=${signId}`)
-  const [exam] = useFetch(`/examination/item?id=${examId}`, {})
+  const [exam = {}] = useFetch(`/examination/item?id=${examId}`)
   // 当前只有一个等级考试
   const signLevel = (sign && sign.signLevels[0]) || {}
   const examFinished = signLevel.resultScore !== -1

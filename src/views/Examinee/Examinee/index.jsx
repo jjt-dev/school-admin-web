@@ -15,9 +15,8 @@ import PageListCustom from 'src/components/PageListCustom'
 
 const Examinee = ({ match }) => {
   const [showModal, setShowModal] = useState(false)
-  const [examineeDetail] = useFetch(
-    `/student/studentInfo?studentId=${match.params.id}`,
-    {}
+  const [examineeDetail = {}] = useFetch(
+    `/student/studentInfo?studentId=${match.params.id}`
   )
 
   return (
