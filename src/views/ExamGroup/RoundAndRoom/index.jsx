@@ -1,19 +1,20 @@
 import React, { useState } from 'react'
 import './index.less'
 import api from 'src/utils/api'
-import { Table, message, Select, Tag } from 'antd'
+import { message, Select, Tag } from 'antd'
 import { useSelector } from 'react-redux'
 import RoundExamineeModal from './RoundExamineeModal'
-import useFetch from 'src/hooks/useFetch'
 import PageListCustom from 'src/components/PageListCustom'
 import { addRoundNumPrefix, tableOrder, getCustomRow } from 'src/utils/common'
 import { pathRoundAndRoom, pathUpdRoundRoom } from 'src/utils/httpUtil'
+import CustomTable from 'src/components/CustomTable'
+import useTableFetch from 'src/hooks/useTableFetch'
 
 const RoundAndRoom = ({ match }) => {
   const [selectedRound, setSelectedRound] = useState()
   const { allRooms } = useSelector((state) => state.app)
   const examId = match.params.id
-  const [roundAndRoom] = useFetch(pathRoundAndRoom(examId))
+  const tableList = useTableFetch(pathRoundAndRoom, { examinationId: examId })
 
   const updateRoundRoom = async (sourceId, newRoomId) => {
     await api.post(pathUpdRoundRoom(sourceId, newRoomId))
@@ -26,13 +27,11 @@ const RoundAndRoom = ({ match }) => {
 
   return (
     <PageListCustom title="考场分配" customClass="round-room-list">
-      <Table
+      <CustomTable
+        {...tableList}
         className="round-room-table"
         columns={getColumns(allRooms, updateRoundRoom, setSelectedRound)}
-        dataSource={roundAndRoom}
         rowKey="round_num"
-        size="middle"
-        bordered={true}
       />
       {selectedRound && (
         <RoundExamineeModal

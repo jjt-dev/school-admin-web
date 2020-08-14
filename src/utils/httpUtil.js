@@ -13,8 +13,7 @@ export const pathGroupedStudDetail = (examGroupId) =>
 export const pathChangeStudGroup = (examGroupId, toRoundNum) =>
   `/examination/changeStudentGroup?examinationGroupId=${examGroupId}&toRoundNum=${toRoundNum}`
 
-export const pathRoundAndRoom = (examId) =>
-  `/examination/getExamRoundAndItsRoom?examinationId=${examId}`
+export const pathRoundAndRoom = `/examination/getExamRoundAndItsRoom`
 
 export const pathUpdRoundRoom = (sourceId, newRoomId) =>
   `/examination/updateRoundRoom?sourceId=${sourceId}&newRoomId=${newRoomId}`
