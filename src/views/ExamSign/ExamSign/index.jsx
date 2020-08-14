@@ -8,7 +8,7 @@ import FormInput from 'src/components/FormInput'
 import FormGender from 'src/components/FormGender'
 import FormDate from 'src/components/FormDate'
 import FormImage from 'src/components/FormImage'
-import { Relationships, dateFormat, ExamStatus } from 'src/utils/const'
+import { Relationships, dateFormat } from 'src/utils/const'
 import FormRadioGroup from 'src/components/FormRadio'
 import { useParams } from 'react-router'
 import api from 'src/utils/api'
@@ -23,6 +23,8 @@ import {
 } from 'src/utils/httpUtil'
 import { routeExamSignList } from 'src/utils/routeUtil'
 import LevelRoom from './LevelRoom'
+import './index.less'
+import { checkIsExaming } from 'src/utils/common'
 
 const ExamSign = ({ history }) => {
   const { id: examId, signId } = useParams()
@@ -30,10 +32,11 @@ const ExamSign = ({ history }) => {
   const { allCoaches, allExamLevels } = useSelector((state) => state.app)
   const [selectedLevelIds, setSelectedLevelIds] = useState([])
   const [sign] = useFetch(pathExamSign(signId))
-  const [exam] = useFetch(pathExam(examId))
+  const [exam = {}] = useFetch(pathExam(examId))
   const [{ data: coachClasses = [] } = {}, fetchClasses] = useFetch('')
   const [availableExamLevels = []] = useFetch(pathCanSignLevels(examId))
-  const isExaming = exam?.currState === ExamStatus.examing.id
+  const isExaming = checkIsExaming(exam.currState)
+  const isEdit = !!signId
 
   const getClasses = useCallback(
     (coachId) => fetchClasses(pathCoachClasses(coachId)),
@@ -42,15 +45,22 @@ const ExamSign = ({ history }) => {
 
   useEffect(() => {
     if (sign) {
+      const levelIds = (sign.signLevels || []).map((level) => level.levelId)
+      const selectedRoomObj = levelIds.reduce((result, levelId) => {
+        result[`level_${levelId}_room`] = levelId
+        return result
+      }, {})
       const formSign = {
         ...sign.signInfo,
         ...sign.studentInfo,
-        levels: (sign.signLevels || []).map((level) => level.levelId),
+        levels: levelIds,
+        ...selectedRoomObj,
       }
       formSign.isPayed = formSign.currState > 0
       formSign.birthday = moment(formSign.birthday)
       getClasses(formSign.coachId)
       form.setFieldsValue(formSign)
+      setSelectedLevelIds(formSign.levels)
     }
   }, [sign, form, getClasses])
 
@@ -93,7 +103,8 @@ const ExamSign = ({ history }) => {
     <PageFormCustom
       form={form}
       onFinish={onFinish}
-      fullTitle={signId ? '编辑报名' : '人工报名'}
+      fullTitle={isEdit ? '编辑报名' : '人工报名'}
+      customClass="exam-sign"
     >
       <Form.Item label="教练" name="coachId" rules={[{ required: true }]}>
         <Select onChange={onCoachChange} placeholder="请选择教练">
@@ -111,7 +122,7 @@ const ExamSign = ({ history }) => {
         titleKey="name"
       />
       <Form.Item label="考试名称">
-        <Input readOnly={true} value={exam?.title}></Input>
+        <Input readOnly={true} value={exam.title}></Input>
       </Form.Item>
       <FormInput label="考试姓名" name="name" />
       <FormGender />
@@ -158,7 +169,7 @@ const ExamSign = ({ history }) => {
           ))}
         </Select>
       </Form.Item>
-      {/* 临时报名需要给每一个等级选择考场 */}
+      {/* 考试报名截止时间后报名需要给每一个等级选择考场 */}
       {isExaming && (
         <LevelRoom
           exam={exam}

@@ -351,3 +351,7 @@ export const findExamStatus = (examStatusId) => {
 export const findSignStatus = (signStatusId) => {
   return Object.values(SignStatus).find((status) => status.id === signStatusId)
 }
+
+export const checkIsExaming = (examStatus) =>
+  examStatus === ExamStatus.waitForExam.id ||
+  examStatus === ExamStatus.examing.id

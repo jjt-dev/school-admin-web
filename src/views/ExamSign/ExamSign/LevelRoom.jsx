@@ -5,7 +5,7 @@ import FormSelect from 'src/components/FormSelect'
 import { findById } from 'src/utils/common'
 
 const LevelRoom = ({ exam, levelIds = [], levels = [] }) => {
-  const [rooms] = useFetch(pathExamRooms(exam.id))
+  const [rooms = []] = useFetch(pathExamRooms(exam.id))
 
   return (
     <>
