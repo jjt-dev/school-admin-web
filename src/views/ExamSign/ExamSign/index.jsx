@@ -1,17 +1,13 @@
 import React, { useEffect, useCallback, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { Form, Select, Input } from 'antd'
+import { Form, Select } from 'antd'
 import useFetch from 'src/hooks/useFetch'
 import PageFormCustom from 'src/components/PageFormCustom'
 import FormSelect from 'src/components/FormSelect'
 import FormInput from 'src/components/FormInput'
-import FormGender from 'src/components/FormGender'
-import FormDate from 'src/components/FormDate'
 import FormImage from 'src/components/FormImage'
-import { Relationships } from 'src/utils/const'
 import FormRadioGroup from 'src/components/FormRadio'
 import { useParams } from 'react-router'
-import moment from 'moment'
 import {
   pathExamSign,
   pathExam,
@@ -54,7 +50,6 @@ const ExamSign = ({ history }) => {
         ...selectedRoom,
       }
       formSign.isPayed = formSign.currState > 0
-      formSign.birthday = moment(formSign.birthday)
       getClasses(formSign.coachId)
       form.setFieldsValue(formSign)
       setSelectedLevelIds(formSign.levels)
@@ -71,13 +66,32 @@ const ExamSign = ({ history }) => {
     setSelectedLevelIds(levels)
   }
 
+  const titlePrefix = isEdit ? '编辑报名' : '人工报名'
+
   return (
     <PageFormCustom
       form={form}
       onFinish={onFinish(history, examId, isEdit, isExaming, selectedLevelIds)}
-      fullTitle={isEdit ? '编辑报名' : '人工报名'}
+      fullTitle={`${titlePrefix} (${exam.title})`}
       customClass="exam-sign"
     >
+      <FormInput label="考生姓名" name="name" />
+      <FormInput label="考生身份证号" name="cardId" />
+      <FormInput label="家长电话" name="phone" />
+      <FormImage
+        form={form}
+        label="照片"
+        name="faceUrl"
+        message="请上传头像"
+        imageUrl={form.faceUrl}
+      />
+      <FormInput label="住址" name="address" type="textarea" />
+      <FormSelect
+        label="当前考生等级"
+        name="currLevelId"
+        options={allExamLevels}
+        titleKey="name"
+      />
       <Form.Item label="教练" name="coachId" rules={[{ required: true }]}>
         <Select onChange={onCoachChange} placeholder="请选择教练">
           {allCoaches.map((coach) => (
@@ -91,41 +105,6 @@ const ExamSign = ({ history }) => {
         label="班级"
         name="coachClassId"
         options={coachClasses}
-        titleKey="name"
-      />
-      <Form.Item label="考试名称">
-        <Input readOnly={true} value={exam.title}></Input>
-      </Form.Item>
-      <FormInput label="考试姓名" name="name" />
-      <FormGender />
-      <FormDate label="考生生日" name="birthday" />
-      <FormImage
-        form={form}
-        label="照片"
-        name="faceUrl"
-        message="请上传头像"
-        imageUrl={form.faceUrl}
-      />
-      <FormInput label="家长姓名" name="parentName" />
-      <FormInput label="家长电话" name="phone" />
-      <Form.Item
-        label="家长关系"
-        name="relationship"
-        rules={[{ required: true }]}
-      >
-        <Select placeholder="请选择与家长关系">
-          {Object.keys(Relationships).map((key) => (
-            <Select.Option key={key} value={Number(key)}>
-              {Relationships[key]}
-            </Select.Option>
-          ))}
-        </Select>
-      </Form.Item>
-      <FormInput label="考生身份证号" name="cardId" />
-      <FormSelect
-        label="当前考生等级"
-        name="currLevelId"
-        options={allExamLevels}
         titleKey="name"
       />
       <Form.Item name="levels" label="报考级别" rules={[{ required: true }]}>
@@ -149,7 +128,6 @@ const ExamSign = ({ history }) => {
           levels={availableExamLevels}
         />
       )}
-      <FormInput label="住址" name="address" type="textarea" />
       <FormRadioGroup label="已缴费" name="isPayed" options={payedOptions} />
       <FormInput label="备注" name="note" type="textarea" required={false} />
     </PageFormCustom>

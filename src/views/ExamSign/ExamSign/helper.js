@@ -6,7 +6,6 @@ import {
   pathSignEditBeforeSignEnd,
   pathSignEditAfterSignEnd,
 } from 'src/utils/httpUtil'
-import { dateFormat } from 'src/utils/const'
 import { routeExamSignList } from 'src/utils/routeUtil'
 import { message } from 'antd'
 import { buildParameters } from 'src/utils/common'
@@ -26,7 +25,6 @@ export const onFinish = (
   values.currState = values.isPayed ? 10 : 0
   values.examinationId = examId
   values.levels = values.levels.join(',')
-  values.birthday = values.birthday.format(dateFormat)
 
   // 新增报名和临时新报名只需要分别调用单独的一个借口
   if (!isEdit) {
