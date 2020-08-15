@@ -355,3 +355,5 @@ export const findSignStatus = (signStatusId) => {
 export const checkIsExaming = (examStatus) =>
   examStatus === ExamStatus.waitForExam.id ||
   examStatus === ExamStatus.examing.id
+
+export const isProdEnv = process.env.REACT_APP_IS_PRODUCTION === 'true'
