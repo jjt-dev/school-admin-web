@@ -20,7 +20,8 @@ import { checkIsExaming } from 'src/utils/common'
 import { payedOptions, onFinish } from './helper'
 
 const ExamSign = ({ history }) => {
-  const { id: examId, signId } = useParams()
+  const { id, signId } = useParams()
+  const examId = Number(id)
   const [form] = Form.useForm()
   const { allCoaches, allExamLevels } = useSelector((state) => state.app)
   const [selectedLevelIds, setSelectedLevelIds] = useState([])
