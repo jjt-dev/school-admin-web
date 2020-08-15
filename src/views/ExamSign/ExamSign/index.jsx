@@ -130,7 +130,6 @@ const ExamSign = ({ history }) => {
         />
       )}
       <FormRadioGroup label="已缴费" name="isPayed" options={payedOptions} />
-      <FormInput label="备注" name="note" type="textarea" required={false} />
     </PageFormCustom>
   )
 }
