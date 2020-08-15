@@ -67,6 +67,10 @@ export const pathSignOfflineWhenExaming = `/exam/sign/signOffLineAfterStartExam`
 export const pathExamRooms = (examId) =>
   `/examination/getExamRooms?examinationId=${examId}`
 
+export const pathSignEditBasicInfo = `/exam/sign/editStudentBaseInfo`
+export const pathSignEditBeforeSignEnd = `/exam/sign/updateSignInfoBeforeSignEndTime`
+export const pathSignEditAfterSignEnd = `/exam/sign/updateSignInfoAfterSignEndTime`
+
 /**
  * coach
  */

@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { Form, Select, Input, message } from 'antd'
+import { Form, Select, Input } from 'antd'
 import useFetch from 'src/hooks/useFetch'
 import PageFormCustom from 'src/components/PageFormCustom'
 import FormSelect from 'src/components/FormSelect'
@@ -8,23 +8,20 @@ import FormInput from 'src/components/FormInput'
 import FormGender from 'src/components/FormGender'
 import FormDate from 'src/components/FormDate'
 import FormImage from 'src/components/FormImage'
-import { Relationships, dateFormat } from 'src/utils/const'
+import { Relationships } from 'src/utils/const'
 import FormRadioGroup from 'src/components/FormRadio'
 import { useParams } from 'react-router'
-import api from 'src/utils/api'
 import moment from 'moment'
 import {
   pathExamSign,
   pathExam,
   pathCanSignLevels,
   pathCoachClasses,
-  pathSignOffline,
-  pathSignOfflineWhenExaming,
 } from 'src/utils/httpUtil'
-import { routeExamSignList } from 'src/utils/routeUtil'
 import LevelRoom from './LevelRoom'
 import './index.less'
 import { checkIsExaming } from 'src/utils/common'
+import { payedOptions, onFinish } from './helper'
 
 const ExamSign = ({ history }) => {
   const { id: examId, signId } = useParams()
@@ -45,16 +42,16 @@ const ExamSign = ({ history }) => {
 
   useEffect(() => {
     if (sign) {
-      const levelIds = (sign.signLevels || []).map((level) => level.levelId)
-      const selectedRoomObj = levelIds.reduce((result, levelId) => {
-        result[`level_${levelId}_room`] = levelId
+      const levels = sign.signLevels || []
+      const selectedRoom = levels.reduce((result, level) => {
+        result[`level_${level.levelId}_room`] = level.roomId
         return result
       }, {})
       const formSign = {
         ...sign.signInfo,
         ...sign.studentInfo,
-        levels: levelIds,
-        ...selectedRoomObj,
+        levels: levels.map((level) => level.levelId),
+        ...selectedRoom,
       }
       formSign.isPayed = formSign.currState > 0
       formSign.birthday = moment(formSign.birthday)
@@ -74,35 +71,10 @@ const ExamSign = ({ history }) => {
     setSelectedLevelIds(levels)
   }
 
-  const onFinish = async (values) => {
-    values.currState = values.isPayed ? 10 : 0
-    values.examinationId = examId
-    values.levels = values.levels.join(',')
-    values.birthday = values.birthday.format(dateFormat)
-    if (!isExaming) {
-      await api.post(pathSignOffline(values))
-    } else {
-      await signWhenExaming(values)
-    }
-    message.success(`报名成功`)
-    history.push(routeExamSignList(examId))
-  }
-
-  const signWhenExaming = async (values) => {
-    const levelRoomMap = {}
-    selectedLevelIds.forEach((levelId) => {
-      levelRoomMap[levelId] = values[`level_${levelId}_room`]
-    })
-    await api.post(pathSignOfflineWhenExaming, {
-      examinationSignInfo: values,
-      levelRoomMap,
-    })
-  }
-
   return (
     <PageFormCustom
       form={form}
-      onFinish={onFinish}
+      onFinish={onFinish(history, examId, isEdit, isExaming, selectedLevelIds)}
       fullTitle={isEdit ? '编辑报名' : '人工报名'}
       customClass="exam-sign"
     >
@@ -185,8 +157,3 @@ const ExamSign = ({ history }) => {
 }
 
 export default ExamSign
-
-const payedOptions = [
-  { title: '是', value: true },
-  { title: '否', value: false },
-]
