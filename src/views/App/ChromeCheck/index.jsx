@@ -4,9 +4,10 @@ import { getDomain } from 'src/utils/common'
 import './index.less'
 
 const ChromeCheck = () => {
+  const isProduction = process.env.REACT_APP_IS_PRODUCTION
   const isChrome =
     !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime)
-  const [visible, setVisible] = useState(!isChrome)
+  const [visible, setVisible] = useState(!isChrome && isProduction)
 
   const downloadExamineeInfo = () => {
     window.open(`${getDomain()}/images/jjt/config/ChromeSetup.exe`, '_blank')
