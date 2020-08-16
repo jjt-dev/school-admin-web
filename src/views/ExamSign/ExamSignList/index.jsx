@@ -25,8 +25,7 @@ import {
   pathPaySign,
 } from 'src/utils/httpUtil'
 import { routePrintExamCertif, routeExamSign } from 'src/utils/routeUtil'
-
-const { useTableFetch } = CustomTable
+import useTableFetch from 'src/hooks/useTableFetch'
 
 const ExamSignList = ({ match, history }) => {
   const examinationId = match.params.id

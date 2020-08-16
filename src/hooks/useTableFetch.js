@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { debounce } from 'lodash'
-import { isNotEmpty } from 'src/utils/common'
+import { isNotEmpty, buildParameters } from 'src/utils/common'
 import api from 'src/utils/api'
 import { session } from 'src/utils/storage'
 
@@ -8,17 +8,18 @@ const defaultPageSizeOptions = ['10', '20', '30', '50', '100']
 
 const useTableFetch = (defaultPath = null, options = {}) => {
   const { defaultValue = [], ...defaultSearch } = options
+  const storageId = buildParameters(defaultPath, defaultSearch)
   const [path, setPath] = useState(defaultPath)
   const [data, setData] = useState(defaultValue)
   const [hasPagination, setHasPagination] = useState(true)
   const [refreshInterval, setRefreshInterval] = useState()
   const [total, setTotal] = useState(0)
   const [forceRefreshCount, setForceRefreshCount] = useState(0)
-  const [paginator, setPaignator] = useState(getSavedPaginator(defaultPath))
+  const [paginator, setPaignator] = useState(getSavedPaginator(storageId))
   const [filters, setFilters] = useState({})
   const defaultSearchRef = useRef(defaultSearch)
   const [search, setSearch] = useState({
-    ...getSavedSearch(defaultPath),
+    ...getSavedSearch(storageId),
     ...defaultSearchRef.current,
   })
   const [loading, setLoading] = useState(false)
@@ -36,8 +37,8 @@ const useTableFetch = (defaultPath = null, options = {}) => {
   }, [])
 
   useEffect(() => {
-    session.setItem(defaultPath, { paginator, search })
-  }, [defaultPath, paginator, search])
+    session.setItem(storageId, { paginator, search })
+  }, [defaultPath, defaultSearch, paginator, search, storageId])
 
   /**
    * __tableChange__的命名方式是为了不被用户碰巧同名
@@ -212,8 +213,8 @@ const useTableFetch = (defaultPath = null, options = {}) => {
 
 export default useTableFetch
 
-const getSavedPaginator = (defaultPath) => {
-  const savedFilter = session.getItem(defaultPath)
+const getSavedPaginator = (storageId) => {
+  const savedFilter = session.getItem(storageId)
   const defaultPaginator = {
     current: 1,
     pageSize: Number(defaultPageSizeOptions[0]),
@@ -221,7 +222,7 @@ const getSavedPaginator = (defaultPath) => {
   return savedFilter?.paginator ?? defaultPaginator
 }
 
-const getSavedSearch = (defaultPath) => {
-  const savedFilter = session.getItem(defaultPath)
+const getSavedSearch = (storageId) => {
+  const savedFilter = session.getItem(storageId)
   return savedFilter?.search ?? {}
 }
