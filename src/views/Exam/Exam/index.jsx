@@ -11,16 +11,20 @@ import FormInput from 'src/components/FormInput'
 import FormEnableRadio from 'src/components/FormEnableRadio'
 import FormDateRange from 'src/components/FormDateRange'
 import LevelRangeItems from './LevelRangeItems'
-import { message, Button, Form } from 'antd'
+import { message, Button, Form, DatePicker } from 'antd'
 import ImportExamModal from './ImportExamModal'
 import moment from 'moment'
+import { hourFormat, timeFormat } from 'src/utils/const'
 
+const { RangePicker } = DatePicker
 const { usePageForm } = PageFormCustom
 
 const Exam = ({ history }) => {
   const dispatch = useDispatch()
   const [form] = Form.useForm()
   const { isFormal } = useSearch()
+  const [signEndTime, setSignEndTime] = useState()
+  const [examStartTime, setExamStartTime] = useState()
   const [showImportExamModal, setShowImportExamModal] = useState(false)
   const examType = isFormal === 'true' ? '正式' : '模拟'
   const [examId, isEdit, status] = usePageForm()
@@ -47,15 +51,17 @@ const Exam = ({ history }) => {
 
   useEffect(() => {
     if (examInEdit) {
-      examInEdit.examTime = [
-        moment(examInEdit.examStartTime),
-        moment(examInEdit.examEndTime),
-      ]
       examInEdit.signTime = [
         moment(examInEdit.signStartTime),
         moment(examInEdit.signEndTime),
       ]
+      examInEdit.examTime = [
+        moment(examInEdit.examStartTime),
+        moment(examInEdit.examEndTime),
+      ]
       form.setFieldsValue(examInEdit)
+      setSignEndTime(examInEdit.signTime[1])
+      setExamStartTime(examInEdit.examTime[0])
     }
   }, [examInEdit, form])
 
@@ -83,6 +89,11 @@ const Exam = ({ history }) => {
     }
   }
 
+  const onValuesChange = (values) => {
+    values.signTime && setSignEndTime(values.signTime[1])
+    values.examTime && setExamStartTime(values.examTime[0])
+  }
+
   // 如果编辑考试，需要等到获取到该考试后，再渲染考试。这样可以解决form初始值的问题
   if (isEdit && !examInEdit) {
     return null
@@ -94,6 +105,7 @@ const Exam = ({ history }) => {
       onFinish={onFinish}
       title={`${examType}考试`}
       customClass="exam"
+      onValuesChange={onValuesChange}
     >
       {examInEdit?.isFormal === false && (
         <Button
@@ -108,14 +120,22 @@ const Exam = ({ history }) => {
       <FormInput label="名称" name="title" />
       <FormInput label="地址" name="address" />
       <FormDateRange
-        label="考试时间"
-        name="examTime"
-        defaultHours={['09:00', '18:00']}
-      />
-      <FormDateRange
         label="报名时间"
         name="signTime"
         defaultHours={['00:00', '23:59']}
+      />
+      <Form.Item label="考前准备">
+        <RangePicker
+          disabled
+          showTime={{ format: hourFormat }}
+          format={timeFormat}
+          value={[signEndTime, examStartTime]}
+        />
+      </Form.Item>
+      <FormDateRange
+        label="考试时间"
+        name="examTime"
+        defaultHours={['09:00', '18:00']}
       />
       <LevelRangeItems
         examLevelList={examLevelList}

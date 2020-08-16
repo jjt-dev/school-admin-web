@@ -16,6 +16,7 @@ const PageFormCustom = ({
   onFinish,
   back,
   onFieldsChange,
+  onValuesChange,
 }) => {
   const match = useRouteMatch()
   const { title: defaultTitle, back: defaultBack } = useActiveRoute()
@@ -37,6 +38,7 @@ const PageFormCustom = ({
         form={form ?? defaultForm}
         onFinish={onFinish}
         onFieldsChange={onFieldsChange}
+        onValuesChange={onValuesChange}
       >
         {children}
         <FormBottom path={back ?? defaultBack} />
