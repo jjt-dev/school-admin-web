@@ -15,6 +15,7 @@ const initState = {
   loading: false,
   user: null,
   allCoaches: [],
+  enabledCoaches: [],
   allExamLevels: [],
   allSigningExams: [],
   allExaminers: [],
@@ -42,9 +43,11 @@ const app = handleActions(
       }
     },
     [GET_ALL_COACHES]: (state, { payload }) => {
+      const allCoaches = payload.data
       return {
         ...state,
-        allCoaches: payload.data,
+        allCoaches,
+        enabledCoaches: allCoaches.filter((item) => item.isEnable),
       }
     },
     [GET_ALL_EXAM_LEVELS]: (state, { payload }) => {

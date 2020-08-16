@@ -23,7 +23,7 @@ const ExamSign = ({ history }) => {
   const { id, signId } = useParams()
   const examId = Number(id)
   const [form] = Form.useForm()
-  const { allCoaches, allExamLevels } = useSelector((state) => state.app)
+  const { enabledCoaches, allExamLevels } = useSelector((state) => state.app)
   const [selectedLevelIds, setSelectedLevelIds] = useState([])
   const [sign] = useFetch(pathExamSign(signId))
   const [exam = {}] = useFetch(pathExam(examId))
@@ -95,7 +95,7 @@ const ExamSign = ({ history }) => {
       />
       <Form.Item label="教练" name="coachId" rules={[{ required: true }]}>
         <Select onChange={onCoachChange} placeholder="请选择教练">
-          {allCoaches.map((coach) => (
+          {enabledCoaches.map((coach) => (
             <Select.Option key={coach.id} value={coach.id}>
               {coach.username}
             </Select.Option>
