@@ -3,7 +3,7 @@ import './index.less'
 import { useSelector } from 'react-redux'
 import { findById, formatTime, getDomain } from 'src/utils/common'
 import { Descriptions, Button } from 'antd'
-import { Genders, Relationships } from 'src/utils/const'
+import { Genders } from 'src/utils/const'
 import useFetch from 'src/hooks/useFetch'
 
 const ExamSignDetail = ({ match, history }) => {

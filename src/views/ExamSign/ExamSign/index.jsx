@@ -58,7 +58,7 @@ const ExamSign = ({ history }) => {
   }, [sign, form, getClasses])
 
   const onCoachChange = async (coachId) => {
-    form.setFieldsValue({ coachId })
+    form.setFieldsValue({ coachId, coachClassId: null })
     getClasses(coachId)
   }
 
