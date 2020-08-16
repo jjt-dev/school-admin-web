@@ -77,7 +77,7 @@ const ExamSign = ({ history }) => {
       customClass="exam-sign"
     >
       <FormInput label="考生姓名" name="name" />
-      <FormInput label="考生身份证号" name="cardId" />
+      <FormInput label="考生身份证号" name="cardId" disabled={isEdit} />
       <FormInput label="家长电话" name="phone" />
       <FormImage
         form={form}
@@ -129,7 +129,9 @@ const ExamSign = ({ history }) => {
           levels={availableExamLevels}
         />
       )}
-      <FormRadioGroup label="已缴费" name="isPayed" options={payedOptions} />
+      {!isEdit && (
+        <FormRadioGroup label="已缴费" name="isPayed" options={payedOptions} />
+      )}
     </PageFormCustom>
   )
 }
