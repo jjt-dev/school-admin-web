@@ -20,7 +20,7 @@ function replaceStrInFile(filePath, stringsToReplace, replacements) {
 }
 
 async function updateIndexHtmlMetadata() {
-  const indexHtmlFilePath = `${appDirectory}/public/index.html`
+  const indexHtmlFilePath = `${appDirectory}/build/index.html`
   const commit = execSync('git rev-parse --short HEAD').toString().trim()
   replaceStrInFile(indexHtmlFilePath, 'commit_placeholder', commit)
 }
