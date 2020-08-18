@@ -20,6 +20,9 @@ const local = {
   removeItem(key) {
     window.localStorage.removeItem(key)
   },
+  clear() {
+    window.localStorage.clear()
+  },
 }
 
 const session = {

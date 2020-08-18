@@ -15,6 +15,7 @@ import useSearch from 'src/hooks/useSearch'
 import Router from '../Router'
 import './index.less'
 import ChromeCheck from './ChromeCheck'
+import { checkIsLatestVersion } from 'src/utils/common'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -31,6 +32,7 @@ const App = () => {
       local.setItem(SCHOOL_CODE, schoolCode)
     }
     session.clear()
+    checkIsLatestVersion()
   })
 
   useEffect(() => {
