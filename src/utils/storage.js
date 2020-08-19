@@ -1,5 +1,6 @@
 export const TOKEN = 'token'
 export const SCHOOL_CODE = 'schoolCode'
+export const PAGE_RELOADED = 'pageReloaded'
 
 const local = {
   setItem(key, val) {

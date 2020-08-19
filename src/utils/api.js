@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { local, TOKEN } from 'src/utils/storage'
+import { local, TOKEN, PAGE_RELOADED } from 'src/utils/storage'
 import { message } from 'antd'
 
 const methods = ['get', 'head', 'post', 'put', 'delete', 'options', 'patch']
@@ -53,6 +53,7 @@ class Api {
         // 这里后端是资源没有权限需要登录统一返回403
         else if ([403].includes(data.status)) {
           reject(data)
+          local.removeItem(PAGE_RELOADED)
           goToLogin()
         }
         // schoolCode无效返回404, 其他错误返回0

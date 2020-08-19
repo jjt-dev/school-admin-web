@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import './index.less'
 import loginLogo from 'src/images/login_logo.png'
 import { Form, Input, Button, Divider } from 'antd'
 import * as FA from 'react-fontawesome'
 import api from 'src/utils/api'
-import { local, TOKEN, SCHOOL_CODE } from 'src/utils/storage'
+import { local, TOKEN, SCHOOL_CODE, PAGE_RELOADED } from 'src/utils/storage'
 import * as appAction from 'src/actions/app'
 import { useDispatch } from 'react-redux'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
@@ -12,6 +12,13 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons'
 const Login = ({ history }) => {
   const dispatch = useDispatch()
   const [form] = Form.useForm()
+
+  useEffect(() => {
+    if (!local.getItem(PAGE_RELOADED)) {
+      local.setItem(PAGE_RELOADED, 'true')
+      window.location.reload()
+    }
+  }, [])
 
   const onFinish = async (values) => {
     const { username, password } = values

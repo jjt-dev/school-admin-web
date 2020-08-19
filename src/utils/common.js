@@ -358,14 +358,3 @@ export const checkIsExaming = (examStatus) =>
   examStatus === ExamStatus.examing.id
 
 export const isProdEnv = process.env.REACT_APP_IS_PRODUCTION === 'true'
-
-export const checkIsLatestVersion = () => {
-  const commit = window.__ENV__.commit
-  if (
-    process.env.NODE_ENV !== 'development' &&
-    local.getItem('commit') !== commit
-  ) {
-    local.setItem('commit', commit)
-    window.location.reload()
-  }
-}
