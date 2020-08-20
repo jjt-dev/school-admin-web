@@ -12,7 +12,7 @@ const updateVersion = async (api) => {
     const res = await axios.get(
       api + '/jjtPlatformAdmin/platformAdmin/common/updateAllUserToken'
     )
-    console.log('更新版本成功', res)
+    console.log('更新版本成功', res.data)
   } catch (err) {
     console.error(err)
   }

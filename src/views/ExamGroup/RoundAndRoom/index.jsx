@@ -6,14 +6,20 @@ import { useSelector } from 'react-redux'
 import RoundExamineeModal from './RoundExamineeModal'
 import PageListCustom from 'src/components/PageListCustom'
 import { addRoundNumPrefix, tableOrder, getCustomRow } from 'src/utils/common'
-import { pathRoundAndRoom, pathUpdRoundRoom } from 'src/utils/httpUtil'
+import {
+  pathRoundAndRoom,
+  pathUpdRoundRoom,
+  pathExam,
+} from 'src/utils/httpUtil'
 import CustomTable from 'src/components/CustomTable'
 import useTableFetch from 'src/hooks/useTableFetch'
+import useFetch from 'src/hooks/useFetch'
 
 const RoundAndRoom = ({ match }) => {
   const [selectedRound, setSelectedRound] = useState()
   const { allRooms } = useSelector((state) => state.app)
   const examId = match.params.id
+  const [exam = {}] = useFetch(pathExam(examId))
   const tableList = useTableFetch(pathRoundAndRoom, { examinationId: examId })
 
   const updateRoundRoom = async (sourceId, newRoomId) => {
@@ -26,7 +32,10 @@ const RoundAndRoom = ({ match }) => {
   }
 
   return (
-    <PageListCustom title="考场分配" customClass="round-room-list">
+    <PageListCustom
+      title={`${exam.title}考场分配`}
+      customClass="round-room-list"
+    >
       <CustomTable
         {...tableList}
         className="round-room-table"

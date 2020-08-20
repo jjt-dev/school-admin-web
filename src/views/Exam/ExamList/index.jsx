@@ -31,6 +31,7 @@ const ExamList = () => {
         deleteCallback={refetch}
         defaultTableList={examList}
         size="small"
+        customClass="exam-list"
       >
         <Header
           fetchTable={examList.fetchTable}
@@ -47,20 +48,22 @@ const ExamList = () => {
 
 export default ExamList
 
-const getColumns = (setSelectedExam) => (deleteCoach, updateExamStatus) => [
+const getColumns = (setSelectedExam) => (deleteExam, updateExamStatus) => [
   tableOrder,
   getRow('名称', 'title'),
   getExamlinkRow(setSelectedExam),
   getDateRow('考试时间', 'examStartTime'),
   getDateRow('报名时间', 'signStartTime'),
-  getCustomRow('当前状态', (record) => findExamStatus(record.currState).title),
-  getSwitchRow(updateExamStatus),
-  getCustomRow('考试类型', (record) => (record.isFormal ? '正式' : '模拟')),
-  getLinkRow('考生列表', '/exam/::/signs', ['id']),
-  getLinkRow('考试分组', '/exam/::/group', ['id']),
+  getCustomRow('状态', (record) => findExamStatus(record.currState).title),
+  getSwitchRow(updateExamStatus, '启用'),
+  getCustomRow('类型', (record) => (record.isFormal ? '正式' : '模拟')),
+  getLinkRow('考生', '/exam/::/signs', ['id']),
+  getLinkRow('分组', '/exam/::/group', ['id']),
+  getLinkRow('考场', '/exam/::/round-room', ['id']),
+  getLinkRow('考官', '/exam/::/room-examiner', ['id']),
   getActionRow(
     (record) => `/exam/${record.id}?isFormal=${record.isFormal}`,
-    deleteCoach
+    deleteExam
   ),
 ]
 

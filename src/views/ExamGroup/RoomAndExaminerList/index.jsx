@@ -7,9 +7,11 @@ import useFetch from 'src/hooks/useFetch'
 import PageListCustom from 'src/components/PageListCustom'
 import { tableOrder, getRow } from 'src/utils/common'
 import { Link } from 'react-router-dom'
+import { pathExam } from 'src/utils/httpUtil'
 
 const RoomAndExaminerList = ({ match }) => {
   const examId = match.params.id
+  const [exam = {}] = useFetch(pathExam(examId))
   const [selectedRoom, setSelectedRoom] = useState()
   const [showRoomExaminees, setShowRoomExaminees] = useState(false)
   const [showRoomRounds, setShowRoomRounds] = useState(false)
@@ -36,7 +38,7 @@ const RoomAndExaminerList = ({ match }) => {
   }
 
   return (
-    <PageListCustom title="考场和考官列表">
+    <PageListCustom title={`${exam.title}考场和考官列表`}>
       <Table
         className="room-examiner-list-table"
         columns={getColumns(

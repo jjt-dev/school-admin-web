@@ -17,6 +17,8 @@ const PageList = ({
   path,
   children,
   size = 'middle',
+  title: defaultTitle,
+  customClass = '',
 }) => {
   const {
     editPath,
@@ -66,8 +68,8 @@ const PageList = ({
   }
 
   return (
-    <div className="page page-list">
-      <div className="page-list-title">{title}列表</div>
+    <div className={`page page-list ${customClass}`}>
+      <div className="page-list-title">{defaultTitle ?? title}列表</div>
       {children}
       {!children && (
         <ListHeader

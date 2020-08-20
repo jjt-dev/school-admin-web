@@ -71,9 +71,11 @@ const ExamSignDetail = ({ match, history }) => {
             </Descriptions.Item>
           </Descriptions>
           <div className="sign-detail__btns">
-            <Button type="primary" onClick={() => goToPrint('exam-certif')}>
-              打印准考证
-            </Button>
+            {!examFinished && (
+              <Button type="primary" onClick={() => goToPrint('exam-certif')}>
+                打印准考证
+              </Button>
+            )}
             {examFinished && (
               <Button type="primary" onClick={() => goToPrint('report')}>
                 打印成绩单

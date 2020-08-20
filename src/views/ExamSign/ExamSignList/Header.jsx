@@ -48,7 +48,7 @@ const Header = ({
             临时报名
           </Button>
         )}
-        {examSignList.length > 0 && (
+        {examState !== ExamStatus.finish.id && examSignList.length > 0 && (
           <Button size="small" type="primary" onClick={printExamCertifs}>
             打印准考证
           </Button>

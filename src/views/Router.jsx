@@ -162,18 +162,16 @@ export const routes = [
     path: '/exam/:id/round-room',
     comp: RoundAndRoom,
     back: {
-      path: '/exam/:id/group',
-      params: ['id'],
-      breadcrumbs: ['考试管理', '分组管理', '考场分配'],
+      path: '/exams',
+      breadcrumbs: ['考试管理', '考场分配'],
     },
   },
   {
     path: '/exam/:id/room-examiner',
     comp: RoomAndExaminerList,
     back: {
-      path: '/exam/:id/group',
-      params: ['id'],
-      breadcrumbs: ['考试管理', '分组管理', '考场与考官'],
+      path: '/exams',
+      breadcrumbs: ['考试管理', '考场与考官'],
     },
   },
   {

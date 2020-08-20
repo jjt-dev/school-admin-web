@@ -66,7 +66,7 @@ const ExamSignList = ({ match, history }) => {
   }
 
   return (
-    <PageListCustom title="报考列表">
+    <PageListCustom title={`${exam.title}报考列表`}>
       <Header
         examSignList={signTableList.dataSource}
         fetchTable={fetchTable}

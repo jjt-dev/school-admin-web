@@ -8,7 +8,6 @@ import confirm from 'antd/lib/modal/confirm'
 import api from './api'
 import { Link } from 'react-router-dom'
 import Button from 'antd/es/button'
-import { local } from './storage'
 
 export const parseSearches = (location) => {
   return queryString.parse(location.search)
@@ -267,8 +266,8 @@ export const getEnableRow = () => ({
   render: (text, record) => <span>{record.isEnable ? '是' : '否'}</span>,
 })
 
-export const getSwitchRow = (update) => ({
-  title: '状态',
+export const getSwitchRow = (update, title) => ({
+  title: title ?? '状态',
   key: 'isEnable',
   render: (text, record) => {
     return (

@@ -13,8 +13,11 @@ const ExamGroup = ({ match }) => {
     examinationId,
   })
 
+  if (!exam) return null
+
   return (
     <PageList
+      title={`${exam.title}分组`}
       defaultTableList={groupStdList}
       columns={getColumns(examinationId)}
     >
