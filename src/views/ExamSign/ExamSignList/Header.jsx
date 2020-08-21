@@ -43,7 +43,8 @@ const Header = ({
             报名
           </Button>
         )}
-        {examState === ExamStatus.examing.id && (
+        {(examState === ExamStatus.waitForExam.id ||
+          examState === ExamStatus.examing.id) && (
           <Button size="small" type="primary" onClick={handleSign}>
             临时报名
           </Button>
