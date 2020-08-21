@@ -1,9 +1,7 @@
 import { buildFormPath } from './common'
 import { local, TOKEN } from './storage'
 
-/**
- * exam group
- */
+// exam group
 export const pathExamRounds = (examId) =>
   `/examination/examRoundInfo?examinationId=${examId}`
 
@@ -27,17 +25,13 @@ export const pathDownloadRoomStudInfos = (examId, roomId) =>
     local.getItem(TOKEN)
   )}`
 
-/**
- * exam
- */
+// exam
 export const pathMockBtn = `/examination/canShowMockBtn`
 export const pathExamList = `/examination/page`
 
 export const pathExam = (examId) => `/examination/item?id=${examId}`
 
-/**
- * exam sign
- */
+// exam sign
 export const pathExamSignList = '/exam/sign/signPage'
 
 export const pathExamSign = (signId) =>
@@ -71,8 +65,10 @@ export const pathSignEditBasicInfo = `/exam/sign/editStudentBaseInfo`
 export const pathSignEditBeforeSignEnd = `/exam/sign/updateSignInfoBeforeSignEndTime`
 export const pathSignEditAfterSignEnd = `/exam/sign/updateSignInfoAfterSignEndTime`
 
-/**
- * coach
- */
+// coach
 export const pathCoachClasses = (coachId) =>
   `/coach/class/page?page=1&rows=10000&coachId=${coachId}`
+
+// change password
+export const pathChangePsd = (values) =>
+  buildFormPath(`/user/changePsw`, values)
