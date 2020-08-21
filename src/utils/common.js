@@ -96,7 +96,7 @@ export const buildParameters = (path, parameters) => {
 export const buildFormPath = (path, parameters) => {
   path += '?'
   Object.keys(parameters).forEach((key) => {
-    path += `&${key}=${encodeURIComponent(parameters[key])}`
+    path += `&${key}=${encodeURIComponent(parameters[key] ?? '')}`
   })
   return path
 }
