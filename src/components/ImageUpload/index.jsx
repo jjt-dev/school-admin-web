@@ -2,6 +2,9 @@ import React from 'react'
 import { Upload } from 'antd'
 import { getApiRootImg, getDomain } from 'src/utils/common'
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons'
+import ImgCrop from 'antd-img-crop'
+import 'antd/es/modal/style'
+import 'antd/es/slider/style'
 
 function getBase64(img, callback) {
   const reader = new FileReader()
@@ -61,22 +64,24 @@ class ImageUpload extends React.Component {
     )
     const { imageUrl } = this.state
     return (
-      <Upload
-        disabled={this.props.disabled}
-        name="file"
-        listType="picture-card"
-        className="avatar-uploader"
-        showUploadList={false}
-        action={getApiRootImg()}
-        beforeUpload={(file) => beforeUpload(file, this.props.callback)}
-        onChange={this.handleChange}
-      >
-        {imageUrl ? (
-          <img src={imageUrl} alt="avatar" style={{ width: '100%' }} />
-        ) : (
-          uploadButton
-        )}
-      </Upload>
+      <ImgCrop rotate>
+        <Upload
+          disabled={this.props.disabled}
+          name="file"
+          listType="picture-card"
+          className="avatar-uploader"
+          showUploadList={false}
+          action={getApiRootImg()}
+          beforeUpload={(file) => beforeUpload(file, this.props.callback)}
+          onChange={this.handleChange}
+        >
+          {imageUrl ? (
+            <img src={imageUrl} alt="avatar" style={{ width: '100%' }} />
+          ) : (
+            uploadButton
+          )}
+        </Upload>
+      </ImgCrop>
     )
   }
 }
