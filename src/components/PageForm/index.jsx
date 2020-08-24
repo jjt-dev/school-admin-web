@@ -62,7 +62,7 @@ const PageForm = ({ callback, formItems }) => {
           }
           return React.createElement(compMap[comp], rest)
         })}
-        <FormBottom path={back} />
+        <FormBottom path={back?.path} />
       </Form>
     </div>
   )
