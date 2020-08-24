@@ -136,7 +136,7 @@ const ReportHoriz = ({
               </div>
               <div className="results__middle-comments">
                 <div className="results__middle-comments-item">考官评语</div>
-                <div className="examiner-comment__sign">考官签字:</div>
+                <div className="examiner-comment__sign">【考官】:</div>
               </div>
             </div>
             <div className="results__remark">

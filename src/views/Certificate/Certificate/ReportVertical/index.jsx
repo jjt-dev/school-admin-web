@@ -138,7 +138,7 @@ const ReportVertical = ({
                 考官评语
               </div>
               <div className="item-result__comments-item examiner-comment">
-                <div className="examiner-comment__sign">考官签字:</div>
+                <div className="examiner-comment__sign">【考官】:</div>
               </div>
               <div className="item-result__comments-item writing-mode-vertical">
                 备注
