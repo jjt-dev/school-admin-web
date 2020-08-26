@@ -142,7 +142,6 @@ class ReportHoriz extends React.Component {
                         </div>
                         <div>
                           3.考试不合格的学员凭补考单进行补考 (限补考一次);
-                          4.此表盖章有效
                         </div>
                       </div>
                     </div>
