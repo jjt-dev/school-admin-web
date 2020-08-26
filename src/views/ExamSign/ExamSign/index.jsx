@@ -17,7 +17,12 @@ import {
 import LevelRoom from './LevelRoom'
 import './index.less'
 import { checkIsExaming } from 'src/utils/common'
-import { payedOptions, onFinish } from './helper'
+import {
+  payedOptions,
+  onFinish,
+  validateIdCardForm,
+  onValuesChange,
+} from './helper'
 
 const ExamSign = ({ history }) => {
   const { id, signId } = useParams()
@@ -73,19 +78,19 @@ const ExamSign = ({ history }) => {
     <PageFormCustom
       form={form}
       onFinish={onFinish(history, examId, isEdit, isExaming, selectedLevelIds)}
+      onValuesChange={onValuesChange(form)}
       fullTitle={`${titlePrefix} (${exam.title})`}
       customClass="exam-sign"
     >
-      <FormInput label="考生姓名" name="name" />
-      <FormInput label="考生身份证号" name="cardId" disabled={isEdit} />
-      <FormInput label="家长电话" name="phone" />
-      <FormImage
-        form={form}
-        label="照片"
-        name="faceUrl"
-        message="请上传头像"
-        imageUrl={form.faceUrl}
+      <FormInput
+        label="考生身份证号"
+        name="cardId"
+        disabled={isEdit}
+        rules={[{ validator: validateIdCardForm }, { required: true }]}
       />
+      <FormInput label="考生姓名" name="name" />
+      <FormInput label="家长电话" name="phone" />
+      <FormImage form={form} label="照片" name="faceUrl" message="请上传头像" />
       <FormInput label="住址" name="address" type="textarea" />
       <FormSelect
         label="当前考生等级"

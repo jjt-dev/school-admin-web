@@ -65,6 +65,9 @@ export const pathSignEditBasicInfo = `/exam/sign/editStudentBaseInfo`
 export const pathSignEditBeforeSignEnd = `/exam/sign/updateSignInfoBeforeSignEndTime`
 export const pathSignEditAfterSignEnd = `/exam/sign/updateSignInfoAfterSignEndTime`
 
+export const pathUserByCardId = (cardId) =>
+  `/exam/sign/getStudentInfoByCardId?cardId=${cardId}`
+
 // coach
 export const pathCoachClasses = (coachId) =>
   `/coach/class/page?page=1&rows=10000&coachId=${coachId}`

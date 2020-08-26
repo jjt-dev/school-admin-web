@@ -5,10 +5,12 @@ import {
   pathSignEditBasicInfo,
   pathSignEditBeforeSignEnd,
   pathSignEditAfterSignEnd,
+  pathUserByCardId,
 } from 'src/utils/httpUtil'
 import { routeExamSignList } from 'src/utils/routeUtil'
 import { message } from 'antd'
 import { buildParameters } from 'src/utils/common'
+import { validateIdCard } from 'src/utils/idCard'
 
 export const payedOptions = [
   { title: '是', value: true },
@@ -64,4 +66,23 @@ export const signWhenExaming = async (path, values, selectedLevelIds) => {
     examinationSignInfo: values,
     levelRoomMap,
   })
+}
+
+export const validateIdCardForm = (rule, value) => {
+  if (validateIdCard(value) || value === '') {
+    return Promise.resolve()
+  }
+  return Promise.reject('输入的身份证号不正确')
+}
+
+export const onValuesChange = (form) => async (values) => {
+  if (validateIdCard(values.cardId)) {
+    const result = await api.get(pathUserByCardId(values.cardId))
+    form.setFieldsValue({
+      name: result.name,
+      phone: result.phone,
+      faceUrl: result.faceUrl,
+      address: result.address,
+    })
+  }
 }
