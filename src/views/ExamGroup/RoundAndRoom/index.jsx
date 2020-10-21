@@ -36,7 +36,7 @@ const RoundAndRoom = ({ match }) => {
   if (!data) return null
 
   return (
-    <div>
+    <div className="page">
       <Rounds allRounds={data} />
       {selectedRound && (
         <RoundExamineeModal

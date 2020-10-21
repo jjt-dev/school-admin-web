@@ -1,14 +1,24 @@
-.round-room-list {
-  .round-room-table {
-    width: 800px;
-    margin: 0 auto;
+.table-drag-select {
+  border-collapse: separate;
+  border-spacing: 15px;
 
-    td:last-child {
-      width: 180px;
-    }
+  td {
+    border: 1px solid rgba(205, 213, 223, 1);
+    line-height: 40px;
+    min-width: 110px;
+    height: 120px;
+    cursor: cell;
   }
 
-  .ant-table-cell {
-    padding: 5px 8px !important;
+  td.cell-enabled {
+    background-color: #ddd;
+  }
+
+  td.cell-selected {
+    background-color: #e4f2fd;
+  }
+
+  td.cell-being-selected {
+    background-color: #e4f2fd;
   }
 }

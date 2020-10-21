@@ -3,10 +3,11 @@ import './index.less'
 import React, { useState } from 'react'
 import TableDragSelect from 'react-table-drag-select'
 
+const rowNum = 10
+
 const Rounds = ({ allRounds }) => {
   const [originCells, roundCells] = buildCells(allRounds)
   const [cells, setCells] = useState(originCells)
-  console.log(55, cells)
 
   return (
     <TableDragSelect value={cells} onChange={(cells) => setCells(cells)}>
@@ -24,13 +25,12 @@ const Rounds = ({ allRounds }) => {
 export default Rounds
 
 const buildCells = (allRounds) => {
-  const totalRows = Math.ceil(allRounds.length / 10)
-  const totalColumns = 10
+  const totalRows = Math.ceil(allRounds.length / rowNum)
   const rows = Array(totalRows).fill(0)
-  const cells = rows.map(() => Array(totalColumns).fill(false))
+  const cells = rows.map(() => Array(rowNum).fill(false))
   const roundCells = []
   rows.forEach((row, index) => {
-    roundCells.push(allRounds.slice(index * 10, index * 10 + 10))
+    roundCells.push(allRounds.slice(index * rowNum, index * rowNum + rowNum))
   })
   return [cells, roundCells]
 }
