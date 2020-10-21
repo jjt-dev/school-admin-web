@@ -3,7 +3,6 @@ import './index.less'
 import { message } from 'antd'
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
-import PageListCustom from 'src/components/PageListCustom'
 import useFetch from 'src/hooks/useFetch'
 import api from 'src/utils/api'
 import {
@@ -29,10 +28,6 @@ const RoundAndRoom = ({ match }) => {
     message.success(`更新考场成功`)
   }
 
-  const hideRoundExamineeModal = () => {
-    setSelectedRound()
-  }
-
   if (!data) return null
 
   return (
@@ -42,7 +37,7 @@ const RoundAndRoom = ({ match }) => {
         <RoundExamineeModal
           examinationId={examId}
           roundNum={selectedRound.round_num}
-          hideModal={hideRoundExamineeModal}
+          hideModal={() => setSelectedRound()}
         />
       )}
     </div>

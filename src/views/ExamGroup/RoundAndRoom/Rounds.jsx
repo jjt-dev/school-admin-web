@@ -2,8 +2,10 @@ import './index.less'
 
 import React, { useState } from 'react'
 import TableDragSelect from 'react-table-drag-select'
+import { addRoundNumPrefix } from 'src/utils/common'
+import { Tag } from 'antd'
 
-const rowNum = 10
+const rowNum = 8
 
 const Rounds = ({ allRounds }) => {
   const [originCells, roundCells] = buildCells(allRounds)
@@ -14,7 +16,19 @@ const Rounds = ({ allRounds }) => {
       {roundCells.map((rowRounds, index) => (
         <tr key={index}>
           {rowRounds.map((round) => {
-            return <td key={round.id}>{round.id}</td>
+            return (
+              <td key={round.id}>
+                <div className="round-content">
+                  <div>组号: {addRoundNumPrefix(round.round_num)}</div>
+                  <div>
+                    教练:
+                    {round.coachs.map(({ nickname, id }) => (
+                      <Tag key={id}>{nickname}</Tag>
+                    ))}
+                  </div>
+                </div>
+              </td>
+            )
           })}
         </tr>
       ))}
