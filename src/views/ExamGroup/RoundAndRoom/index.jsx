@@ -1,6 +1,6 @@
 import './index.less'
 
-import { Button, message, Select, Tag } from 'antd'
+import { Button, Dropdown, Menu, message, Select, Tag } from 'antd'
 import React, { useEffect, useMemo, useState } from 'react'
 import { useCallback } from 'react'
 import { useSelector } from 'react-redux'
@@ -112,29 +112,30 @@ const RoundAndRoom = ({ match }) => {
         />
       )}
       {showMultSelect && (
-        <>
-          {toggleCellTable ? (
-            <Rounds
-              cells={cells}
-              setCells={setCells}
-              roundCells={roundCells}
-              allRooms={allRooms}
-              updateSelectedRoundsRoom={updateSelectedRoundsRoom}
-              contextMenuVisible={contextMenuVisible}
-              setContextMenuVisible={setContextMenuVisible}
-            />
-          ) : (
-            <Rounds2
-              cells={cells}
-              setCells={setCells}
-              roundCells={roundCells}
-              allRooms={allRooms}
-              updateSelectedRoundsRoom={updateSelectedRoundsRoom}
-              contextMenuVisible={contextMenuVisible}
-              setContextMenuVisible={setContextMenuVisible}
-            />
-          )}
-        </>
+        <Dropdown
+          overlay={getRoomMenus(allRooms, updateSelectedRoundsRoom)}
+          trigger={['contextMenu']}
+          onVisibleChange={(value) => {
+            setContextMenuVisible(value)
+          }}
+          visible={contextMenuVisible}
+        >
+          <a className="ant-dropdown-link" onClick={(e) => e.preventDefault()}>
+            {toggleCellTable ? (
+              <Rounds
+                cells={cells}
+                setCells={setCells}
+                roundCells={roundCells}
+              />
+            ) : (
+              <Rounds2
+                cells={cells}
+                setCells={setCells}
+                roundCells={roundCells}
+              />
+            )}
+          </a>
+        </Dropdown>
       )}
       {selectedRound && (
         <RoundExamineeModal
@@ -195,3 +196,16 @@ const getColumns = (allRooms, updateRoundRoom, setSelectedRound) => [
     ),
   },
 ]
+
+const getRoomMenus = (allRooms, updateSelectedRoundsRoom) => (
+  <Menu>
+    {allRooms.map((room) => (
+      <Menu.Item
+        key={room.id}
+        onClick={() => updateSelectedRoundsRoom(room.id)}
+      >
+        {room.name}
+      </Menu.Item>
+    ))}
+  </Menu>
+)
