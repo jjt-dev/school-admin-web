@@ -1,30 +1,21 @@
 import './index.less'
 
 import { Dropdown } from 'antd'
-import React, { useState } from 'react'
+import React from 'react'
 import TableDragSelect from 'react-table-drag-select'
 import { addRoundNumPrefix } from 'src/utils/common'
 
-import { buildCells, getRoomMenus } from './roundHelper'
+import { getRoomMenus } from './roundHelper'
 
-const Rounds2 = ({ allRounds, allRooms, updateRoundsRoom }) => {
-  const [contextMenuVisible, setContextMenuVisible] = useState(false)
-  const [originCells, roundCells] = buildCells(allRounds)
-  const [cells, setCells] = useState(originCells)
-
-  const updateSelectedRoundsRoom = (newRoomId) => {
-    const roundIds = []
-    cells.forEach((cellRow, index) => {
-      cellRow.forEach((cell, index1) => {
-        if (cell === true) {
-          roundIds.push(roundCells[index][index1].id)
-        }
-      })
-    })
-    setContextMenuVisible(false)
-    updateRoundsRoom(roundIds.join(','), newRoomId)
-  }
-
+const Rounds2 = ({
+  cells,
+  setCells,
+  allRooms,
+  updateSelectedRoundsRoom,
+  contextMenuVisible,
+  setContextMenuVisible,
+  roundCells,
+}) => {
   return (
     <Dropdown
       overlay={getRoomMenus(allRooms, updateSelectedRoundsRoom)}

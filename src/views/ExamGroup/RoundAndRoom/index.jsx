@@ -1,33 +1,50 @@
-import React, { useEffect, useState } from 'react'
 import './index.less'
-import api from 'src/utils/api'
+
 import { Button, message, Select, Tag } from 'antd'
+import React, { useEffect, useMemo, useState } from 'react'
+import { useCallback } from 'react'
 import { useSelector } from 'react-redux'
-import RoundExamineeModal from './RoundExamineeModal'
+import CustomTable from 'src/components/CustomTable'
 import PageListCustom from 'src/components/PageListCustom'
-import { addRoundNumPrefix, tableOrder, getCustomRow } from 'src/utils/common'
+import useFetch from 'src/hooks/useFetch'
+import useTableFetch from 'src/hooks/useTableFetch'
+import api from 'src/utils/api'
+import { addRoundNumPrefix, getCustomRow, tableOrder } from 'src/utils/common'
 import {
+  pathExam,
   pathRoundAndRoom,
   pathUpdRoundRoom as pathUpdRoundsRoom,
-  pathExam,
 } from 'src/utils/httpUtil'
-import CustomTable from 'src/components/CustomTable'
-import useTableFetch from 'src/hooks/useTableFetch'
-import useFetch from 'src/hooks/useFetch'
-import ListHeaderCustom from 'src/components/ListHeaderCustom'
+
+import RoundExamineeModal from './RoundExamineeModal'
 import Rounds from './Rounds'
 import Rounds2 from './Rounds2'
-import { useCallback } from 'react'
+
+const rowNum = 8
 
 const RoundAndRoom = ({ match }) => {
-  const [toggleCellTable, setToggleCellTable] = useState(false)
-  const [selectedRound, setSelectedRound] = useState()
-  const [showMultSelect, setShowMultiSelect] = useState(false)
-  const { allRooms } = useSelector((state) => state.app)
   const examId = match.params.id
   const [exam = {}] = useFetch(pathExam(examId))
+  const [toggleCellTable, setToggleCellTable] = useState(false)
+  const [showMultSelect, setShowMultiSelect] = useState(false)
+  const [contextMenuVisible, setContextMenuVisible] = useState(false)
+  const [selectedRound, setSelectedRound] = useState()
+  const { allRooms } = useSelector((state) => state.app)
   const tableList = useTableFetch(pathRoundAndRoom, { examinationId: examId })
   const [allRounds, setAllRounds] = useState([])
+  const [cells, setCells] = useState([])
+
+  const [originCells, roundCells] = useMemo(() => {
+    const totalRows = Math.ceil(allRounds.length / rowNum)
+    const rows = Array(totalRows).fill(0)
+    const cells = rows.map(() => Array(rowNum).fill(false))
+    const roundCells = []
+    rows.forEach((row, index) => {
+      roundCells.push(allRounds.slice(index * rowNum, index * rowNum + rowNum))
+    })
+    setCells(cells)
+    return [cells, roundCells]
+  }, [allRounds])
 
   const getAllRounds = useCallback(() => {
     const fetchData = async () => {
@@ -54,19 +71,37 @@ const RoundAndRoom = ({ match }) => {
     setSelectedRound()
   }
 
+  const updateSelectedRoundsRoom = (newRoomId) => {
+    const roundIds = []
+    cells.forEach((cellRow, index) => {
+      cellRow.forEach((cell, index1) => {
+        if (cell === true) {
+          roundIds.push(roundCells[index][index1].id)
+        }
+      })
+    })
+    setContextMenuVisible(false)
+    if (roundIds.length > 0) {
+      updateRoundsRoom(roundIds.join(','), newRoomId)
+    }
+  }
+
   return (
     <PageListCustom
       title={`${exam.title}考场分配`}
       customClass="round-room-list"
     >
-      <ListHeaderCustom>
+      <div className={`round-room-actions multi-select-${showMultSelect}`}>
         <Button
           type="primary"
           onClick={() => setShowMultiSelect((pre) => !pre)}
         >
           {showMultSelect ? '返回' : '多选配置考场'}
         </Button>
-      </ListHeaderCustom>
+        {showMultSelect && (
+          <Button onClick={() => setCells(originCells)}>清空选择</Button>
+        )}
+      </div>
       {!showMultSelect && (
         <CustomTable
           {...tableList}
@@ -79,15 +114,23 @@ const RoundAndRoom = ({ match }) => {
         <>
           {toggleCellTable ? (
             <Rounds
-              allRounds={allRounds}
+              cells={cells}
+              setCells={setCells}
+              roundCells={roundCells}
               allRooms={allRooms}
-              updateRoundsRoom={updateRoundsRoom}
+              updateSelectedRoundsRoom={updateSelectedRoundsRoom}
+              contextMenuVisible={contextMenuVisible}
+              setContextMenuVisible={setContextMenuVisible}
             />
           ) : (
             <Rounds2
-              allRounds={allRounds}
+              cells={cells}
+              setCells={setCells}
+              roundCells={roundCells}
               allRooms={allRooms}
-              updateRoundsRoom={updateRoundsRoom}
+              updateSelectedRoundsRoom={updateSelectedRoundsRoom}
+              contextMenuVisible={contextMenuVisible}
+              setContextMenuVisible={setContextMenuVisible}
             />
           )}
         </>
