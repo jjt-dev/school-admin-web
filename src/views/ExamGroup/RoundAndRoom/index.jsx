@@ -108,6 +108,7 @@ const RoundAndRoom = ({ match }) => {
           className="round-room-table"
           columns={getColumns(allRooms, updateRoundsRoom, setSelectedRound)}
           rowKey="round_num"
+          size="small"
         />
       )}
       {showMultSelect && (
@@ -153,7 +154,7 @@ const getColumns = (allRooms, updateRoundRoom, setSelectedRound) => [
   getCustomRow('组号', (record) => addRoundNumPrefix(record.round_num), 80),
   {
     title: '教练',
-    width: 300,
+    width: 500,
     render: (text, record) => (
       <>
         {record.coachs.map(({ nickname, id }) => (
