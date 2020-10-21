@@ -84,8 +84,15 @@ const Rounds = ({
             {roundCells.map((rowRounds, index) => (
               <tr key={index}>
                 {rowRounds.map((round) => {
+                  const roomIndex = allRooms.findIndex(
+                    (room) => room.id === round.roomId
+                  )
                   return (
-                    <td key={round.id} disabled={round.excuteId > 0}>
+                    <td
+                      key={round.id}
+                      disabled={round.excuteId > 0}
+                      style={{ backgroundColor: colors[roomIndex] }}
+                    >
                       <div className="round-content">
                         <div className="round-number">
                           组号: {addRoundNumPrefix(round.round_num)}
@@ -118,3 +125,21 @@ const getRoomMenus = (allRooms, updateSelectedRoundsRoom) => (
     ))}
   </Menu>
 )
+
+const colors = [
+  '#b7eb8f',
+  '#91d5ff',
+  '#ffe58f',
+  '#ffccc7',
+  '#6495fa',
+  '#5b8ff9',
+  '#5ad8a6',
+  '#5d7092',
+  '#f6bd16',
+  '#e86452',
+  '#6dc8ec',
+  '#945fb9',
+  '#ff9845',
+  '#1e9493',
+  '#ff99c3',
+]
