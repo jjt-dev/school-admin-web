@@ -18,7 +18,6 @@ import {
 
 import RoundExamineeModal from './RoundExamineeModal'
 import Rounds from './Rounds'
-import Rounds2 from './Rounds2'
 
 const rowNum = 8
 
@@ -121,19 +120,9 @@ const RoundAndRoom = ({ match }) => {
           visible={contextMenuVisible}
         >
           <a className="ant-dropdown-link" onClick={(e) => e.preventDefault()}>
-            {toggleCellTable ? (
-              <Rounds
-                cells={cells}
-                setCells={setCells}
-                roundCells={roundCells}
-              />
-            ) : (
-              <Rounds2
-                cells={cells}
-                setCells={setCells}
-                roundCells={roundCells}
-              />
-            )}
+            {toggleCellTable
+              ? React.createElement(Rounds, { cells, setCells, roundCells })
+              : React.createElement(Rounds, { cells, setCells, roundCells })}
           </a>
         </Dropdown>
       )}
