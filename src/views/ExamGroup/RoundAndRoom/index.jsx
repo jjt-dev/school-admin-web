@@ -1,8 +1,7 @@
 import './index.less'
 
-import { Button, Dropdown, Menu, message, Select, Tag } from 'antd'
-import React, { useEffect, useMemo, useState } from 'react'
-import { useCallback } from 'react'
+import { Button, message, Select, Tag } from 'antd'
+import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import CustomTable from 'src/components/CustomTable'
 import PageListCustom from 'src/components/PageListCustom'
@@ -19,70 +18,26 @@ import {
 import RoundExamineeModal from './RoundExamineeModal'
 import Rounds from './Rounds'
 
-const rowNum = 8
-
 const RoundAndRoom = ({ match }) => {
   const examId = match.params.id
   const [exam = {}] = useFetch(pathExam(examId))
   const [toggleCellTable, setToggleCellTable] = useState(false)
   const [showMultSelect, setShowMultiSelect] = useState(false)
-  const [contextMenuVisible, setContextMenuVisible] = useState(false)
   const [selectedRound, setSelectedRound] = useState()
   const { allRooms } = useSelector((state) => state.app)
   const tableList = useTableFetch(pathRoundAndRoom, { examinationId: examId })
-  const [allRounds, setAllRounds] = useState([])
-  const [cells, setCells] = useState([])
-
-  const [originCells, roundCells] = useMemo(() => {
-    const totalRows = Math.ceil(allRounds.length / rowNum)
-    const rows = Array(totalRows).fill(0)
-    const cells = rows.map(() => Array(rowNum).fill(false))
-    const roundCells = []
-    rows.forEach((row, index) => {
-      roundCells.push(allRounds.slice(index * rowNum, index * rowNum + rowNum))
-    })
-    setCells(cells)
-    return [cells, roundCells]
-  }, [allRounds])
-
-  const getAllRounds = useCallback(() => {
-    const fetchData = async () => {
-      const result = await api.get(
-        `${pathRoundAndRoom}?page=1&rows=10000&examinationId=${examId}`
-      )
-      setAllRounds(result.data)
-      setToggleCellTable((pre) => !pre)
-    }
-    fetchData()
-  }, [examId])
-
-  useEffect(() => {
-    getAllRounds()
-  }, [getAllRounds])
 
   const updateRoundsRoom = async (sourceIds, newRoomId) => {
     await api.post(pathUpdRoundsRoom(sourceIds, newRoomId))
-    getAllRounds()
     message.success(`更新考场成功`)
   }
 
-  const hideRoundExamineeModal = () => {
-    setSelectedRound()
-  }
-
-  const updateSelectedRoundsRoom = (newRoomId) => {
-    const roundIds = []
-    cells.forEach((cellRow, index) => {
-      cellRow.forEach((cell, index1) => {
-        if (cell === true) {
-          roundIds.push(roundCells[index][index1].id)
-        }
-      })
-    })
-    setContextMenuVisible(false)
-    if (roundIds.length > 0) {
-      updateRoundsRoom(roundIds.join(','), newRoomId)
-    }
+  const multiSelectProps = {
+    examId,
+    allRooms,
+    setToggleCellTable,
+    setShowMultiSelect,
+    updateRoundsRoom,
   }
 
   return (
@@ -90,47 +45,34 @@ const RoundAndRoom = ({ match }) => {
       title={`${exam.title}考场分配`}
       customClass="round-room-list"
     >
-      <div className={`round-room-actions multi-select-${showMultSelect}`}>
-        <Button
-          type="primary"
-          onClick={() => setShowMultiSelect((pre) => !pre)}
-        >
-          {showMultSelect ? '返回' : '多选配置考场'}
-        </Button>
-        {showMultSelect && (
-          <Button onClick={() => setCells(originCells)}>清空选择</Button>
-        )}
-      </div>
       {!showMultSelect && (
-        <CustomTable
-          {...tableList}
-          className="round-room-table"
-          columns={getColumns(allRooms, updateRoundsRoom, setSelectedRound)}
-          rowKey="round_num"
-          size="small"
-        />
+        <>
+          <div className="round-room-actions">
+            <Button type="primary" onClick={() => setShowMultiSelect(true)}>
+              多选配置考场
+            </Button>
+          </div>
+          <CustomTable
+            {...tableList}
+            className="round-room-table"
+            columns={getColumns(allRooms, updateRoundsRoom, setSelectedRound)}
+            rowKey="round_num"
+            size="small"
+          />
+        </>
       )}
       {showMultSelect && (
-        <Dropdown
-          overlay={getRoomMenus(allRooms, updateSelectedRoundsRoom)}
-          trigger={['contextMenu']}
-          onVisibleChange={(value) => {
-            setContextMenuVisible(value)
-          }}
-          visible={contextMenuVisible}
-        >
-          <a className="ant-dropdown-link" onClick={(e) => e.preventDefault()}>
-            {toggleCellTable
-              ? React.createElement(Rounds, { cells, setCells, roundCells })
-              : React.createElement(Rounds, { cells, setCells, roundCells })}
-          </a>
-        </Dropdown>
+        <>
+          {toggleCellTable
+            ? React.createElement(Rounds, multiSelectProps)
+            : React.createElement(Rounds, multiSelectProps)}
+        </>
       )}
       {selectedRound && (
         <RoundExamineeModal
           examinationId={examId}
           roundNum={selectedRound.round_num}
-          hideModal={hideRoundExamineeModal}
+          hideModal={() => setSelectedRound()}
         />
       )}
     </PageListCustom>
@@ -185,16 +127,3 @@ const getColumns = (allRooms, updateRoundRoom, setSelectedRound) => [
     ),
   },
 ]
-
-const getRoomMenus = (allRooms, updateSelectedRoundsRoom) => (
-  <Menu>
-    {allRooms.map((room) => (
-      <Menu.Item
-        key={room.id}
-        onClick={() => updateSelectedRoundsRoom(room.id)}
-      >
-        {room.name}
-      </Menu.Item>
-    ))}
-  </Menu>
-)
