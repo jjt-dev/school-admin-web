@@ -1,6 +1,7 @@
 .table-drag-select {
   border-collapse: separate;
-  border-spacing: 15px;
+  border-spacing: 10px;
+  width: 100%;
 
   td {
     border: 1px solid rgba(205, 213, 223, 1);
@@ -8,19 +9,21 @@
     width: 10%;
     height: 150px;
     cursor: cell;
-    padding: 10px;
+    padding: 20px 10px;
+    box-shadow: 0px 0px 6px 3px rgba(28, 27, 28, 0.06);
+    border-radius: 3px;
 
     .round-content {
       height: 100%;
 
-      .ant-tag {
-        line-height: 16px;
+      .round-number {
+        margin-bottom: 20px;
       }
     }
   }
 
   td.cell-enabled {
-    background-color: #ddd;
+    background-color: #fff;
   }
 
   td.cell-selected {
@@ -29,5 +32,17 @@
 
   td.cell-being-selected {
     background-color: #e4f2fd;
+  }
+
+  td.cell-disabled {
+    background-color: #ddd;
+  }
+}
+
+.ant-dropdown-link {
+  color: unset;
+
+  &:hover {
+    color: unset;
   }
 }

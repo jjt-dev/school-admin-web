@@ -7,7 +7,7 @@ import { addRoundNumPrefix } from 'src/utils/common'
 
 import { buildCells, getRoomMenus } from './roundHelper'
 
-const Rounds = ({ allRounds, allRooms, updateRoundsRoom }) => {
+const Rounds2 = ({ allRounds, allRooms, updateRoundsRoom }) => {
   const [contextMenuVisible, setContextMenuVisible] = useState(false)
   const [originCells, roundCells] = buildCells(allRounds)
   const [cells, setCells] = useState(originCells)
@@ -22,9 +22,7 @@ const Rounds = ({ allRounds, allRooms, updateRoundsRoom }) => {
       })
     })
     setContextMenuVisible(false)
-    if (roundIds.length > 0) {
-      updateRoundsRoom(roundIds.join(','), newRoomId)
-    }
+    updateRoundsRoom(roundIds.join(','), newRoomId)
   }
 
   return (
@@ -60,4 +58,4 @@ const Rounds = ({ allRounds, allRooms, updateRoundsRoom }) => {
   )
 }
 
-export default Rounds
+export default Rounds2
