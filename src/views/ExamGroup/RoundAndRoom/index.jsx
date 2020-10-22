@@ -43,7 +43,7 @@ const RoundAndRoom = ({ match }) => {
   return (
     <PageListCustom
       title={`${exam.title}考场分配`}
-      customClass="round-room-list"
+      customClass={showMultSelect ? 'multi-select-container' : ''}
     >
       {!showMultSelect && (
         <>

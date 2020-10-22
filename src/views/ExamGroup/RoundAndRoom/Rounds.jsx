@@ -7,7 +7,7 @@ import { Button, Dropdown, Menu } from 'antd'
 import { pathRoundAndRoom } from 'src/utils/httpUtil'
 import api from 'src/utils/api'
 
-const rowNum = 8
+const rowNum = 30
 
 const Rounds = ({
   examId,
@@ -66,10 +66,29 @@ const Rounds = ({
   return (
     <>
       <div className="round-room-actions multi-select">
-        <Button type="primary" onClick={() => setShowMultiSelect(false)}>
+        <Button
+          type="primary"
+          onClick={() => setShowMultiSelect(false)}
+          size="small"
+        >
           返回
         </Button>
-        <Button onClick={() => setCells(originCells)}>清空选择</Button>
+        <Button
+          onClick={() => setCells(originCells)}
+          size="small"
+          className="clear-select"
+        >
+          清空选择
+        </Button>
+        {allRooms.map((room, index) => (
+          <div
+            className="room-item"
+            key={room.id}
+            style={{ background: colors[index] }}
+          >
+            {room.name}
+          </div>
+        ))}
       </div>
       <Dropdown
         overlay={getRoomMenus(allRooms, updateSelectedRoundsRoom)}
@@ -94,10 +113,8 @@ const Rounds = ({
                       style={{ backgroundColor: colors[roomIndex] }}
                     >
                       <div className="round-content">
-                        <div className="round-number">
-                          组号: {addRoundNumPrefix(round.round_num)}
-                        </div>
-                        <div>考场: {round.roomName}</div>
+                        <div>组号</div>
+                        <div> {addRoundNumPrefix(round.round_num)}</div>
                       </div>
                     </td>
                   )
