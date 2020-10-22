@@ -47,11 +47,14 @@ const RoundAndRoom = ({ match }) => {
     >
       {!showMultSelect && (
         <>
-          <div className="round-room-actions">
-            <Button type="primary" onClick={() => setShowMultiSelect(true)}>
-              多选配置考场
-            </Button>
-          </div>
+          <Button
+            type="primary"
+            onClick={() => setShowMultiSelect(true)}
+            size="small"
+            className="multi-select-btn"
+          >
+            多选配置考场
+          </Button>
           <CustomTable
             {...tableList}
             className="round-room-table"
@@ -107,6 +110,7 @@ const getColumns = (allRooms, updateRoundRoom, setSelectedRound) => [
             style={{ width: '160px' }}
             defaultValue={record.roomId}
             onChange={(value) => updateRoundRoom(record.id, value)}
+            size="small"
           >
             {allRooms.map((room) => (
               <Select.Option key={room.id} value={room.id}>

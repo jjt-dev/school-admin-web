@@ -7,7 +7,7 @@ import { Button, Dropdown, Menu } from 'antd'
 import { pathRoundAndRoom } from 'src/utils/httpUtil'
 import api from 'src/utils/api'
 
-const rowNum = 30
+const rowNum = 12
 
 const Rounds = ({
   examId,
@@ -113,8 +113,7 @@ const Rounds = ({
                       style={{ backgroundColor: colors[roomIndex] }}
                     >
                       <div className="round-content">
-                        <div>组号</div>
-                        <div> {addRoundNumPrefix(round.round_num)}</div>
+                        <div> {addRoundNumPrefix(round.round_num)}组</div>
                       </div>
                     </td>
                   )
