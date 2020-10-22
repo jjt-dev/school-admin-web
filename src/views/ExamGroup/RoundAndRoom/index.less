@@ -2,6 +2,7 @@
   border-collapse: separate;
   border-spacing: 10px;
   width: 100%;
+  padding: 15px;
 
   td {
     border: 1px solid rgba(205, 213, 223, 1);
@@ -39,45 +40,28 @@
   }
 }
 
-.multi-select-container {
-  .page-list-title {
-    margin-top: 60px;
-  }
-
-  .round-room-actions {
-    margin-bottom: 10px;
-
-    &.multi-select {
-      top: 90px;
-      margin-left: 10px;
-      position: fixed;
-      right: 20px;
-      left: 197px;
-      box-shadow: 0px 0px 6px 3px rgba(28, 27, 28, 0.06);
-      border-radius: 3px;
-      background: #fff;
-      padding: 10px;
-
-      .clear-select {
-        margin-right: 40px;
-      }
-
-      .room-item {
-        display: inline-block;
-        height: 30px;
-        padding: 5px 10px;
-        margin-right: 20px;
-        border-radius: 2px;
-      }
-    }
-
-    button {
-      margin-right: 10px;
-    }
-  }
-}
-
 .multi-select-btn {
   margin-bottom: 10px;
   width: 100px;
+}
+
+.multi-select {
+  .ant-modal-body {
+    padding: 0;
+  }
+
+  .rooms {
+    text-align: center;
+    box-shadow: 0 4px 2px -1px rgba(28, 27, 28, 0.06);
+    padding: 10px;
+
+    .room-item {
+      display: inline-block;
+      height: 30px;
+      padding: 5px 10px;
+      margin-right: 20px;
+      border-radius: 2px;
+      cursor: pointer;
+    }
+  }
 }

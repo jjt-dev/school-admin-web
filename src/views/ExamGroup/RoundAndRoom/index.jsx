@@ -26,6 +26,7 @@ const RoundAndRoom = ({ match }) => {
   const [selectedRound, setSelectedRound] = useState()
   const { allRooms } = useSelector((state) => state.app)
   const tableList = useTableFetch(pathRoundAndRoom, { examinationId: examId })
+  const title = `${exam.title}考场分配`
 
   const updateRoundsRoom = async (sourceIds, newRoomId) => {
     await api.post(pathUpdRoundsRoom(sourceIds, newRoomId))
@@ -38,11 +39,13 @@ const RoundAndRoom = ({ match }) => {
     setToggleCellTable,
     setShowMultiSelect,
     updateRoundsRoom,
+    title,
+    hideModal: () => setShowMultiSelect(false),
   }
 
   return (
     <PageListCustom
-      title={`${exam.title}考场分配`}
+      title={title}
       customClass={showMultSelect ? 'multi-select-container' : ''}
     >
       {!showMultSelect && (

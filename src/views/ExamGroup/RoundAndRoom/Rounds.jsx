@@ -3,7 +3,7 @@ import './index.less'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import TableDragSelect from 'react-table-drag-select'
 import { addRoundNumPrefix } from 'src/utils/common'
-import { Button, Dropdown, Menu } from 'antd'
+import { Button, Dropdown, Menu, Modal } from 'antd'
 import { pathRoundAndRoom } from 'src/utils/httpUtil'
 import api from 'src/utils/api'
 
@@ -13,8 +13,9 @@ const Rounds = ({
   examId,
   allRooms,
   setToggleCellTable,
-  setShowMultiSelect,
+  hideModal,
   updateRoundsRoom,
+  title,
 }) => {
   const [cells, setCells] = useState([])
   const [allRounds, setAllRounds] = useState([])
@@ -25,7 +26,7 @@ const Rounds = ({
       const result = await api.get(
         `${pathRoundAndRoom}?page=1&rows=10000&examinationId=${examId}`
       )
-      setAllRounds(result.data)
+      setAllRounds(result.data.filter((round) => round.excuteId < 0))
       setToggleCellTable((pre) => !pre)
     }
     fetchData()
@@ -64,27 +65,28 @@ const Rounds = ({
   }
 
   return (
-    <>
-      <div className="round-room-actions multi-select">
-        <Button
-          type="primary"
-          onClick={() => setShowMultiSelect(false)}
-          size="small"
-        >
-          返回
-        </Button>
-        <Button
-          onClick={() => setCells(originCells)}
-          size="small"
-          className="clear-select"
-        >
+    <Modal
+      width={1300}
+      title={title}
+      visible={true}
+      onCancel={hideModal}
+      footer={[
+        <Button onClick={() => setCells(originCells)} className="clear-select">
           清空选择
-        </Button>
+        </Button>,
+        <Button key="back" onClick={hideModal}>
+          取消
+        </Button>,
+      ]}
+      className="multi-select"
+    >
+      <div className="rooms">
         {allRooms.map((room, index) => (
           <div
             className="room-item"
             key={room.id}
             style={{ background: colors[index] }}
+            onClick={() => updateSelectedRoundsRoom(room.id)}
           >
             {room.name}
           </div>
@@ -123,7 +125,7 @@ const Rounds = ({
           </TableDragSelect>
         </a>
       </Dropdown>
-    </>
+    </Modal>
   )
 }
 
