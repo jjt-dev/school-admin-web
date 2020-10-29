@@ -1,11 +1,13 @@
 import { createAction } from 'redux-actions'
 import api from 'src/utils/api'
+import { local } from 'src/utils/storage'
 
 export const APP_SHOW_LOADING = 'APP_SHOW_LOADING'
 export const APP_CLOSE_LOADING = 'APP_CLOSE_LOADING'
 
 export const APP_OAUTH_USER = 'APP_OAUTH_USER'
 
+export const GET_ALL_COURSES = 'GET_ALL_COURSES'
 export const GET_ALL_COACHES = 'GET_ALL_COACHES'
 export const GET_ALL_EXAM_LEVELS = 'GET_ALL_EXAM_LEVELS'
 export const GET_ALL_SIGNING_EXAMS = 'GET_ALL_SIGNING_EXAMS'
@@ -17,8 +19,17 @@ export const showLoadingBar = createAction(APP_SHOW_LOADING)
 
 export const closeLoadingBar = createAction(APP_CLOSE_LOADING)
 
-export const getUserInfo = createAction(APP_OAUTH_USER, () =>
-  api.get(`/user/userInfo`)
+export const getUserInfo = createAction(APP_OAUTH_USER, () => {
+  const selectedCourse = local.getItem('course')
+  let path = `/user/userInfo`
+  if (selectedCourse) {
+    path += `?courseId=${selectedCourse}`
+  }
+  return api.get(path)
+})
+
+export const getAllCourses = createAction(GET_ALL_COURSES, () =>
+  api.get(`/user/courseList`)
 )
 
 export const getAllCoaches = createAction(GET_ALL_COACHES, () =>
