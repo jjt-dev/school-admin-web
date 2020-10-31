@@ -26,6 +26,7 @@ import Certificate from './Certificate/Certificate'
 import PrintExamCertif from './PrintExamCertif'
 import PrintReport from './PrintReport'
 import CoachClassList from './Coach/CoachClassList'
+import Account from './Account'
 
 export const routes = [
   { path: '/login', comp: Login },
@@ -259,6 +260,10 @@ export const routes = [
     title: '学校',
     defaultPath: '/school',
     comp: Parameter,
+  },
+  {
+    path: '/accounts',
+    comp: Account,
   },
 ]
 
