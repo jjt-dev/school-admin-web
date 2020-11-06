@@ -65,6 +65,9 @@ export const pathSignEditBasicInfo = `/exam/sign/editStudentBaseInfo`
 export const pathSignEditBeforeSignEnd = `/exam/sign/updateSignInfoBeforeSignEndTime`
 export const pathSignEditAfterSignEnd = `/exam/sign/updateSignInfoAfterSignEndTime`
 
+export const pathUploadTaekwondo = (examId) =>
+  `/examination/requestUploadResult?examinationId=${examId}`
+
 export const pathUserByCardId = (cardId) =>
   `/exam/sign/getStudentInfoByCardId?cardId=${cardId}`
 

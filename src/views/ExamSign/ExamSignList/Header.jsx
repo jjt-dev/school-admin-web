@@ -1,11 +1,13 @@
 import React from 'react'
-import { Button, Select } from 'antd'
+import { Button, message, Select } from 'antd'
 import { useState } from 'react'
 import { SignStatus, ExamStatus } from 'src/utils/const'
 import CoachClassSelect from './CoachClassSelect'
 import ListHeaderCustom from 'src/components/ListHeaderCustom'
 import ListHeaderLeft from 'src/components/ListHeaderLeft'
 import ListHeaderRight from 'src/components/ListHeaderRight'
+import { pathUploadTaekwondo } from 'src/utils/httpUtil'
+import api from 'src/utils/api'
 
 const { Option } = Select
 
@@ -13,12 +15,14 @@ const Header = ({
   examSignList,
   fetchTable,
   handleSign,
-  examState,
+  exam,
+  fetchExam,
   allCoaches,
   printExamCertifs,
   downloadExamineeInfo,
   defaultSearch,
 }) => {
+  const { currState: examState } = exam
   const { coachId } = defaultSearch
   const defaultSelectedClasses = []
   if (coachId) {
@@ -55,9 +59,12 @@ const Header = ({
           </Button>
         )}
         {examState === ExamStatus.finish.id && (
-          <Button size="small" onClick={downloadExamineeInfo}>
-            下载考试信息
-          </Button>
+          <>
+            <Button size="small" onClick={downloadExamineeInfo}>
+              下载考试信息
+            </Button>
+            <UploadTaekwondo exam={exam} fetchExam={fetchExam} />
+          </>
         )}
       </ListHeaderLeft>
       <ListHeaderRight
@@ -93,3 +100,33 @@ const Header = ({
 }
 
 export default Header
+
+const UploadTaekwondo = ({ exam, fetchExam }) => {
+  const { uploadState } = exam
+  const canUpload = exam.uploadState === 0
+  const isUploading = exam.uploadState === 1
+  const titles = {
+    0: '申请上传台协',
+    1: '上传台协中',
+    2: '上传台协完成',
+  }
+
+  const uploadToTaekwondo = async () => {
+    if (canUpload) {
+      await api.post(pathUploadTaekwondo(exam.id))
+      message.success('正在上传中，请稍后刷新页面查看是否完成。')
+      fetchExam()
+    }
+  }
+
+  return (
+    <Button
+      size="small"
+      loading={isUploading}
+      disabled={!canUpload}
+      onClick={uploadToTaekwondo}
+    >
+      {titles[uploadState]}
+    </Button>
+  )
+}

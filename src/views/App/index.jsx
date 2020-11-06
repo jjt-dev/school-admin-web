@@ -63,7 +63,7 @@ const App = () => {
         'login-page': isLogin,
       })}
     >
-      <Header user={user} courses={allCourses} changeCourse={changeCourse} />
+      {/* <Header user={user} courses={allCourses} changeCourse={changeCourse} /> */}
       <main>
         <SideMenu />
         <ErrorBoundary>
