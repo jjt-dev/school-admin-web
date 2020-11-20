@@ -135,7 +135,12 @@ const ExamSign = ({ history }) => {
         />
       )}
       {!isEdit && (
-        <FormRadioGroup label="已缴费" name="isPayed" options={payedOptions} />
+        <FormRadioGroup
+          label="已缴费"
+          name="isPayed"
+          options={payedOptions}
+          hidden={isExaming}
+        />
       )}
     </PageFormCustom>
   )

@@ -27,6 +27,7 @@ import PrintExamCertif from './PrintExamCertif'
 import PrintReport from './PrintReport'
 import CoachClassList from './Coach/CoachClassList'
 import Account from './Account'
+import ResourcePool from './ResourcePool'
 
 export const routes = [
   { path: '/login', comp: Login },
@@ -237,6 +238,15 @@ export const routes = [
     title: '考场',
     comp: Room,
     back: { path: '/rooms', breadcrumbs: ['考场管理', '编辑考场'] },
+  },
+  {
+    path: '/exam/:id/resource-pool',
+    comp: ResourcePool,
+    title: '资源池',
+    back: {
+      path: '/exams',
+      breadcrumbs: ['考试管理', '资源池列表'],
+    },
   },
   {
     path: '/certificate',
