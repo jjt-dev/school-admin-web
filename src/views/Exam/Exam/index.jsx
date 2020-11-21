@@ -15,6 +15,7 @@ import { message, Button, Form, DatePicker } from 'antd'
 import ImportExamModal from './ImportExamModal'
 import moment from 'moment'
 import { hourFormat, timeFormat } from 'src/utils/const'
+import { useCallback } from 'react'
 
 const { RangePicker } = DatePicker
 const { usePageForm } = PageFormCustom
@@ -65,9 +66,12 @@ const Exam = ({ history }) => {
     }
   }, [examInEdit, form])
 
-  const updateItemRatio = (levelId, itemId, ratio) => {
-    dispatch(examAction.updateItemRatio({ levelId, itemId, ratio }))
-  }
+  const updateItemRatio = useCallback(
+    (levelId, itemId, ratio) => {
+      dispatch(examAction.updateItemRatio({ levelId, itemId, ratio }))
+    },
+    [dispatch]
+  )
 
   const selectItems = (levelId, selectedItems) => {
     dispatch(examAction.selectItems({ levelId, selectedItems }))
@@ -80,13 +84,8 @@ const Exam = ({ history }) => {
   }
 
   const onFinish = (values) => {
-    const itemsValid = validateItems(checkedLevels)
-    if (itemsValid) {
-      values.isFormal = isFormal
-      updateExam(history, status, examId, values, checkedLevels)
-    } else {
-      message.error('请保证每一个级别的考项比例之和为100')
-    }
+    values.isFormal = isFormal
+    updateExam(history, status, examId, values, checkedLevels)
   }
 
   const onValuesChange = (values) => {

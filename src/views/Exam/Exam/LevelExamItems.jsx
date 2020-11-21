@@ -1,4 +1,4 @@
-import { Col, Form, InputNumber, Row, Select } from 'antd'
+import { Col, Form, Input, Row, Select } from 'antd'
 import React from 'react'
 
 const { Option } = Select
@@ -10,6 +10,8 @@ const LevelExamItems = ({
   updateItemRatio,
 }) => {
   const itemIds = Object.keys(level.items).map((i) => Number(i))
+  const itemRatio = (100 / itemIds.length).toFixed(0)
+
   return (
     <Form.Item label={`${level.name}考项`} className="exam-level-item">
       <>
@@ -37,15 +39,10 @@ const LevelExamItems = ({
             >
               <Col>
                 <span>{item.name}</span>
-                <InputNumber
-                  defaultValue={level.items[itemId]}
-                  min={0}
-                  max={100}
-                  formatter={(value) => `${value}%`}
-                  parser={(value) => value.replace('%', '')}
-                  onChange={(value) =>
-                    updateItemRatio(level.id, item.id, value)
-                  }
+                <Input
+                  value={`${itemRatio}%`}
+                  style={{ width: '80px' }}
+                  readOnly
                 />
               </Col>
             </Row>

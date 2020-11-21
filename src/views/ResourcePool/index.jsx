@@ -41,6 +41,7 @@ const getColumns = (examId) => (deleteSign) => [
   getCustomRow('头像', (record) => (
     <Avatar size={45} src={`${getDomain()}${record.faceUrl}`} />
   )),
+  getRow('报考等级', 'levelName'),
   getDateRow('报名时间', 'createTime'),
   getCustomRow(
     '当前状态',
