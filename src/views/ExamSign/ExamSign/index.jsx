@@ -74,6 +74,8 @@ const ExamSign = ({ history }) => {
 
   const titlePrefix = isEdit ? '编辑报名' : '人工报名'
 
+  if (!sign) return null
+
   return (
     <PageFormCustom
       form={form}
@@ -127,12 +129,11 @@ const ExamSign = ({ history }) => {
         </Select>
       </Form.Item>
       {/* 考试报名截止时间后报名需要给每一个等级选择考场 */}
-      {isExaming && (
+      {isEdit && !sign.isTempSign && (
         <LevelRoom
           exam={exam}
           levelIds={selectedLevelIds}
           levels={availableExamLevels}
-          hidden={sign?.isTempSign}
         />
       )}
       {!isEdit && (

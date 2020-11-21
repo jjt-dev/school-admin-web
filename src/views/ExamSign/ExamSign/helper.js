@@ -60,7 +60,7 @@ export const onFinish = (
 export const editSignWhenExaming = async (path, values, selectedLevelIds) => {
   const levelRoomMap = {}
   selectedLevelIds.forEach((levelId) => {
-    levelRoomMap[levelId] = values[`level_${levelId}_room`]
+    levelRoomMap[levelId] = values[`level_${levelId}_room`] ?? -1
   })
   await api.post(path, {
     examinationSignInfo: values,
