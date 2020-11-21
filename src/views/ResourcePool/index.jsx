@@ -51,27 +51,4 @@ const getColumns = (examId) => (deleteSign) => [
     '来源方式',
     (record) => findResPoolSource(record.createWay).title
   ),
-  {
-    title: '操作',
-    render: (text, record) => (
-      <>
-        <Link to={`/exam/${examId}/resource-pool-sign/${record.signId}`}>
-          编辑
-        </Link>
-        <Divider type="vertical" />
-        <Link to={`/exam/${examId}/resource-pool-sign/${record.signId}/detail`}>
-          详情
-        </Link>
-        <Divider type="vertical" />
-        <span
-          className="table-action"
-          onClick={() => {
-            deleteSign(record)
-          }}
-        >
-          删除
-        </span>
-      </>
-    ),
-  },
 ]
