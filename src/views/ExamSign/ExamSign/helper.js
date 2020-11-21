@@ -33,7 +33,7 @@ export const onFinish = (
     if (!isExaming) {
       await api.post(pathSignOffline(values))
     } else {
-      await signWhenExaming(buildParameters(pathSignOfflineWhenExaming, values))
+      await await api.post(buildParameters(pathSignOfflineWhenExaming, values))
     }
   }
   // 编辑报名基本信息调用一个接口，然后级别和考场信息在考试报名截止前和截止后需要调用不同的两个接口
@@ -45,7 +45,11 @@ export const onFinish = (
       await api.post(buildParameters(pathSignEditBeforeSignEnd, values))
     } else {
       // 这里单独的接口是因为报名截止后需要人工指定级别考场
-      await signWhenExaming(pathSignEditAfterSignEnd, values, selectedLevelIds)
+      await editSignWhenExaming(
+        pathSignEditAfterSignEnd,
+        values,
+        selectedLevelIds
+      )
     }
   }
 
@@ -53,8 +57,15 @@ export const onFinish = (
   history.push(routeExamSignList(examId))
 }
 
-export const signWhenExaming = async (path, values) => {
-  await api.post(path, values)
+export const editSignWhenExaming = async (path, values, selectedLevelIds) => {
+  const levelRoomMap = {}
+  selectedLevelIds.forEach((levelId) => {
+    levelRoomMap[levelId] = values[`level_${levelId}_room`]
+  })
+  await api.post(path, {
+    examinationSignInfo: values,
+    levelRoomMap,
+  })
 }
 
 export const validateIdCardForm = (rule, value) => {

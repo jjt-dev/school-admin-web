@@ -132,6 +132,7 @@ const ExamSign = ({ history }) => {
           exam={exam}
           levelIds={selectedLevelIds}
           levels={availableExamLevels}
+          hidden={sign?.isTempSign}
         />
       )}
       {!isEdit && (

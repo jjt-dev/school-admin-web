@@ -2,7 +2,13 @@ import React from 'react'
 import * as queryString from 'query-string'
 import moment from 'moment'
 import { Divider, message, Switch } from 'antd'
-import { EntityStatus, ExamStatus, SignStatus } from './const'
+import {
+  EntityStatus,
+  ExamStatus,
+  SignStatus,
+  ResourcePoolStatus,
+  ResourcePoolSource,
+} from './const'
 import domtoimage from 'dom-to-image'
 import confirm from 'antd/lib/modal/confirm'
 import api from './api'
@@ -350,6 +356,18 @@ export const findExamStatus = (examStatusId) => {
 
 export const findSignStatus = (signStatusId) => {
   return Object.values(SignStatus).find((status) => status.id === signStatusId)
+}
+
+export const findResPoolStatus = (statusId) => {
+  return Object.values(ResourcePoolStatus).find(
+    (status) => status.id === statusId
+  )
+}
+
+export const findResPoolSource = (sourceId) => {
+  return Object.values(ResourcePoolSource).find(
+    (status) => status.id === sourceId
+  )
 }
 
 export const checkIsExaming = (examStatus) =>

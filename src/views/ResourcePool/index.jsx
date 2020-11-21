@@ -6,7 +6,8 @@ import { Link } from 'react-router-dom'
 import PageList from 'src/components/PageList'
 import useFetch from 'src/hooks/useFetch'
 import {
-  findSignStatus,
+  findResPoolSource,
+  findResPoolStatus,
   getCustomRow,
   getDateRow,
   getDomain,
@@ -26,6 +27,7 @@ const ResourcePool = ({ match }) => {
       title={`${exam.title}资源池`}
       defaultSearch={{ examId }}
       path="/exam/sign/examMakeUpPage"
+      size="small"
     />
   )
 }
@@ -34,14 +36,19 @@ export default ResourcePool
 
 const getColumns = (examId) => (deleteSign) => [
   tableOrder,
-  getRow('姓名', 'name'),
-  getRow('身份证号', 'cardId'),
+  getRow('姓名', 'studentName'),
   getCustomRow('头像', (record) => (
     <Avatar size={45} src={`${getDomain()}${record.faceUrl}`} />
   )),
-  getDateRow('报名时间', 'signTime'),
-  getCustomRow('当前状态', (record) => findSignStatus(record.currState).title),
-  getRow('联系电话', 'phone'),
+  getDateRow('报名时间', 'createTime'),
+  getCustomRow(
+    '当前状态',
+    (record) => findResPoolStatus(record.currState).title
+  ),
+  getCustomRow(
+    '来源方式',
+    (record) => findResPoolSource(record.createWay).title
+  ),
   {
     title: '操作',
     render: (text, record) => (
