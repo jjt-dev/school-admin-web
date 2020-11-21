@@ -37,6 +37,7 @@ export default ResourcePool
 const getColumns = (examId) => (deleteSign) => [
   tableOrder,
   getRow('姓名', 'studentName'),
+  getRow('身份证号', 'cardId'),
   getCustomRow('头像', (record) => (
     <Avatar size={45} src={`${getDomain()}${record.faceUrl}`} />
   )),
@@ -53,9 +54,13 @@ const getColumns = (examId) => (deleteSign) => [
     title: '操作',
     render: (text, record) => (
       <>
-        <Link to={`/exam/${examId}/sign/${record.signId}`}>编辑</Link>
+        <Link to={`/exam/${examId}/resource-pool-sign/${record.signId}`}>
+          编辑
+        </Link>
         <Divider type="vertical" />
-        <Link to={`/exam/${examId}/sign/${record.signId}/detail`}>详情</Link>
+        <Link to={`/exam/${examId}/resource-pool-sign/${record.signId}/detail`}>
+          详情
+        </Link>
         <Divider type="vertical" />
         <span
           className="table-action"

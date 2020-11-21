@@ -105,12 +105,30 @@ export const routes = [
     },
   },
   {
+    path: '/exam/:id/resource-pool-sign/:signId',
+    comp: ExamSign,
+    back: {
+      path: '/exam/:id/resource-pool',
+      params: ['id'],
+      breadcrumbs: ['考试管理', '资源池列表', '编辑报名'],
+    },
+  },
+  {
     path: '/exam/:id/sign/:signId/detail',
     comp: ExamSignDetail,
     back: {
       path: '/exam/:id/signs',
       params: ['id'],
       breadcrumbs: ['考试管理', '报考列表', '报名详情'],
+    },
+  },
+  {
+    path: '/exam/:id/resource-pool-sign/:signId/detail',
+    comp: ExamSignDetail,
+    back: {
+      path: '/exam/:id/resource-pool',
+      params: ['id'],
+      breadcrumbs: ['考试管理', '资源池列表', '报名详情'],
     },
   },
   {
