@@ -1,8 +1,7 @@
 import './index.less'
 
-import { Avatar, Divider } from 'antd'
+import { Avatar } from 'antd'
 import React from 'react'
-import { Link } from 'react-router-dom'
 import PageList from 'src/components/PageList'
 import useFetch from 'src/hooks/useFetch'
 import {

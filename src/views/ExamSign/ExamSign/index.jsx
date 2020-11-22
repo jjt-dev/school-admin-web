@@ -74,7 +74,7 @@ const ExamSign = ({ history }) => {
 
   const titlePrefix = isEdit ? '编辑报名' : '人工报名'
 
-  if (!sign) return null
+  if (isEdit && !sign) return null
 
   return (
     <PageFormCustom
