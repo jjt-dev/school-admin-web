@@ -44,10 +44,10 @@ const getColumns = (examId) => (deleteSign) => [
   getDateRow('报名时间', 'createTime'),
   getCustomRow(
     '当前状态',
-    (record) => findResPoolStatus(record.currState).title
+    (record) => findResPoolStatus(record.currState)?.title
   ),
   getCustomRow(
     '来源方式',
-    (record) => findResPoolSource(record.createWay).title
+    (record) => findResPoolSource(record.createWay)?.title
   ),
 ]
