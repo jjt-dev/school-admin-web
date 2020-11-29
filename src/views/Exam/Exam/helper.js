@@ -3,27 +3,6 @@ import api from 'src/utils/api'
 import { findIndexById } from 'src/utils/common'
 import { timeFormat } from 'src/utils/const'
 
-export const validateItems = (checkedLevels) => {
-  let result = true
-
-  checkedLevels.forEach(({ items }) => {
-    let totalRatio = 0
-    const itemIds = Object.keys(items)
-    if (itemIds.length === 0) {
-      result = false
-      return
-    }
-
-    itemIds.map((itemId) => (totalRatio += items[itemId] ?? 0))
-    if (totalRatio !== 100) {
-      result = false
-      return
-    }
-  })
-
-  return result
-}
-
 export const enforceLevelList = (exam, levelList) => {
   const { itemes: totalItems } = exam
   const uniqLevelIds = Array.from(
@@ -66,9 +45,11 @@ export const updateExam = async (
   const levelItems = {}
   checkedLevels.forEach((level) => {
     const { id: levelId, items } = level
-    const temp = Object.keys(items).map((itemId) => ({
+    const itemNumber = Object.keys(items).length
+    const ratio = Number((100 / itemNumber / 100).toFixed(2))
+    const temp = Object.keys(items).map((itemId, index) => ({
       examItemId: itemId,
-      ratio: items[itemId] / 100,
+      ratio: index === 0 ? ratio + (1 - itemNumber * ratio) : ratio,
     }))
     levelItems[levelId] = temp
   })

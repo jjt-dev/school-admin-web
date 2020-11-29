@@ -138,7 +138,10 @@ class ReportVertical extends React.Component {
                       <div className="item-result__comments-item examiner-comment">
                         {examResult?.comment}
                         <div className="examiner-comment__sign">
-                          考官签字: <span>{examResult?.examinerName}</span>
+                          【考官】:
+                          <span className="examiner-comment__sign-name">
+                            {examResult?.examinerName}
+                          </span>
                         </div>
                       </div>
                       <div className="item-result__comments-item writing-mode-vertical">
@@ -150,7 +153,6 @@ class ReportVertical extends React.Component {
                         <div>
                           3.考试不合格的学员凭补考单进行补考 (限补考一次)
                         </div>
-                        <div>4.此表盖章有效</div>
                       </div>
                     </div>
                   </div>

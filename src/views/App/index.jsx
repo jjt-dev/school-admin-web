@@ -20,7 +20,7 @@ const App = () => {
   const dispatch = useDispatch()
   const activeRoute = useActiveRoute()
   const isLogin = useLogin()
-  const { loading, user } = useSelector((state) => state.app)
+  const { loading, user, allCourses } = useSelector((state) => state.app)
   const { schoolCode } = useSearch()
 
   /**
@@ -41,6 +41,7 @@ const App = () => {
 
   useEffect(() => {
     if (user) {
+      dispatch(appAction.getAllCourses())
       dispatch(appAction.getAllCoaches())
       dispatch(appAction.getAllExamLevels())
       dispatch(appAction.getAllSigningExams())
@@ -48,6 +49,11 @@ const App = () => {
       dispatch(appAction.getAllRooms())
     }
   }, [dispatch, user])
+
+  const changeCourse = (courseId) => {
+    local.setItem('course', courseId)
+    window.location.reload()
+  }
 
   return (
     <div
@@ -57,7 +63,7 @@ const App = () => {
         'login-page': isLogin,
       })}
     >
-      <Header user={user} />
+      <Header user={user} courses={allCourses} changeCourse={changeCourse} />
       <main>
         <SideMenu />
         <ErrorBoundary>

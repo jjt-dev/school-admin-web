@@ -13,8 +13,8 @@ export const pathChangeStudGroup = (examGroupId, toRoundNum) =>
 
 export const pathRoundAndRoom = `/examination/getExamRoundAndItsRoom`
 
-export const pathUpdRoundRoom = (sourceId, newRoomId) =>
-  `/examination/updateRoundRoom?sourceId=${sourceId}&newRoomId=${newRoomId}`
+export const pathUpdRoundRoom = (sourceIds, newRoomId) =>
+  `/examination/updateRoundRoom?sourceIds=${sourceIds}&newRoomId=${newRoomId}`
 
 export const pathRoomStudents = '/examination/pageStudentsOfSomeRoom'
 
@@ -64,6 +64,12 @@ export const pathExamRooms = (examId) =>
 export const pathSignEditBasicInfo = `/exam/sign/editStudentBaseInfo`
 export const pathSignEditBeforeSignEnd = `/exam/sign/updateSignInfoBeforeSignEndTime`
 export const pathSignEditAfterSignEnd = `/exam/sign/updateSignInfoAfterSignEndTime`
+
+export const pathUploadTaekwondo = (examId) =>
+  `/examination/requestUploadResult?examinationId=${examId}`
+
+export const pathUserByCardId = (cardId) =>
+  `/exam/sign/getStudentInfoByCardId?cardId=${cardId}`
 
 // coach
 export const pathCoachClasses = (coachId) =>

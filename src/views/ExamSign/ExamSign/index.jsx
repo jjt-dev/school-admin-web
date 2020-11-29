@@ -17,7 +17,12 @@ import {
 import LevelRoom from './LevelRoom'
 import './index.less'
 import { checkIsExaming } from 'src/utils/common'
-import { payedOptions, onFinish } from './helper'
+import {
+  payedOptions,
+  onFinish,
+  validateIdCardForm,
+  onValuesChange,
+} from './helper'
 
 const ExamSign = ({ history }) => {
   const { id, signId } = useParams()
@@ -69,23 +74,25 @@ const ExamSign = ({ history }) => {
 
   const titlePrefix = isEdit ? '编辑报名' : '人工报名'
 
+  if (isEdit && !sign) return null
+
   return (
     <PageFormCustom
       form={form}
       onFinish={onFinish(history, examId, isEdit, isExaming, selectedLevelIds)}
+      onValuesChange={onValuesChange(form)}
       fullTitle={`${titlePrefix} (${exam.title})`}
       customClass="exam-sign"
     >
-      <FormInput label="考生姓名" name="name" />
-      <FormInput label="考生身份证号" name="cardId" disabled={isEdit} />
-      <FormInput label="家长电话" name="phone" />
-      <FormImage
-        form={form}
-        label="照片"
-        name="faceUrl"
-        message="请上传头像"
-        imageUrl={form.faceUrl}
+      <FormInput
+        label="考生身份证号"
+        name="cardId"
+        disabled={isEdit}
+        rules={[{ validator: validateIdCardForm }, { required: true }]}
       />
+      <FormInput label="考生姓名" name="name" />
+      <FormInput label="家长电话" name="phone" />
+      <FormImage form={form} label="照片" name="faceUrl" message="请上传头像" />
       <FormInput label="住址" name="address" type="textarea" />
       <FormSelect
         label="当前考生等级"
@@ -122,7 +129,7 @@ const ExamSign = ({ history }) => {
         </Select>
       </Form.Item>
       {/* 考试报名截止时间后报名需要给每一个等级选择考场 */}
-      {isExaming && (
+      {isEdit && !sign.isTempSign && (
         <LevelRoom
           exam={exam}
           levelIds={selectedLevelIds}
@@ -130,7 +137,12 @@ const ExamSign = ({ history }) => {
         />
       )}
       {!isEdit && (
-        <FormRadioGroup label="已缴费" name="isPayed" options={payedOptions} />
+        <FormRadioGroup
+          label="已缴费"
+          name="isPayed"
+          options={payedOptions}
+          hidden={isExaming}
+        />
       )}
     </PageFormCustom>
   )

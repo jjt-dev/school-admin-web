@@ -94,4 +94,11 @@ const menus = [
     icon: 'file-text',
     title: '参数管理',
   },
+  {
+    key: '7',
+    path: '/accounts',
+    prefix: '/account',
+    icon: 'info-circle',
+    title: '账号信息',
+  },
 ]

@@ -3,8 +3,7 @@ import { confirmUpdate } from 'src/utils/common'
 import ListHeader from '../ListHeader'
 import CustomTable from '../CustomTable'
 import useActiveRoute from 'src/hooks/useActiveRoute'
-
-const { useTableFetch } = CustomTable
+import useTableFetch from 'src/hooks/useTableFetch'
 
 const PageList = ({
   columns,
@@ -19,6 +18,7 @@ const PageList = ({
   size = 'middle',
   title: defaultTitle,
   customClass = '',
+  defaultSearch = {},
 }) => {
   const {
     editPath,
@@ -31,7 +31,7 @@ const PageList = ({
   if (!defaultTableList) {
     fetchPath = path ? path : `${apiPath}/page`
   }
-  let tableList = useTableFetch(fetchPath)
+  let tableList = useTableFetch(fetchPath, defaultSearch)
   if (defaultTableList) {
     tableList = defaultTableList
   }

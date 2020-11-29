@@ -9,11 +9,13 @@ import {
   GET_ALL_SIGNING_EXAMS,
   GET_ALL_EXAMINERS,
   GET_ALL_ROOMS,
+  GET_ALL_COURSES,
 } from 'src/actions/app'
 
 const initState = {
   loading: false,
   user: null,
+  allCourses: [],
   allCoaches: [],
   enabledCoaches: [],
   allExamLevels: [],
@@ -40,6 +42,12 @@ const app = handleActions(
       return {
         ...state,
         user: payload,
+      }
+    },
+    [GET_ALL_COURSES]: (state, { payload }) => {
+      return {
+        ...state,
+        allCourses: payload,
       }
     },
     [GET_ALL_COACHES]: (state, { payload }) => {

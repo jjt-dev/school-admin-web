@@ -4,7 +4,7 @@ import { pathExamRooms } from 'src/utils/httpUtil'
 import FormSelect from 'src/components/FormSelect'
 import { findById } from 'src/utils/common'
 
-const LevelRoom = ({ exam, levelIds = [], levels = [] }) => {
+const LevelRoom = ({ exam, levelIds = [], levels = [], hidden = false }) => {
   const [rooms = []] = useFetch(pathExamRooms(exam.id))
 
   return (
@@ -19,6 +19,7 @@ const LevelRoom = ({ exam, levelIds = [], levels = [] }) => {
             options={rooms}
             valueKey="roomId"
             titleKey="name"
+            hidden={hidden}
           />
         )
       })}

@@ -30,7 +30,7 @@ import useTableFetch from 'src/hooks/useTableFetch'
 const ExamSignList = ({ match, history }) => {
   const examinationId = match.params.id
   const { allCoaches } = useSelector((state) => state.app)
-  const [exam = {}] = useFetch(pathExam(examinationId))
+  const [exam = {}, fetchExam] = useFetch(pathExam(examinationId))
   const signTableList = useTableFetch(pathExamSignList, { examinationId })
   const {
     search: { coachId, coachClassId },
@@ -72,7 +72,8 @@ const ExamSignList = ({ match, history }) => {
         fetchTable={fetchTable}
         defaultSearch={signTableList.search}
         handleSign={handleSign}
-        examState={exam.currState}
+        exam={exam}
+        fetchExam={fetchExam}
         allCoaches={allCoaches}
         printExamCertifs={printExamCertifs}
         downloadExamineeInfo={downloadExamineeInfo}

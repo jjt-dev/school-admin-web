@@ -1,0 +1,81 @@
+.login {
+  background-image: url('../../images/sign_bg.png');
+  height: 100%;
+  width: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &-container {
+    position: relative;
+    width: 630px;
+    height: 330px;
+    background: rgba(255, 255, 255, 1);
+    border-radius: 2px;
+    display: flex;
+
+    img {
+      width: 50%;
+      height: 330px;
+    }
+
+    &__content {
+      width: 100%;
+      margin: 50px 40px;
+
+      .ant-form {
+        &-item {
+          margin-bottom: 10px;
+
+          .ant-form-item-control {
+            line-height: 30px;
+          }
+
+          .ant-divider {
+            margin-left: 0;
+            width: 2px;
+            background: rgba(76, 113, 230, 1);
+            top: -2px;
+          }
+
+          .login-title {
+            font-size: 15px;
+            color: rgba(58, 58, 58, 1);
+          }
+
+          .ant-input-prefix {
+            .anticon {
+              color: rgba(0, 0, 0, 0.25);
+            }
+          }
+        }
+
+        .login-form-button {
+          width: 100px;
+          margin-top: 20px;
+          margin-left: 60px;
+        }
+
+        &-explain {
+          display: none;
+        }
+      }
+    }
+
+    .fa-check-circle {
+      position: absolute;
+      bottom: -12px;
+      left: 304px;
+      font-size: 24px;
+      color: rgba(90, 162, 244, 1);
+      background-image: radial-gradient(
+        at center,
+        #ffffff 50%,
+        transparent 50%
+      );
+    }
+  }
+}

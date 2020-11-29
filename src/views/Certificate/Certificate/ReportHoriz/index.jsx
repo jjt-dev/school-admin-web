@@ -136,7 +136,7 @@ const ReportHoriz = ({
               </div>
               <div className="results__middle-comments">
                 <div className="results__middle-comments-item">考官评语</div>
-                <div className="examiner-comment__sign">考官签字:</div>
+                <div className="examiner-comment__sign">【考官】:</div>
               </div>
             </div>
             <div className="results__remark">
@@ -146,10 +146,7 @@ const ReportHoriz = ({
                   1.考官未打分的科目属于本级别规定不考科目;
                   2.考试合格的学员凭此表领取证书和腰带
                 </div>
-                <div>
-                  3.考试不合格的学员凭补考单进行补考 (限补考一次);
-                  4.此表盖章有效
-                </div>
+                <div>3.考试不合格的学员凭补考单进行补考 (限补考一次);</div>
               </div>
             </div>
           </div>

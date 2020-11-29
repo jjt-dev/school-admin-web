@@ -5,10 +5,12 @@ import {
   pathSignEditBasicInfo,
   pathSignEditBeforeSignEnd,
   pathSignEditAfterSignEnd,
+  pathUserByCardId,
 } from 'src/utils/httpUtil'
 import { routeExamSignList } from 'src/utils/routeUtil'
 import { message } from 'antd'
 import { buildParameters } from 'src/utils/common'
+import { validateIdCard } from 'src/utils/idCard'
 
 export const payedOptions = [
   { title: '是', value: true },
@@ -31,11 +33,7 @@ export const onFinish = (
     if (!isExaming) {
       await api.post(pathSignOffline(values))
     } else {
-      await signWhenExaming(
-        pathSignOfflineWhenExaming,
-        values,
-        selectedLevelIds
-      )
+      await await api.post(buildParameters(pathSignOfflineWhenExaming, values))
     }
   }
   // 编辑报名基本信息调用一个接口，然后级别和考场信息在考试报名截止前和截止后需要调用不同的两个接口
@@ -47,7 +45,11 @@ export const onFinish = (
       await api.post(buildParameters(pathSignEditBeforeSignEnd, values))
     } else {
       // 这里单独的接口是因为报名截止后需要人工指定级别考场
-      await signWhenExaming(pathSignEditAfterSignEnd, values, selectedLevelIds)
+      await editSignWhenExaming(
+        pathSignEditAfterSignEnd,
+        values,
+        selectedLevelIds
+      )
     }
   }
 
@@ -55,13 +57,32 @@ export const onFinish = (
   history.push(routeExamSignList(examId))
 }
 
-export const signWhenExaming = async (path, values, selectedLevelIds) => {
+export const editSignWhenExaming = async (path, values, selectedLevelIds) => {
   const levelRoomMap = {}
   selectedLevelIds.forEach((levelId) => {
-    levelRoomMap[levelId] = values[`level_${levelId}_room`]
+    levelRoomMap[levelId] = values[`level_${levelId}_room`] ?? -1
   })
   await api.post(path, {
     examinationSignInfo: values,
     levelRoomMap,
   })
+}
+
+export const validateIdCardForm = (rule, value) => {
+  if (validateIdCard(value) || value === '') {
+    return Promise.resolve()
+  }
+  return Promise.reject('输入的身份证号不正确')
+}
+
+export const onValuesChange = (form) => async (values) => {
+  if (validateIdCard(values.cardId)) {
+    const result = await api.get(pathUserByCardId(values.cardId))
+    form.setFieldsValue({
+      name: result.name,
+      phone: result.phone,
+      faceUrl: result.faceUrl,
+      address: result.address,
+    })
+  }
 }

@@ -26,6 +26,8 @@ import Certificate from './Certificate/Certificate'
 import PrintExamCertif from './PrintExamCertif'
 import PrintReport from './PrintReport'
 import CoachClassList from './Coach/CoachClassList'
+import Account from './Account'
+import ResourcePool from './ResourcePool'
 
 export const routes = [
   { path: '/login', comp: Login },
@@ -103,12 +105,30 @@ export const routes = [
     },
   },
   {
+    path: '/exam/:id/resource-pool-sign/:signId',
+    comp: ExamSign,
+    back: {
+      path: '/exam/:id/resource-pool',
+      params: ['id'],
+      breadcrumbs: ['考试管理', '资源池列表', '编辑报名'],
+    },
+  },
+  {
     path: '/exam/:id/sign/:signId/detail',
     comp: ExamSignDetail,
     back: {
       path: '/exam/:id/signs',
       params: ['id'],
       breadcrumbs: ['考试管理', '报考列表', '报名详情'],
+    },
+  },
+  {
+    path: '/exam/:id/resource-pool-sign/:signId/detail',
+    comp: ExamSignDetail,
+    back: {
+      path: '/exam/:id/resource-pool',
+      params: ['id'],
+      breadcrumbs: ['考试管理', '资源池列表', '报名详情'],
     },
   },
   {
@@ -238,6 +258,15 @@ export const routes = [
     back: { path: '/rooms', breadcrumbs: ['考场管理', '编辑考场'] },
   },
   {
+    path: '/exam/:id/resource-pool',
+    comp: ResourcePool,
+    title: '资源池',
+    back: {
+      path: '/exams',
+      breadcrumbs: ['考试管理', '资源池列表'],
+    },
+  },
+  {
     path: '/certificate',
     comp: Certificate,
     back: {
@@ -259,6 +288,10 @@ export const routes = [
     title: '学校',
     defaultPath: '/school',
     comp: Parameter,
+  },
+  {
+    path: '/accounts',
+    comp: Account,
   },
 ]
 

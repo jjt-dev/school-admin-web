@@ -138,7 +138,7 @@ const ReportVertical = ({
                 考官评语
               </div>
               <div className="item-result__comments-item examiner-comment">
-                <div className="examiner-comment__sign">考官签字:</div>
+                <div className="examiner-comment__sign">【考官】:</div>
               </div>
               <div className="item-result__comments-item writing-mode-vertical">
                 备注
@@ -147,7 +147,6 @@ const ReportVertical = ({
                 <div>1.考官未打分的科目属于本级别规定不考科目</div>
                 <div>2.考试合格的学员凭此表领取证书和腰带</div>
                 <div>3.考试不合格的学员凭补考单进行补考 (限补考一次)</div>
-                <div>4.此表盖章有效</div>
               </div>
             </div>
           </div>

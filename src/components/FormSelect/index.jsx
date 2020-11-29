@@ -13,6 +13,7 @@ const FormSelect = ({
   valueKey = 'id',
   titleKey = 'id',
   mode = null,
+  hidden = false,
 }) => {
   return (
     <Form.Item
@@ -20,6 +21,7 @@ const FormSelect = ({
       label={label}
       name={name}
       initialValue={initialValue}
+      hidden={hidden}
     >
       <Select placeholder={message} mode={mode}>
         {options.map((item) => (

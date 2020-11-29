@@ -30,8 +30,10 @@ export const mapReportValue = (student, examResult = {}) => {
     signLevelName,
   } = student
   const { roundNum, subOrderNum, levelName, levelAlias } = examResult
+  // 补考场次是负数，这里如果是补考加1000显示正数来区分
+  const finalRoundNum = roundNum > 0 ? roundNum : roundNum + 1000
   return {
-    考号: `${roundNum}-${addNumPrefix(subOrderNum)}`,
+    考号: `${finalRoundNum}-${addNumPrefix(subOrderNum)}`,
     姓名: studentName,
     性别: Genders[studentGender],
     出生时间: formatTime(studentBirthday),

@@ -1,52 +1,84 @@
-import React, { useState } from 'react'
 import './index.less'
-import api from 'src/utils/api'
-import { message, Select, Tag } from 'antd'
+
+import { Button, message, Select, Tag } from 'antd'
+import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
-import RoundExamineeModal from './RoundExamineeModal'
-import PageListCustom from 'src/components/PageListCustom'
-import { addRoundNumPrefix, tableOrder, getCustomRow } from 'src/utils/common'
-import {
-  pathRoundAndRoom,
-  pathUpdRoundRoom,
-  pathExam,
-} from 'src/utils/httpUtil'
 import CustomTable from 'src/components/CustomTable'
-import useTableFetch from 'src/hooks/useTableFetch'
+import PageListCustom from 'src/components/PageListCustom'
 import useFetch from 'src/hooks/useFetch'
+import useTableFetch from 'src/hooks/useTableFetch'
+import api from 'src/utils/api'
+import { addRoundNumPrefix, getCustomRow, tableOrder } from 'src/utils/common'
+import {
+  pathExam,
+  pathRoundAndRoom,
+  pathUpdRoundRoom as pathUpdRoundsRoom,
+} from 'src/utils/httpUtil'
+
+import RoundExamineeModal from './RoundExamineeModal'
+import Rounds from './Rounds'
 
 const RoundAndRoom = ({ match }) => {
-  const [selectedRound, setSelectedRound] = useState()
-  const { allRooms } = useSelector((state) => state.app)
   const examId = match.params.id
   const [exam = {}] = useFetch(pathExam(examId))
+  const [toggleCellTable, setToggleCellTable] = useState(false)
+  const [showMultSelect, setShowMultiSelect] = useState(false)
+  const [selectedRound, setSelectedRound] = useState()
+  const { allRooms } = useSelector((state) => state.app)
   const tableList = useTableFetch(pathRoundAndRoom, { examinationId: examId })
+  const title = `${exam.title}考场分配`
 
-  const updateRoundRoom = async (sourceId, newRoomId) => {
-    await api.post(pathUpdRoundRoom(sourceId, newRoomId))
+  const updateRoundsRoom = async (sourceIds, newRoomId) => {
+    await api.post(pathUpdRoundsRoom(sourceIds, newRoomId))
     message.success(`更新考场成功`)
   }
 
-  const hideRoundExamineeModal = () => {
-    setSelectedRound()
+  const multiSelectProps = {
+    examId,
+    allRooms,
+    setToggleCellTable,
+    setShowMultiSelect,
+    updateRoundsRoom,
+    title,
+    hideModal: () => setShowMultiSelect(false),
   }
 
   return (
     <PageListCustom
-      title={`${exam.title}考场分配`}
-      customClass="round-room-list"
+      title={title}
+      customClass={showMultSelect ? 'multi-select-container' : ''}
     >
-      <CustomTable
-        {...tableList}
-        className="round-room-table"
-        columns={getColumns(allRooms, updateRoundRoom, setSelectedRound)}
-        rowKey="round_num"
-      />
+      {!showMultSelect && (
+        <>
+          <Button
+            type="primary"
+            onClick={() => setShowMultiSelect(true)}
+            size="small"
+            className="multi-select-btn"
+          >
+            多选配置考场
+          </Button>
+          <CustomTable
+            {...tableList}
+            className="round-room-table"
+            columns={getColumns(allRooms, updateRoundsRoom, setSelectedRound)}
+            rowKey="round_num"
+            size="small"
+          />
+        </>
+      )}
+      {showMultSelect && (
+        <>
+          {toggleCellTable
+            ? React.createElement(Rounds, multiSelectProps)
+            : React.createElement(Rounds, multiSelectProps)}
+        </>
+      )}
       {selectedRound && (
         <RoundExamineeModal
           examinationId={examId}
           roundNum={selectedRound.round_num}
-          hideModal={hideRoundExamineeModal}
+          hideModal={() => setSelectedRound()}
         />
       )}
     </PageListCustom>
@@ -60,7 +92,7 @@ const getColumns = (allRooms, updateRoundRoom, setSelectedRound) => [
   getCustomRow('组号', (record) => addRoundNumPrefix(record.round_num), 80),
   {
     title: '教练',
-    width: 300,
+    width: 500,
     render: (text, record) => (
       <>
         {record.coachs.map(({ nickname, id }) => (
@@ -81,6 +113,7 @@ const getColumns = (allRooms, updateRoundRoom, setSelectedRound) => [
             style={{ width: '160px' }}
             defaultValue={record.roomId}
             onChange={(value) => updateRoundRoom(record.id, value)}
+            size="small"
           >
             {allRooms.map((room) => (
               <Select.Option key={room.id} value={room.id}>
