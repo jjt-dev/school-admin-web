@@ -4,7 +4,14 @@ import ImageUpload from '../ImageUpload'
 import { useState } from 'react'
 import { useEffect } from 'react'
 
-const FormImage = ({ form, label, name, message, imageUrl }) => {
+const FormImage = ({
+  form,
+  label,
+  name,
+  message,
+  imageUrl,
+  required = true,
+}) => {
   const [url, setUrl] = useState()
 
   useEffect(() => {
@@ -19,7 +26,7 @@ const FormImage = ({ form, label, name, message, imageUrl }) => {
 
   return (
     <Form.Item
-      rules={[{ required: true, message }]}
+      rules={[{ required, message }]}
       label={label}
       name={name}
       shouldUpdate={() => {

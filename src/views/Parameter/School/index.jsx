@@ -35,6 +35,13 @@ const formItems = [
     comp: 'FormInput',
   },
   {
+    label: '付款码',
+    name: 'qrCodeUrl',
+    comp: 'FormImage',
+    message: '请上传付款码',
+    required: false,
+  },
+  {
     label: '网址',
     name: 'website',
     comp: 'FormInput',
