@@ -1,7 +1,7 @@
 import './index.less'
 
 import { LoadingOutlined, UploadOutlined } from '@ant-design/icons'
-import { Alert, Button, Modal, Upload } from 'antd'
+import { Alert, Button, message, Modal, Upload } from 'antd'
 import { debounce } from 'lodash'
 import React, { useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
@@ -27,6 +27,7 @@ const ImportModal = ({ hideModal, fetchTable }) => {
       })
       fetchTable()
       setErrorMsg(null)
+      message.success('上传考生信息成功')
     } catch (e) {
       setErrorMsg(e.msg)
     } finally {
@@ -53,11 +54,7 @@ const ImportModal = ({ hideModal, fetchTable }) => {
           <Button key="back" onClick={hideModal} className="mr-10">
             取消
           </Button>,
-          <Button
-            key="template"
-            onClick={() => window.open(getSignTemplate(), '_blank')}
-            className="mr-10"
-          >
+          <Button key="template" href={getSignTemplate()} className="mr-10">
             下载模板
           </Button>,
           <Upload
@@ -81,9 +78,18 @@ const ImportModal = ({ hideModal, fetchTable }) => {
         ]}
       >
         {errorMsg && <Alert message={errorMsg} type="error" closable />}
-        <div>1, 如果没有模板请首先下载excel模板并填写考生信息</div>
+        <div>
+          1, 如果没有模板请首先下载
+          <Button type="link" href={getSignTemplate()}>
+            excel模板
+          </Button>
+          并填写考生信息
+        </div>
         <div>2, 只能选择一个excel文件并且同时选择所有考生的图片</div>
-        <div>3, 考生图片命名规则: 姓名+身份证号</div>
+        <div>
+          3, 考生图片命名规则:
+          <label className="naming-rule"> 姓名+身份证号</label>
+        </div>
       </Modal>
     </div>
   )
