@@ -108,7 +108,10 @@ const Header = ({
         )}
       </ListHeaderRight>
       {showImportModal && (
-        <ImportModal hideModal={() => setShowImportModal(false)} />
+        <ImportModal
+          hideModal={() => setShowImportModal(false)}
+          fetchTable={fetchTable}
+        />
       )}
     </ListHeaderCustom>
   )

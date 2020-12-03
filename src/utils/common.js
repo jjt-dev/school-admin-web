@@ -49,6 +49,8 @@ export const getApiRootImg = () => process.env.REACT_APP_API_IMAGE
 
 export const getDomain = () => process.env.REACT_APP_DOMAIN
 
+export const getApiRoot = () => process.env.REACT_APP_API_ROOT
+
 export const addNumPrefix = (value) => {
   const absValue = String(Math.abs(value))
   if (absValue.length === 1) return '00' + absValue
