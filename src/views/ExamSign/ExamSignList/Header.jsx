@@ -1,13 +1,15 @@
-import React from 'react'
 import { Button, message, Select } from 'antd'
+import React from 'react'
 import { useState } from 'react'
-import { SignStatus, ExamStatus } from 'src/utils/const'
-import CoachClassSelect from './CoachClassSelect'
 import ListHeaderCustom from 'src/components/ListHeaderCustom'
 import ListHeaderLeft from 'src/components/ListHeaderLeft'
 import ListHeaderRight from 'src/components/ListHeaderRight'
-import { pathUploadTaekwondo } from 'src/utils/httpUtil'
 import api from 'src/utils/api'
+import { ExamStatus, SignStatus } from 'src/utils/const'
+import { pathUploadTaekwondo } from 'src/utils/httpUtil'
+
+import CoachClassSelect from './CoachClassSelect'
+import ImportModal from './ImportModal'
 
 const { Option } = Select
 
@@ -29,6 +31,7 @@ const Header = ({
     defaultSelectedClasses.push(coachId)
   }
   const [selectedClasses, setSelectedClasses] = useState(defaultSelectedClasses)
+  const [showImportModal, setShowImportModal] = useState(false)
 
   const clearSearch = () => {
     setSelectedClasses([])
@@ -43,9 +46,18 @@ const Header = ({
     <ListHeaderCustom>
       <ListHeaderLeft>
         {examState <= ExamStatus.signing.id && (
-          <Button size="small" type="primary" onClick={handleSign}>
-            报名
-          </Button>
+          <>
+            <Button size="small" type="primary" onClick={handleSign}>
+              报名
+            </Button>
+            <Button
+              size="small"
+              type="primary"
+              onClick={() => setShowImportModal(true)}
+            >
+              导入考生
+            </Button>
+          </>
         )}
         {(examState === ExamStatus.waitForExam.id ||
           examState === ExamStatus.examing.id) && (
@@ -95,6 +107,9 @@ const Header = ({
           />
         )}
       </ListHeaderRight>
+      {showImportModal && (
+        <ImportModal hideModal={() => setShowImportModal(false)} />
+      )}
     </ListHeaderCustom>
   )
 }
