@@ -6,6 +6,7 @@ import { debounce } from 'lodash'
 import React, { useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import api from 'src/utils/api'
+import { getSignTemplate } from 'src/utils/common'
 
 const ImportModal = ({ hideModal, fetchTable }) => {
   const { id } = useParams()
@@ -49,8 +50,15 @@ const ImportModal = ({ hideModal, fetchTable }) => {
         visible={true}
         onCancel={hideModal}
         footer={[
-          <Button key="back" onClick={hideModal} className="cancel-import">
+          <Button key="back" onClick={hideModal} className="mr-10">
             取消
+          </Button>,
+          <Button
+            key="template"
+            onClick={() => window.open(getSignTemplate(), '_blank')}
+            className="mr-10"
+          >
+            下载模板
           </Button>,
           <Upload
             name="files"
