@@ -28,6 +28,7 @@ const ImportModal = ({ hideModal, fetchTable }) => {
       fetchTable()
       setErrorMsg(null)
       message.success('上传考生信息成功')
+      hideModal()
     } catch (e) {
       setErrorMsg(e.msg)
     } finally {
