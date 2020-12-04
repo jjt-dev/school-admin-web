@@ -14,7 +14,6 @@ import {
   pathCanSignLevels,
   pathCoachClasses,
 } from 'src/utils/httpUtil'
-import LevelRoom from './LevelRoom'
 import './index.less'
 import { checkIsExaming } from 'src/utils/common'
 import {
@@ -128,14 +127,6 @@ const ExamSign = ({ history }) => {
           ))}
         </Select>
       </Form.Item>
-      {/* 考试报名截止时间后报名需要给每一个等级选择考场 */}
-      {isEdit && !sign.isTempSign && (
-        <LevelRoom
-          exam={exam}
-          levelIds={selectedLevelIds}
-          levels={availableExamLevels}
-        />
-      )}
       {!isEdit && (
         <FormRadioGroup
           label="已缴费"
