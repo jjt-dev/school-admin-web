@@ -8,7 +8,7 @@ import ExamResult from './ExamResult'
 const MiniProgram = () => {
   const { page } = useSearch()
   return (
-    <div className="mini-program">
+    <div className={`mini-program ${page}`}>
       {page === 'qrcode' && <QrCode />}
       {page === 'examResult' && <ExamResult />}
     </div>

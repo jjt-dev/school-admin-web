@@ -18,6 +18,7 @@ class ReportVertical extends React.Component {
       basicInfos: [],
       rightImg: '',
       withBgImg: true,
+      isMiniProgram: !!this.props.signId,
     }
     this.myRef = React.createRef()
   }
@@ -28,7 +29,11 @@ class ReportVertical extends React.Component {
 
   componentDidMount() {
     const fetchData = async () => {
-      const result = await api.get(`/config/file/getFileTemplate?type=0`)
+      // 如果有signId,则是为了小程序展示用
+      const url = this.state.isMiniProgram
+        ? `/client/getFileTemplate?type=0&signId=${this.props.signId}`
+        : `/config/file/getFileTemplate?type=0`
+      const result = await api.get(url)
       this.setState({
         ...this.state,
         template: result,
@@ -47,6 +52,7 @@ class ReportVertical extends React.Component {
   }
 
   render() {
+    const { isMiniProgram } = this.state
     const { studentInfo, examResults } = this.props.examResultContainer
     const bgImageLink = this.state.withBgImg
       ? `url(${getDomain()}${this.state.template.bgUrl})`
@@ -54,18 +60,20 @@ class ReportVertical extends React.Component {
 
     return (
       <div className="report-vertical">
-        <div className="report-header">
-          <ReactToPrint
-            trigger={() => <Button size="small">打印</Button>}
-            content={() => this.myRef.current}
-          />
-          <Switch
-            onChange={this.toggleBgImage}
-            checkedChildren="显示背景"
-            unCheckedChildren="隐藏背景"
-            defaultChecked
-          />
-        </div>
+        {!isMiniProgram && (
+          <div className="report-header">
+            <ReactToPrint
+              trigger={() => <Button size="small">打印</Button>}
+              content={() => this.myRef.current}
+            />
+            <Switch
+              onChange={this.toggleBgImage}
+              checkedChildren="显示背景"
+              unCheckedChildren="隐藏背景"
+              defaultChecked
+            />
+          </div>
+        )}
         <div className="report-vertical__content" ref={this.myRef}>
           {examResults.map((examResult, index) => {
             const { studentFaceUrl, schoolName } = studentInfo

@@ -59,15 +59,15 @@ const App = () => {
   }
 
   return (
-    <div
-      className={classnames('app', {
-        'breadcrumb-active': activeRoute.back,
-        'print-certificate': activeRoute.isPrintCertif,
-        'login-page': isLogin,
-      })}
-    >
+    <>
       {!isMiniProgram && (
-        <>
+        <div
+          className={classnames('app', {
+            'breadcrumb-active': activeRoute.back,
+            'print-certificate': activeRoute.isPrintCertif,
+            'login-page': isLogin,
+          })}
+        >
           <Header
             user={user}
             courses={allCourses}
@@ -82,10 +82,10 @@ const App = () => {
           </main>
           {loading && <Spin />}
           <ChromeCheck />
-        </>
+        </div>
       )}
-      {isMiniProgram && <MiniProgram />}
-    </div>
+      <>{isMiniProgram && <MiniProgram />}</>
+    </>
   )
 }
 

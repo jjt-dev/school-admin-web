@@ -12,15 +12,15 @@ const ExamResult = () => {
   const [examResult] = useFetch(`/client/studentExamResult?signId=${signId}`)
 
   return (
-    <div className="page print-report">
+    <>
       {examResult ? (
-        <ReportVertical examResultContainer={examResult} />
+        <ReportVertical examResultContainer={examResult} signId={signId} />
       ) : (
         <div className="no-exam-results">
           <Empty description="没有考试结果" />
         </div>
       )}
-    </div>
+    </>
   )
 }
 
