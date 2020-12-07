@@ -8,13 +8,13 @@ import useSearch from 'src/hooks/useSearch'
 import ReportVertical from '../PrintReport/ReportVertical'
 
 const ExamResult = () => {
-  const { signId } = useSearch()
-  const [examResult] = useFetch(`/client/studentExamResult?signId=${signId}`)
+  const { cardId } = useSearch()
+  const [examResult] = useFetch(`/client/studentExamResult?cardId=${cardId}`)
 
   return (
     <>
       {examResult ? (
-        <ReportVertical examResultContainer={examResult} signId={signId} />
+        <ReportVertical examResultContainer={examResult} cardId={cardId} />
       ) : (
         <div className="no-exam-results">
           <Empty description="没有考试结果" />

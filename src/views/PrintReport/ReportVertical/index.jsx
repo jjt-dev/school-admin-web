@@ -18,7 +18,7 @@ class ReportVertical extends React.Component {
       basicInfos: [],
       rightImg: '',
       withBgImg: true,
-      isMiniProgram: !!this.props.signId,
+      isMiniProgram: !!this.props.cardId,
     }
     this.myRef = React.createRef()
   }
@@ -29,9 +29,9 @@ class ReportVertical extends React.Component {
 
   componentDidMount() {
     const fetchData = async () => {
-      // 如果有signId,则是为了小程序展示用
+      // cardId,则是为了小程序展示用
       const url = this.state.isMiniProgram
-        ? `/client/getFileTemplate?type=0&signId=${this.props.signId}`
+        ? `/client/getFileTemplate?type=0&cardId=${this.props.cardId}`
         : `/config/file/getFileTemplate?type=0`
       const result = await api.get(url)
       this.setState({
