@@ -15,13 +15,16 @@ import useSearch from 'src/hooks/useSearch'
 import Router from '../Router'
 import './index.less'
 import ChromeCheck from './ChromeCheck'
+import MiniProgram from '../MiniProgram'
 
 const App = () => {
+  const { mode } = useSearch()
   const dispatch = useDispatch()
   const activeRoute = useActiveRoute()
   const isLogin = useLogin()
   const { loading, user, allCourses } = useSelector((state) => state.app)
   const { schoolCode } = useSearch()
+  const isMiniProgram = mode === 'miniProgram'
 
   /**
    * 从用户输入的url中拿到schoolCode
@@ -63,16 +66,25 @@ const App = () => {
         'login-page': isLogin,
       })}
     >
-      <Header user={user} courses={allCourses} changeCourse={changeCourse} />
-      <main>
-        <SideMenu />
-        <ErrorBoundary>
-          <JjtBreadcrumb />
-          {isLogin || user ? <Router /> : <div></div>}
-        </ErrorBoundary>
-      </main>
-      {loading && <Spin />}
-      <ChromeCheck />
+      {!isMiniProgram && (
+        <>
+          <Header
+            user={user}
+            courses={allCourses}
+            changeCourse={changeCourse}
+          />
+          <main>
+            <SideMenu />
+            <ErrorBoundary>
+              <JjtBreadcrumb />
+              {isLogin || user ? <Router /> : <div></div>}
+            </ErrorBoundary>
+          </main>
+          {loading && <Spin />}
+          <ChromeCheck />
+        </>
+      )}
+      {isMiniProgram && <MiniProgram />}
     </div>
   )
 }
