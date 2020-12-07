@@ -1,9 +1,12 @@
 import './index.less'
 
-import React, { useEffect } from 'react'
+import React from 'react'
+import useSearch from 'src/hooks/useSearch'
+import QrCode from './QrCode'
 
 const MiniProgram = () => {
-  return <div className="login"></div>
+  const { page } = useSearch()
+  return <div className="mini-program">{page === 'qrcode' && <QrCode />}</div>
 }
 
 export default MiniProgram

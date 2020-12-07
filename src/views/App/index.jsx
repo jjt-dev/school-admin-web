@@ -37,13 +37,13 @@ const App = () => {
   })
 
   useEffect(() => {
-    if (!isLogin) {
+    if (!isLogin && !isMiniProgram) {
       dispatch(appAction.getUserInfo())
     }
-  }, [dispatch, isLogin])
+  }, [dispatch, isLogin, isMiniProgram])
 
   useEffect(() => {
-    if (user) {
+    if (user && !isMiniProgram) {
       dispatch(appAction.getAllCourses())
       dispatch(appAction.getAllCoaches())
       dispatch(appAction.getAllExamLevels())
@@ -51,7 +51,7 @@ const App = () => {
       dispatch(appAction.getAllExaminers())
       dispatch(appAction.getAllRooms())
     }
-  }, [dispatch, user])
+  }, [dispatch, isMiniProgram, user])
 
   const changeCourse = (courseId) => {
     local.setItem('course', courseId)
