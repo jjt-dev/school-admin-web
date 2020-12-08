@@ -31,6 +31,8 @@ const ImportModal = ({ hideModal, fetchTable }) => {
         const errorMsg = `图片大小不能超过${imgMaxSize}k`
         setErrorMsg(errorMsg)
         message.error(errorMsg)
+        filesRef.current = []
+        setLoading(false)
         return
       }
 
@@ -53,6 +55,7 @@ const ImportModal = ({ hideModal, fetchTable }) => {
   }, 1000)
 
   const beforeUpload = (file) => {
+    setErrorMsg(null)
     setLoading(true)
     filesRef.current.push(file)
     uploadFiles()
