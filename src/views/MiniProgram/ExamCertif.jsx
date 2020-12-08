@@ -6,7 +6,7 @@ import useSearch from 'src/hooks/useSearch'
 import api from 'src/utils/api'
 import ExamCertifPrint from '../PrintExamCertif/ExamCertifPrint'
 
-const ExamCertif = () => {
+const ExamCertif = ({ isMiniProgram = false }) => {
   const { signId } = useSearch()
   const [template, setTemplate] = useState()
   const [schoolConfig, setSchoolConfig] = useState()
@@ -38,6 +38,7 @@ const ExamCertif = () => {
     <>
       {schoolConfig && examCertifInfos && (
         <ExamCertifPrint
+          isMiniProgram={isMiniProgram}
           template={template}
           examCertifInfos={examCertifInfos}
           schoolConfig={schoolConfig}

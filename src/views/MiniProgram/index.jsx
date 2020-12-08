@@ -16,7 +16,7 @@ const MiniProgram = () => {
     <div className={`mini-program ${page} ${getClass(windowWidth)}`}>
       {page === 'qrcode' && <QrCode />}
       {page === 'examResult' && <ExamResult />}
-      {page === 'examCertif' && <ExamCertif />}
+      {page === 'examCertif' && <ExamCertif isMiniProgram />}
     </div>
   )
 }

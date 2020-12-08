@@ -21,19 +21,26 @@ class ExamCertifPrint extends React.Component {
   }
 
   render() {
+    const { isMiniProgram } = this.props
+
     return (
       <div className="page exam-certif-print">
-        <div className="exam-certif-print__header">
-          <ReactToPrint
-            trigger={() => <Button>打印</Button>}
-            content={() => this.myRef.current}
-          />
-        </div>
+        {!isMiniProgram && (
+          <div className="exam-certif-print__header">
+            <ReactToPrint
+              trigger={() => <Button>打印</Button>}
+              content={() => this.myRef.current}
+            />
+          </div>
+        )}
         <div className="exam-certif-print__content" ref={this.myRef}>
           {this.props.examCertifInfos.map((examCertifInfo, index) => {
             const mappedValue = mapExamCertifValue({ ...examCertifInfo })
             return (
-              <div className="exam-certif-print__content-item" key={index}>
+              <div
+                className={`exam-certif-print__content-item mini-program-${isMiniProgram}`}
+                key={index}
+              >
                 <div className="exam-certif-print__content-item-logo">
                   {this.props.schoolConfig.logoUrl && (
                     <img
