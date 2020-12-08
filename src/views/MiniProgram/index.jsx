@@ -2,9 +2,11 @@ import './index.less'
 
 import React from 'react'
 import useSearch from 'src/hooks/useSearch'
-import QrCode from './QrCode'
-import ExamResult from './ExamResult'
 import useWindowSize from 'src/hooks/useWindowSize'
+
+import ExamCertif from './ExamCertif'
+import ExamResult from './ExamResult'
+import QrCode from './QrCode'
 
 const MiniProgram = () => {
   const { page } = useSearch()
@@ -14,6 +16,7 @@ const MiniProgram = () => {
     <div className={`mini-program ${page} ${getClass(windowWidth)}`}>
       {page === 'qrcode' && <QrCode />}
       {page === 'examResult' && <ExamResult />}
+      {page === 'examCertif' && <ExamCertif />}
     </div>
   )
 }

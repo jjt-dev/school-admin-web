@@ -39,7 +39,7 @@ const PrintExamCertif = ({ match, location }) => {
 
   if (!template) {
     return (
-      <Empty className="no-exam-certif-template" description="没有准考证摸板" />
+      <Empty className="no-exam-certif-template" description="没有准考证模板" />
     )
   }
 
