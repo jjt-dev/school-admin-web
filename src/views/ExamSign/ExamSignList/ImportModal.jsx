@@ -91,6 +91,7 @@ const ImportModal = ({ hideModal, fetchTable }) => {
           3, 考生图片命名规则:
           <label className="naming-rule"> 姓名+身份证号</label>
         </div>
+        <div>4, 图片大小不能超过200K</div>
       </Modal>
     </div>
   )
