@@ -21,7 +21,7 @@ const ExamCertif = ({ isMiniProgram = false }) => {
       setSchoolConfig(result.signInfo.schoolInfo)
       const examCertifInfos = []
       result.signInfo.signLevels.forEach((signLevel) => {
-        examCertifInfos.push({ ...result, signLevel })
+        examCertifInfos.push({ ...result.signInfo, signLevel })
       })
       setExamCertifInfos(examCertifInfos)
     }
