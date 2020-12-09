@@ -13,12 +13,29 @@ const ImportModal = ({ hideModal, fetchTable }) => {
   const [loading, setLoading] = useState(false)
   const [errorMsg, setErrorMsg] = useState(null)
   const filesRef = useRef([])
+  const imgMaxSize = 200
 
   const uploadFiles = debounce(async () => {
     try {
       setLoading(true)
       let params = new FormData()
       params.append('examId', id)
+
+      const hasImgOverSize = filesRef.current.some((file) => {
+        const isMoreThan200k =
+          file.type.startsWith('image') && file.size / 1024 > imgMaxSize
+        return isMoreThan200k
+      })
+
+      if (hasImgOverSize) {
+        const errorMsg = `图片大小不能超过${imgMaxSize}k`
+        setErrorMsg(errorMsg)
+        message.error(errorMsg)
+        filesRef.current = []
+        setLoading(false)
+        return
+      }
+
       filesRef.current.forEach((file) => {
         params.append('files', file)
       })
@@ -38,6 +55,7 @@ const ImportModal = ({ hideModal, fetchTable }) => {
   }, 1000)
 
   const beforeUpload = (file) => {
+    setErrorMsg(null)
     setLoading(true)
     filesRef.current.push(file)
     uploadFiles()
@@ -91,7 +109,9 @@ const ImportModal = ({ hideModal, fetchTable }) => {
           3, 考生图片命名规则:
           <label className="naming-rule"> 姓名+身份证号</label>
         </div>
-        <div>4, 图片大小不能超过200K</div>
+        <div>
+          4, 图片大小不能超过:<label className="naming-rule"> 200K</label>
+        </div>
       </Modal>
     </div>
   )
