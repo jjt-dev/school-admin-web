@@ -19,6 +19,7 @@ const PageList = ({
   title: defaultTitle,
   customClass = '',
   defaultSearch = {},
+  updateCallback,
 }) => {
   const {
     editPath,
@@ -43,12 +44,16 @@ const PageList = ({
 
   const updateEntityStatus = (entity) => {
     const { isEnable } = entity
+    const callback = () => {
+      tableList.fetchTable()
+      updateCallback && updateCallback()
+    }
     const payload = {
       status: isEnable ? '禁用' : '启用',
       title,
       titleValue: entity[titleProp],
       path: `${apiPath}/enable?id=${entity.id}&isEnable=${!isEnable}`,
-      callback: tableList.fetchTable,
+      callback,
     }
     confirmUpdate(payload)
   }

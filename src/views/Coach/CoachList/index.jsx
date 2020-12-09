@@ -8,9 +8,14 @@ import {
   tableOrder,
   getSwitchRow,
 } from 'src/utils/common'
+import * as appAction from 'src/actions/app'
+import { useDispatch } from 'react-redux'
 
 const CoachList = () => {
-  return <PageList columns={getColumns} />
+  const dispatch = useDispatch()
+  const getAllCoaches = () => dispatch(appAction.getAllCoaches())
+
+  return <PageList columns={getColumns} updateCallback={getAllCoaches} />
 }
 
 export default CoachList
