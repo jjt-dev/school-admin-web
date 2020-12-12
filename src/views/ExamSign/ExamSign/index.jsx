@@ -78,7 +78,14 @@ const ExamSign = ({ history }) => {
   return (
     <PageFormCustom
       form={form}
-      onFinish={onFinish(history, examId, isEdit, isExaming, selectedLevelIds)}
+      onFinish={onFinish(
+        history,
+        examId,
+        isEdit,
+        isExaming,
+        selectedLevelIds,
+        signId
+      )}
       onValuesChange={onValuesChange(form)}
       fullTitle={`${titlePrefix} (${exam.title})`}
       customClass="exam-sign"
@@ -86,7 +93,6 @@ const ExamSign = ({ history }) => {
       <FormInput
         label="考生身份证号"
         name="cardId"
-        disabled={isEdit}
         rules={[{ validator: validateIdCardForm }, { required: true }]}
       />
       <FormInput label="考生姓名" name="name" />

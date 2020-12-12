@@ -22,7 +22,8 @@ export const onFinish = (
   examId,
   isEdit,
   isExaming,
-  selectedLevelIds
+  selectedLevelIds,
+  signId
 ) => async (values) => {
   values.currState = values.isPayed ? 10 : 0
   values.examinationId = examId
@@ -39,7 +40,9 @@ export const onFinish = (
   // 编辑报名基本信息调用一个接口，然后级别和考场信息在考试报名截止前和截止后需要调用不同的两个接口
   // 两个接口的区别是报名截止后编辑级别需要手动输入级别的考场信息
   if (isEdit) {
-    await api.post(buildParameters(pathSignEditBasicInfo, values))
+    await api.post(
+      buildParameters(pathSignEditBasicInfo, { ...values, signId })
+    )
     if (!isExaming) {
       // 这里传的参数和基本信息是一样的，是因为基本信息接口会忽略级别相关信息，而截止报名前接口会更新级别相关信息
       await api.post(buildParameters(pathSignEditBeforeSignEnd, values))
