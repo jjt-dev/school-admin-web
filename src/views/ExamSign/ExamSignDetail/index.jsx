@@ -11,9 +11,6 @@ const ExamSignDetail = ({ match, history }) => {
   const { allCoaches } = useSelector((state) => state.app)
   let [sign] = useFetch(`/exam/sign/signInfo?signId=${signId}`)
   const [exam = {}] = useFetch(`/examination/item?id=${examId}`)
-  // 当前只有一个等级考试
-  const signLevel = (sign && sign.signLevels[0]) || {}
-  const examFinished = signLevel.resultScore !== -1
 
   const goToPrint = (type) => {
     history.push(`/exam/${examId}/sign/${signId}/print/${type}`)
@@ -71,16 +68,12 @@ const ExamSignDetail = ({ match, history }) => {
             </Descriptions.Item>
           </Descriptions>
           <div className="sign-detail__btns">
-            {!examFinished && (
-              <Button type="primary" onClick={() => goToPrint('exam-certif')}>
-                打印准考证
-              </Button>
-            )}
-            {examFinished && (
-              <Button type="primary" onClick={() => goToPrint('report')}>
-                打印成绩单
-              </Button>
-            )}
+            <Button type="primary" onClick={() => goToPrint('exam-certif')}>
+              打印准考证
+            </Button>
+            <Button type="primary" onClick={() => goToPrint('report')}>
+              打印成绩单
+            </Button>
           </div>
         </div>
       )}
