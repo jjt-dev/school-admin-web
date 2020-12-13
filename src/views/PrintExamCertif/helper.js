@@ -15,7 +15,7 @@ export const mapExamCertifValue = ({
     报考级别: signLevel.levelName,
     申请带色: signLevel.levelAlias,
     指导教练: studentInfo.coach,
-    考试时间: formatTime(signLevel.examStartTime),
+    考试时间: formatTime(signLevel.examStartTime, 'YYYY-MM-DD HH:MM'),
     考试地点: signLevel.examAddress,
     cardId: studentInfo.studentCardId,
   }
