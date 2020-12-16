@@ -1,4 +1,4 @@
-import { Genders } from 'src/utils/const'
+import { Genders, timeFormat } from 'src/utils/const'
 import { formatTime, addNumPrefix, parseSearches } from 'src/utils/common'
 
 export const mapExamCertifValue = ({
@@ -15,7 +15,7 @@ export const mapExamCertifValue = ({
     报考级别: signLevel.levelName,
     申请带色: signLevel.levelAlias,
     指导教练: studentInfo.coach,
-    考试时间: formatTime(signLevel.examStartTime, 'YYYY-MM-DD HH:MM'),
+    考试时间: formatTime(signLevel.examStartTime, timeFormat),
     考试地点: signLevel.examAddress,
     cardId: studentInfo.studentCardId,
   }
