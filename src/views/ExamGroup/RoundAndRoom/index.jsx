@@ -31,6 +31,7 @@ const RoundAndRoom = ({ match }) => {
   const updateRoundsRoom = async (sourceIds, newRoomId) => {
     await api.post(pathUpdRoundsRoom(sourceIds, newRoomId))
     message.success(`更新考场成功`)
+    tableList.fetchTable()
   }
 
   const multiSelectProps = {
