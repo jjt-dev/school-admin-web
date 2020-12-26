@@ -29,7 +29,6 @@ class ReportVertical extends React.Component {
 
   componentDidMount() {
     const fetchData = async () => {
-      // cardId,则是为了小程序展示用
       const url = this.state.isMiniProgram
         ? `/client/getFileTemplate?type=0&cardId=${this.props.cardId}`
         : `/config/file/getFileTemplate?type=0`
@@ -58,6 +57,32 @@ class ReportVertical extends React.Component {
       ? `url(${getDomain()}${this.state.template.bgUrl})`
       : ''
 
+    const printMap = {
+      1: 1133,
+      2: 1136.1,
+      3: 1136.1,
+      4: 1136.1,
+      5: 1136.1,
+      6: 1136.05,
+      7: 1136.05,
+      8: 1136.05,
+      9: 1136.05,
+      10: 1136.05,
+    }
+
+    const items = [
+      ...examResults,
+      ...examResults,
+      ...examResults,
+      ...examResults,
+      ...examResults,
+      ...examResults,
+      ...examResults,
+      ...examResults,
+      ...examResults,
+      ...examResults,
+    ]
+
     return (
       <div className="report-vertical">
         {!isMiniProgram && (
@@ -75,14 +100,17 @@ class ReportVertical extends React.Component {
           </div>
         )}
         <div className="report-vertical__content" ref={this.myRef}>
-          {examResults.map((examResult, index) => {
+          {items.map((examResult, index) => {
             const { studentFaceUrl, schoolName } = studentInfo
             const mappedValue = mapReportValue(studentInfo, examResult)
             return (
               <div
                 key={index}
                 className="report-vertical__content-report"
-                style={{ backgroundImage: bgImageLink }}
+                style={{
+                  backgroundImage: bgImageLink,
+                  height: `${printMap[items.length]}px`,
+                }}
               >
                 <div className="report-vertical__content-report-edit">
                   <div className="basic-info">
