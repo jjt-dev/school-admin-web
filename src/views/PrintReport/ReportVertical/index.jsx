@@ -70,19 +70,6 @@ class ReportVertical extends React.Component {
       10: 1136.05,
     }
 
-    const items = [
-      ...examResults,
-      ...examResults,
-      ...examResults,
-      ...examResults,
-      ...examResults,
-      ...examResults,
-      ...examResults,
-      ...examResults,
-      ...examResults,
-      ...examResults,
-    ]
-
     return (
       <div className="report-vertical">
         {!isMiniProgram && (
@@ -100,7 +87,7 @@ class ReportVertical extends React.Component {
           </div>
         )}
         <div className="report-vertical__content" ref={this.myRef}>
-          {items.map((examResult, index) => {
+          {examResults.map((examResult, index) => {
             const { studentFaceUrl, schoolName } = studentInfo
             const mappedValue = mapReportValue(studentInfo, examResult)
             return (
@@ -109,7 +96,7 @@ class ReportVertical extends React.Component {
                 className="report-vertical__content-report"
                 style={{
                   backgroundImage: bgImageLink,
-                  height: `${printMap[items.length]}px`,
+                  height: `${printMap[examResults.length]}px`,
                 }}
               >
                 <div className="report-vertical__content-report-edit">
