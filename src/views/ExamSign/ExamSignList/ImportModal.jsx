@@ -48,6 +48,9 @@ const ImportModal = ({ hideModal, fetchTable }) => {
       hideModal()
     } catch (e) {
       setErrorMsg(e.msg)
+      if (e.message === 'Network Error') {
+        setErrorMsg('上传文件大小超过限制或者网络错误，请联系管理员')
+      }
     } finally {
       filesRef.current = []
       setLoading(false)
