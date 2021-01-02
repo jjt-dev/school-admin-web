@@ -48,7 +48,7 @@ const ImportModal = ({ hideModal, fetchTable }) => {
       hideModal()
     } catch (e) {
       setErrorMsg(e.msg)
-      if (e.message === 'Network Error') {
+      if (e.includes('413 Request Entity Too Large')) {
         setErrorMsg('上传文件大小超过限制或者网络错误，请联系管理员')
       }
     } finally {
