@@ -1,17 +1,19 @@
 import './index.less'
 
 import { LoadingOutlined, UploadOutlined } from '@ant-design/icons'
-import { Alert, Button, message, Modal, Upload } from 'antd'
+import { Alert, Button, message, Modal, Upload, Table } from 'antd'
 import { debounce } from 'lodash'
 import React, { useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import api from 'src/utils/api'
 import { getSignTemplate } from 'src/utils/common'
+import { getRow, tableOrder } from 'src/utils/tableUtil'
 
 const ImportModal = ({ hideModal, fetchTable }) => {
   const { id } = useParams()
   const [loading, setLoading] = useState(false)
   const [errorMsg, setErrorMsg] = useState(null)
+  const [errorMsgs, setErrorMsgs] = useState([])
   const filesRef = useRef([])
   const imgMaxSize = 200
 
@@ -39,13 +41,22 @@ const ImportModal = ({ hideModal, fetchTable }) => {
       filesRef.current.forEach((file) => {
         params.append('files', file)
       })
-      await api.post(`/exam/sign/importSignInfoFromExcel`, params, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      })
-      fetchTable()
-      setErrorMsg(null)
-      message.success('上传考生信息成功')
-      hideModal()
+      const result = await api.post(
+        `/exam/sign/importSignInfoFromExcel`,
+        params,
+        {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        }
+      )
+
+      if (result.length > 0) {
+        setErrorMsgs(result)
+      } else {
+        fetchTable()
+        setErrorMsg(null)
+        message.success('上传考生信息成功')
+        hideModal()
+      }
     } catch (e) {
       setErrorMsg(e.msg)
       if (e.includes('413 Request Entity Too Large')) {
@@ -59,6 +70,7 @@ const ImportModal = ({ hideModal, fetchTable }) => {
 
   const beforeUpload = (file) => {
     setErrorMsg(null)
+    setErrorMsgs([])
     setLoading(true)
     filesRef.current.push(file)
     uploadFiles()
@@ -68,6 +80,7 @@ const ImportModal = ({ hideModal, fetchTable }) => {
   return (
     <div>
       <Modal
+        width={errorMsgs.length > 0 ? 900 : 500}
         title="上传考生信息要求"
         wrapClassName="import-students"
         visible={true}
@@ -115,9 +128,33 @@ const ImportModal = ({ hideModal, fetchTable }) => {
         <div>
           4, 图片大小不能超过:<label className="naming-rule"> 200K</label>
         </div>
+
+        {errorMsgs.length > 0 && (
+          <Table
+            style={{ marginTop: '20px' }}
+            columns={columns}
+            dataSource={errorMsgs}
+            pagination={{ pageSize: 5 }}
+            bordered
+            size="small"
+            title={() => (
+              <span style={{ color: 'red', fontWeight: 'bold' }}>
+                错误考生信息
+              </span>
+            )}
+          />
+        )}
       </Modal>
     </div>
   )
 }
 
 export default ImportModal
+
+const columns = [
+  tableOrder,
+  getRow('身份证号', 'cardId'),
+  getRow('姓名', 'studentName', 80),
+  getRow('电话', 'phone'),
+  getRow('错误信息', 'errInfo'),
+]
