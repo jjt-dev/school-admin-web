@@ -107,6 +107,7 @@ const Exam = ({ history }) => {
       title={`${examType}考试`}
       customClass="exam"
       onValuesChange={onValuesChange}
+      back="/exams"
     >
       {examInEdit?.isFormal === false && (
         <Button
@@ -137,6 +138,7 @@ const Exam = ({ history }) => {
         label="考试时间"
         name="examTime"
         defaultHours={['09:00', '18:00']}
+        disabledDate={(current) => current && current < signEndTime}
       />
       <LevelRangeItems
         examLevelList={examLevelList}

@@ -5,7 +5,7 @@ import { timeFormat, hourFormat } from 'src/utils/const'
 
 const { RangePicker } = DatePicker
 
-const FormDateRange = ({ label, name, defaultHours }) => {
+const FormDateRange = ({ label, name, defaultHours, disabledDate }) => {
   return (
     <Form.Item
       label={label}
@@ -21,6 +21,7 @@ const FormDateRange = ({ label, name, defaultHours }) => {
           ],
         }}
         format={timeFormat}
+        disabledDate={disabledDate}
       />
     </Form.Item>
   )
