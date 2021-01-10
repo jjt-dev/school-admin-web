@@ -1,29 +1,33 @@
-import React, { useEffect, useCallback, useState } from 'react'
-import { useSelector } from 'react-redux'
-import { Form, Select } from 'antd'
-import useFetch from 'src/hooks/useFetch'
-import PageFormCustom from 'src/components/PageFormCustom'
-import FormSelect from 'src/components/FormSelect'
-import FormInput from 'src/components/FormInput'
-import FormImage from 'src/components/FormImage'
-import FormRadioGroup from 'src/components/FormRadio'
-import { useParams } from 'react-router'
-import {
-  pathExamSign,
-  pathExam,
-  pathCanSignLevels,
-  pathCoachClasses,
-} from 'src/utils/httpUtil'
 import './index.less'
+
+import { Form, Select } from 'antd'
+import React, { useCallback, useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
+import { useHistory, useParams } from 'react-router'
+import FormImage from 'src/components/FormImage'
+import FormInput from 'src/components/FormInput'
+import FormRadioGroup from 'src/components/FormRadio'
+import FormSelect from 'src/components/FormSelect'
+import PageFormCustom from 'src/components/PageFormCustom'
+import useFetch from 'src/hooks/useFetch'
 import { checkIsExaming } from 'src/utils/common'
 import {
-  payedOptions,
+  pathCanSignLevels,
+  pathCoachClasses,
+  pathExam,
+  pathExamSign,
+} from 'src/utils/httpUtil'
+import { routeExamSignList } from 'src/utils/routeUtil'
+
+import {
   onFinish,
-  validateIdCardForm,
   onValuesChange,
+  payedOptions,
+  validateIdCardForm,
 } from './helper'
 
-const ExamSign = ({ history }) => {
+const ExamSign = () => {
+  const history = useHistory()
   const { id, signId } = useParams()
   const examId = Number(id)
   const [form] = Form.useForm()
@@ -89,6 +93,7 @@ const ExamSign = ({ history }) => {
       onValuesChange={onValuesChange(form)}
       fullTitle={`${titlePrefix} (${exam.title})`}
       customClass="exam-sign"
+      back={routeExamSignList(id)}
     >
       <FormInput
         label="考生身份证号"

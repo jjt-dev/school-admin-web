@@ -130,9 +130,9 @@ export const routes = [
   },
   {
     path: '/exam/:id/sign/:signId/print/exam-certif',
-    comp: PrintExamCertif,
+    comp: ExamConfig,
     back: {
-      path: '/exam/:id/sign/:signId/detail',
+      path: '/exam/:id/sign/:signId/detail?key=signs&comp=ExamSignDetail',
       params: ['id', 'signId'],
       breadcrumbs: ['考试管理', '报考列表', '报名详情', '打印准考证'],
     },
@@ -150,9 +150,9 @@ export const routes = [
   },
   {
     path: '/exam/:id/sign/:signId/print/report',
-    comp: PrintReport,
+    comp: ExamConfig,
     back: {
-      path: '/exam/:id/sign/:signId/detail',
+      path: '/exam/:id/sign/:signId/detail?key=signs&comp=ExamSignDetail',
       params: ['id', 'signId'],
       breadcrumbs: ['考试管理', '报考列表', '报名详情', '打印成绩单'],
     },

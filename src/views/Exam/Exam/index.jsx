@@ -16,6 +16,7 @@ import ExamSignList from 'src/views/ExamSign/ExamSignList'
 import PrintExamCertif from 'src/views/PrintExamCertif'
 
 import Exam from './Exam'
+import PrintReport from 'src/views/PrintReport'
 
 const { TabPane } = Tabs
 
@@ -25,6 +26,7 @@ const compMap = {
   ExamSign,
   ExamSignDetail,
   PrintExamCertif,
+  PrintReport,
   ExamGroup,
   StudentExamGroup,
   RoundAndRoom,

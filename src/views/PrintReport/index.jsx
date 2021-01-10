@@ -1,15 +1,18 @@
-import React from 'react'
+import './index.less'
+
 import { Empty, Tabs } from 'antd'
+import React from 'react'
+import { useParams } from 'react-router'
+import useFetch from 'src/hooks/useFetch'
+
+import ReportHoriz from './ReportHoriz'
 import ReportVertical from './ReportVertical'
 import ReportVerticalWithRight from './ReportVerticalWithRight'
-import ReportHoriz from './ReportHoriz'
-import './index.less'
-import useFetch from 'src/hooks/useFetch'
 
 const { TabPane } = Tabs
 
-const PrintReport = ({ match }) => {
-  const { signId } = match.params
+const PrintReport = () => {
+  const { signId } = useParams()
   const [examResult] = useFetch(
     `/exam/sign/getStudentExamResult?signId=${signId}`
   )

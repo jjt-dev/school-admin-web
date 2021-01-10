@@ -1,19 +1,24 @@
-import React from 'react'
 import './index.less'
-import { useSelector } from 'react-redux'
-import { findById, formatTime, getDomain } from 'src/utils/common'
-import { Descriptions, Button } from 'antd'
-import { Genders } from 'src/utils/const'
-import useFetch from 'src/hooks/useFetch'
 
-const ExamSignDetail = ({ match, history }) => {
-  const { id: examId, signId } = match.params
+import { Button, Descriptions } from 'antd'
+import React from 'react'
+import { useSelector } from 'react-redux'
+import { useHistory, useParams } from 'react-router'
+import useFetch from 'src/hooks/useFetch'
+import { findById, formatTime, getDomain } from 'src/utils/common'
+import { Genders } from 'src/utils/const'
+
+const ExamSignDetail = () => {
+  const { id: examId, signId } = useParams()
+  const history = useHistory()
   const { allCoaches } = useSelector((state) => state.app)
   let [sign] = useFetch(`/exam/sign/signInfo?signId=${signId}`)
   const [exam = {}] = useFetch(`/examination/item?id=${examId}`)
 
-  const goToPrint = (type) => {
-    history.push(`/exam/${examId}/sign/${signId}/print/${type}`)
+  const goToPrint = (type, comp) => {
+    history.push(
+      `/exam/${examId}/sign/${signId}/print/${type}?key=signs&comp=${comp}`
+    )
   }
 
   if (!sign) return null
@@ -68,10 +73,16 @@ const ExamSignDetail = ({ match, history }) => {
             </Descriptions.Item>
           </Descriptions>
           <div className="sign-detail__btns">
-            <Button type="primary" onClick={() => goToPrint('exam-certif')}>
+            <Button
+              type="primary"
+              onClick={() => goToPrint('exam-certif', 'PrintExamCertif')}
+            >
               打印准考证
             </Button>
-            <Button type="primary" onClick={() => goToPrint('report')}>
+            <Button
+              type="primary"
+              onClick={() => goToPrint('report', 'PrintReport')}
+            >
               打印成绩单
             </Button>
           </div>

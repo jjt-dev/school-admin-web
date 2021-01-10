@@ -5,6 +5,7 @@ import moment from 'moment'
 import React, { useEffect, useState } from 'react'
 import { useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useHistory } from 'react-router'
 import * as examAction from 'src/actions/exam'
 import FormDateRange from 'src/components/FormDateRange'
 import FormEnableRadio from 'src/components/FormEnableRadio'
@@ -22,7 +23,8 @@ import LevelRangeItems from './LevelRangeItems'
 const { RangePicker } = DatePicker
 const { usePageForm } = PageFormCustom
 
-const Exam = ({ history }) => {
+const Exam = () => {
+  const history = useHistory()
   const dispatch = useDispatch()
   const [form] = Form.useForm()
   const { isFormal } = useSearch()

@@ -3,7 +3,7 @@ import { buildParameters } from './common'
 /**
  * exam sign
  */
-export const routeExamSignList = (examId) => `/exam/${examId}/signs`
+export const routeExamSignList = (examId) => `/exam/${examId}/signs?key=signs&comp=ExamSignList`
 
 export const routeExamSign = (examId) => `/exam/${examId}/sign?key=signs&comp=ExamSign`
 

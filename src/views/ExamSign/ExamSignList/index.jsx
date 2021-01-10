@@ -1,33 +1,35 @@
+import { Avatar, Divider } from 'antd'
 import React from 'react'
 import { useSelector } from 'react-redux'
-import Header from './Header'
-import { Avatar, Divider } from 'antd'
-import useFetch from 'src/hooks/useFetch'
+import { Link, useHistory } from 'react-router-dom'
 import CustomTable from 'src/components/CustomTable'
+import PageListCustom from 'src/components/PageListCustom'
+import useFetch from 'src/hooks/useFetch'
+import useTableFetch from 'src/hooks/useTableFetch'
 import {
-  tableOrder,
-  getRow,
-  getCustomRow,
-  getDomain,
-  getDateRow,
   confirmDelete,
   confirmUpdate,
   findSignStatus,
+  getCustomRow,
+  getDateRow,
+  getDomain,
+  getRow,
+  tableOrder,
 } from 'src/utils/common'
 import { SignStatus } from 'src/utils/const'
-import { Link } from 'react-router-dom'
-import PageListCustom from 'src/components/PageListCustom'
 import {
-  pathExam,
-  pathExamSignList,
   pathDelSign,
   pathDownloadResults,
+  pathExam,
+  pathExamSignList,
   pathPaySign,
 } from 'src/utils/httpUtil'
-import { routePrintExamCertif, routeExamSign } from 'src/utils/routeUtil'
-import useTableFetch from 'src/hooks/useTableFetch'
+import { routeExamSign, routePrintExamCertif } from 'src/utils/routeUtil'
 
-const ExamSignList = ({ examId: examinationId, history }) => {
+import Header from './Header'
+
+const ExamSignList = ({ examId: examinationId }) => {
+  const history = useHistory()
   const { allCoaches } = useSelector((state) => state.app)
   const [exam = {}, fetchExam] = useFetch(pathExam(examinationId))
   const signTableList = useTableFetch(pathExamSignList, { examinationId })
@@ -114,7 +116,7 @@ const getColumns = (examId, payExamSign, deleteSign) => [
         </Link>
         <Divider type="vertical" />
         <Link
-          to={`/exam/${examId}/sign/${record.signId}/detail?key=signs&comp=ExamSign`}
+          to={`/exam/${examId}/sign/${record.signId}/detail?key=signs&comp=ExamSignDetail`}
         >
           详情
         </Link>

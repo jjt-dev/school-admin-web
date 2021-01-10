@@ -1,23 +1,26 @@
-import React, { useState } from 'react'
-import Header from './Header'
-import { Button } from 'antd'
 import './index.less'
-import QRCodeModal from './QRCodeModal'
-import useFetch from 'src/hooks/useFetch'
+
+import { Button } from 'antd'
+import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
 import PageList from 'src/components/PageList'
+import useFetch from 'src/hooks/useFetch'
+import useTableFetch from 'src/hooks/useTableFetch'
 import {
   copyToClipboard,
+  findExamStatus,
   getActionRow,
   getCustomRow,
   getDateRow,
   getLinkRow,
   getRow,
-  tableOrder,
   getSwitchRow,
-  findExamStatus,
+  tableOrder,
 } from 'src/utils/common'
-import { pathMockBtn, pathExamList } from 'src/utils/httpUtil'
-import useTableFetch from 'src/hooks/useTableFetch'
+import { pathExamList, pathMockBtn } from 'src/utils/httpUtil'
+
+import Header from './Header'
+import QRCodeModal from './QRCodeModal'
 
 const ExamList = () => {
   const [canAddMockExam, refetch] = useFetch(pathMockBtn)
@@ -57,10 +60,26 @@ const getColumns = (setSelectedExam) => (deleteExam, updateExamStatus) => [
   getCustomRow('状态', (record) => findExamStatus(record.currState).title),
   getSwitchRow(updateExamStatus, '启用'),
   getCustomRow('类型', (record) => (record.isFormal ? '正式' : '模拟')),
-  getLinkRow('考生', `/exam/::/signs`, ['id']),
-  getLinkRow('分组', '/exam/::/group', ['id']),
-  getLinkRow('考场', '/exam/::/round-room', ['id']),
-  getLinkRow('考官', '/exam/::/room-examiner', ['id']),
+  getCustomRow('考生', (record) => (
+    <Link to={`/exam/${record.id}/signs?key=signs&comp=ExamSignList`}>
+      查看
+    </Link>
+  )),
+  getCustomRow('分组', (record) => (
+    <Link to={`/exam/${record.id}/group?key=group&comp=ExamGroup`}>查看</Link>
+  )),
+  getCustomRow('考场', (record) => (
+    <Link to={`/exam/${record.id}/round-room?key=round-room&comp=RoundAndRoom`}>
+      查看
+    </Link>
+  )),
+  getCustomRow('考官', (record) => (
+    <Link
+      to={`/exam/${record.id}/room-examiner?key=room-examiner&comp=RoomAndExaminerList`}
+    >
+      查看
+    </Link>
+  )),
   getLinkRow('资源池', '/exam/::/resource-pool', ['id']),
   getActionRow(
     (record) =>
