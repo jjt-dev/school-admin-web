@@ -7,10 +7,12 @@ import { buildPath } from './helper'
 import './index.less'
 import api from 'src/utils/api'
 import { useDispatch } from 'react-redux'
+import { useLocation, useParams } from 'react-router'
 
-const PrintExamCertif = ({ match, location }) => {
+const PrintExamCertif = () => {
   const dispatch = useDispatch()
-  const { id: examId, signId } = match.params
+  const location = useLocation()
+  const { id: examId, signId } = useParams()
   const ExamCertifType = CertificateTypes[2]
   const [template, setTemplate] = useState()
   const [schoolConfig] = useFetch(`/school/item`)

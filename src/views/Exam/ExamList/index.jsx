@@ -51,24 +51,24 @@ export default ExamList
 const getColumns = (setSelectedExam) => (deleteExam, updateExamStatus) => [
   tableOrder,
   getRow('名称', 'title'),
-  getExamlinkRow(setSelectedExam),
+  getExamLinkRow(setSelectedExam),
   getDateRow('考试时间', 'examStartTime'),
   getDateRow('报名时间', 'signStartTime'),
   getCustomRow('状态', (record) => findExamStatus(record.currState).title),
   getSwitchRow(updateExamStatus, '启用'),
   getCustomRow('类型', (record) => (record.isFormal ? '正式' : '模拟')),
-  getLinkRow('考生', '/exam/::/signs', ['id']),
+  getLinkRow('考生', `/exam/::/signs`, ['id']),
   getLinkRow('分组', '/exam/::/group', ['id']),
   getLinkRow('考场', '/exam/::/round-room', ['id']),
   getLinkRow('考官', '/exam/::/room-examiner', ['id']),
   getLinkRow('资源池', '/exam/::/resource-pool', ['id']),
   getActionRow(
-    (record) => `/exam/${record.id}?isFormal=${record.isFormal}`,
+    (record) => `/exam/${record.id}/exam?isFormal=${record.isFormal}&key=exam`,
     deleteExam
   ),
 ]
 
-const getExamlinkRow = (setSelectedExam) => ({
+const getExamLinkRow = (setSelectedExam) => ({
   title: '考试链接',
   dataIndex: 'hashCode',
   key: 'hashCode',

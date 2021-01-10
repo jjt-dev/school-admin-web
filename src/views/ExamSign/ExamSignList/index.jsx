@@ -27,8 +27,7 @@ import {
 import { routePrintExamCertif, routeExamSign } from 'src/utils/routeUtil'
 import useTableFetch from 'src/hooks/useTableFetch'
 
-const ExamSignList = ({ match, history }) => {
-  const examinationId = match.params.id
+const ExamSignList = ({ examId: examinationId, history }) => {
   const { allCoaches } = useSelector((state) => state.app)
   const [exam = {}, fetchExam] = useFetch(pathExam(examinationId))
   const signTableList = useTableFetch(pathExamSignList, { examinationId })
@@ -108,9 +107,17 @@ const getColumns = (examId, payExamSign, deleteSign) => [
     title: '操作',
     render: (text, record) => (
       <>
-        <Link to={`/exam/${examId}/sign/${record.signId}`}>编辑</Link>
+        <Link
+          to={`/exam/${examId}/sign/${record.signId}?key=signs&comp=ExamSign`}
+        >
+          编辑
+        </Link>
         <Divider type="vertical" />
-        <Link to={`/exam/${examId}/sign/${record.signId}/detail`}>详情</Link>
+        <Link
+          to={`/exam/${examId}/sign/${record.signId}/detail?key=signs&comp=ExamSign`}
+        >
+          详情
+        </Link>
         <Divider type="vertical" />
         {record.currState === SignStatus.notPay.id && (
           <>

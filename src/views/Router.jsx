@@ -6,9 +6,8 @@ import Parameter from './Parameter'
 import CoachList from './Coach/CoachList'
 import Coach from './Coach/Coach'
 import ExamList from './Exam/ExamList'
-import Exam from './Exam/Exam'
+import ExamConfig from './Exam/Exam'
 import ExamSign from './ExamSign/ExamSign'
-import ExamSignList from './ExamSign/ExamSignList'
 import ExamSignDetail from './ExamSign/ExamSignDetail'
 import ExamGroup from './ExamGroup/ExamGroup'
 import StudentExamGroup from './ExamGroup/StudentExamGroup'
@@ -69,18 +68,18 @@ export const routes = [
   {
     path: '/exam',
     title: '考试',
-    comp: Exam,
+    comp: ExamConfig,
     back: { path: '/exams', breadcrumbs: ['考试管理', '新增考试'] },
   },
   {
-    path: '/exam/:id',
+    path: '/exam/:id/exam',
     title: '考试',
-    comp: Exam,
+    comp: ExamConfig,
     back: { path: '/exams', breadcrumbs: ['考试管理', '编辑考试'] },
   },
   {
     path: '/exam/:id/signs',
-    comp: ExamSignList,
+    comp: ExamConfig,
     back: {
       path: '/exams',
       breadcrumbs: ['考试管理', '报考列表'],
@@ -88,18 +87,18 @@ export const routes = [
   },
   {
     path: '/exam/:id/sign',
-    comp: ExamSign,
+    comp: ExamConfig,
     back: {
-      path: '/exam/:id/signs',
+      path: '/exam/:id/signs?key=signs&comp=ExamSignList',
       params: ['id'],
       breadcrumbs: ['考试管理', '报考列表', '人工报名'],
     },
   },
   {
     path: '/exam/:id/sign/:signId',
-    comp: ExamSign,
+    comp: ExamConfig,
     back: {
-      path: '/exam/:id/signs',
+      path: '/exam/:id/signs?key=signs&comp=ExamSignList',
       params: ['id'],
       breadcrumbs: ['考试管理', '报考列表', '编辑报名'],
     },
@@ -115,9 +114,9 @@ export const routes = [
   },
   {
     path: '/exam/:id/sign/:signId/detail',
-    comp: ExamSignDetail,
+    comp: ExamConfig,
     back: {
-      path: '/exam/:id/signs',
+      path: '/exam/:id/signs?key=signs&comp=ExamSignList',
       params: ['id'],
       breadcrumbs: ['考试管理', '报考列表', '报名详情'],
     },
@@ -143,9 +142,9 @@ export const routes = [
   },
   {
     path: '/exam/:id/print-batch/exam-certif',
-    comp: PrintExamCertif,
+    comp: ExamConfig,
     back: {
-      path: '/exam/:id/signs',
+      path: '/exam/:id/signs?key=signs&comp=ExamSignList',
       params: ['id'],
       breadcrumbs: ['考试管理', '报考列表', '批量打印准考证'],
     },
