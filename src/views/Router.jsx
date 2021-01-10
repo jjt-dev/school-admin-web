@@ -1,32 +1,30 @@
 import React from 'react'
-import { Switch, Redirect } from 'react-router'
+import { Redirect, Switch } from 'react-router'
 import { Route } from 'react-router-dom'
-import Login from './Login'
-import Parameter from './Parameter'
-import CoachList from './Coach/CoachList'
+
+import Account from './Account'
+import Certificate from './Certificate/Certificate'
+import Certificates from './Certificate/Certificates'
 import Coach from './Coach/Coach'
-import ExamList from './Exam/ExamList'
+import CoachClassList from './Coach/CoachClassList'
+import CoachList from './Coach/CoachList'
 import ExamConfig from './Exam/Exam'
-import ExamSign from './ExamSign/ExamSign'
-import ExamSignDetail from './ExamSign/ExamSignDetail'
-import ExamGroup from './ExamGroup/ExamGroup'
-import StudentExamGroup from './ExamGroup/StudentExamGroup'
-import ExamineeList from './Examinee/ExamineeList'
-import ExaminerList from './Examiner/ExaminerList'
-import Examiner from './Examiner/Examiner'
-import RoundAndRoom from './ExamGroup/RoundAndRoom'
-import RoomList from './Room/RoomList'
-import Room from './Room/Room'
+import ExamList from './Exam/ExamList'
 import RoomAndExaminer from './ExamGroup/RoomAndExaminer'
 import RoomAndExaminerList from './ExamGroup/RoomAndExaminerList'
 import Examinee from './Examinee/Examinee'
-import Certificates from './Certificate/Certificates'
-import Certificate from './Certificate/Certificate'
+import ExamineeList from './Examinee/ExamineeList'
+import Examiner from './Examiner/Examiner'
+import ExaminerList from './Examiner/ExaminerList'
+import ExamSign from './ExamSign/ExamSign'
+import ExamSignDetail from './ExamSign/ExamSignDetail'
+import Login from './Login'
+import Parameter from './Parameter'
 import PrintExamCertif from './PrintExamCertif'
 import PrintReport from './PrintReport'
-import CoachClassList from './Coach/CoachClassList'
-import Account from './Account'
 import ResourcePool from './ResourcePool'
+import Room from './Room/Room'
+import RoomList from './Room/RoomList'
 
 export const routes = [
   { path: '/login', comp: Login },
@@ -162,7 +160,7 @@ export const routes = [
   {
     path: '/exam/:id/group',
     title: '考试分组',
-    comp: ExamGroup,
+    comp: ExamConfig,
     back: {
       path: '/exams',
       breadcrumbs: ['考试管理', '分组管理'],
@@ -170,16 +168,16 @@ export const routes = [
   },
   {
     path: '/exam/:id/group/:examGroupId',
-    comp: StudentExamGroup,
+    comp: ExamConfig,
     back: {
-      path: '/exam/:id/group',
+      path: '/exam/:id/group?key=group&comp=ExamGroup',
       params: ['id'],
       breadcrumbs: ['考试管理', '分组管理', '编辑考试分组'],
     },
   },
   {
     path: '/exam/:id/round-room',
-    comp: RoundAndRoom,
+    comp: ExamConfig,
     back: {
       path: '/exams',
       breadcrumbs: ['考试管理', '考场分配'],
@@ -187,7 +185,7 @@ export const routes = [
   },
   {
     path: '/exam/:id/room-examiner',
-    comp: RoomAndExaminerList,
+    comp: ExamConfig,
     back: {
       path: '/exams',
       breadcrumbs: ['考试管理', '考场与考官'],
@@ -195,9 +193,10 @@ export const routes = [
   },
   {
     path: '/exam/:id/room/:roomId/examiners',
-    comp: RoomAndExaminer,
+    comp: ExamConfig,
     back: {
-      path: '/exam/:id/room-examiner',
+      path:
+        '/exam/:id/room-examiner?key=room-examiner&comp=RoomAndExaminerList',
       params: ['id'],
       breadcrumbs: ['考试管理', '分组管理', '考场与考官', '绑定考官'],
     },

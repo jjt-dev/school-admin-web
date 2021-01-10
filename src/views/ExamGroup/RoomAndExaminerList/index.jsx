@@ -1,16 +1,18 @@
-import React, { useState } from 'react'
 import './index.less'
-import { Table, Divider, Tag } from 'antd'
-import RoomExamineeModal from './RoomExamineeModal'
-import RoomRoundModal from './RoomRoundModal'
-import useFetch from 'src/hooks/useFetch'
+
+import { Divider, Table, Tag } from 'antd'
+import React, { useState } from 'react'
+import { Link, useParams } from 'react-router-dom'
 import PageListCustom from 'src/components/PageListCustom'
-import { tableOrder, getRow } from 'src/utils/common'
-import { Link } from 'react-router-dom'
+import useFetch from 'src/hooks/useFetch'
+import { getRow, tableOrder } from 'src/utils/common'
 import { pathExam } from 'src/utils/httpUtil'
 
-const RoomAndExaminerList = ({ match }) => {
-  const examId = match.params.id
+import RoomExamineeModal from './RoomExamineeModal'
+import RoomRoundModal from './RoomRoundModal'
+
+const RoomAndExaminerList = () => {
+  const { id: examId } = useParams()
   const [exam = {}] = useFetch(pathExam(examId))
   const [selectedRoom, setSelectedRoom] = useState()
   const [showRoomExaminees, setShowRoomExaminees] = useState(false)
@@ -90,7 +92,11 @@ const getColumns = (examId, handleShowRoomExaminees, handleShowRoomRounds) => [
     width: 260,
     render: (text, record) => (
       <>
-        <Link to={`/exam/${examId}/room/${record.roomId}/examiners`}>编辑</Link>
+        <Link
+          to={`/exam/${examId}/room/${record.roomId}/examiners?key=room-examiner&comp=RoomAndExaminer`}
+        >
+          编辑
+        </Link>
         <Divider type="vertical" />
         <span
           className="table-action"

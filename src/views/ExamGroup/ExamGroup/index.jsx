@@ -1,13 +1,16 @@
-import React from 'react'
-import Header from './Header'
-import PageList from 'src/components/PageList'
-import { getActionRow, getRow, tableOrder } from 'src/utils/common'
-import useFetch from 'src/hooks/useFetch'
 import './index.less'
-import useTableFetch from 'src/hooks/useTableFetch'
 
-const ExamGroup = ({ match }) => {
-  const examinationId = match.params.id
+import React from 'react'
+import { useParams } from 'react-router'
+import PageList from 'src/components/PageList'
+import useFetch from 'src/hooks/useFetch'
+import useTableFetch from 'src/hooks/useTableFetch'
+import { getActionRow, getRow, tableOrder } from 'src/utils/common'
+
+import Header from './Header'
+
+const ExamGroup = () => {
+  const { id: examinationId } = useParams()
   const [exam] = useFetch(`/examination/item?id=${examinationId}`)
   const groupStdList = useTableFetch(`/examination/examinationStudentGrouped`, {
     examinationId,
@@ -42,5 +45,8 @@ const getColumns = (examId) => () => [
   getRow('带色', 'levelAlias'),
   getRow('组号', 'roundNum'),
   getRow('考试序号', 'subOrderNum'),
-  getActionRow((record) => `/exam/${examId}/group/${record.id}`),
+  getActionRow(
+    (record) =>
+      `/exam/${examId}/group/${record.id}?key=group&comp=StudentExamGroup`
+  ),
 ]

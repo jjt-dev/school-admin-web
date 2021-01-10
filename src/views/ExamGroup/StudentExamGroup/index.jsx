@@ -1,19 +1,22 @@
-import React, { useEffect } from 'react'
 import './index.less'
-import api from 'src/utils/api'
+
 import { Form, message } from 'antd'
-import useFetch from 'src/hooks/useFetch'
-import PageFormCustom from 'src/components/PageFormCustom'
+import React, { useEffect } from 'react'
+import { useHistory, useParams } from 'react-router'
 import FormInput from 'src/components/FormInput'
 import FormSelect from 'src/components/FormSelect'
+import PageFormCustom from 'src/components/PageFormCustom'
+import useFetch from 'src/hooks/useFetch'
+import api from 'src/utils/api'
 import {
+  pathChangeStudGroup,
   pathExamRounds,
   pathGroupedStudDetail,
-  pathChangeStudGroup,
 } from 'src/utils/httpUtil'
 
-const StudentExamGroup = ({ match, history }) => {
-  const { id: examId, examGroupId } = match.params
+const StudentExamGroup = () => {
+  const { id: examId, examGroupId } = useParams()
+  const history = useHistory()
   const [form] = Form.useForm()
   const [examRoundInfo] = useFetch(pathExamRounds(examId))
   const [studExamGroup] = useFetch(pathGroupedStudDetail(examGroupId))

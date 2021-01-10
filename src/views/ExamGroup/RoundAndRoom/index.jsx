@@ -17,9 +17,10 @@ import {
 
 import RoundExamineeModal from './RoundExamineeModal'
 import Rounds from './Rounds'
+import { useParams } from 'react-router'
 
-const RoundAndRoom = ({ match }) => {
-  const examId = match.params.id
+const RoundAndRoom = () => {
+  const { id: examId } = useParams()
   const [exam = {}] = useFetch(pathExam(examId))
   const [toggleCellTable, setToggleCellTable] = useState(false)
   const [showMultSelect, setShowMultiSelect] = useState(false)

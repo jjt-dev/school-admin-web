@@ -1,15 +1,19 @@
-import React, { useEffect, useState } from 'react'
 import './index.less'
-import api from 'src/utils/api'
-import { Table, message, Checkbox, Radio } from 'antd'
-import { useSelector } from 'react-redux'
-import { deepClone, getDateRow, getRow, tableOrder } from 'src/utils/common'
-import Header from './Header'
-import PageListCustom from 'src/components/PageListCustom'
 
-const RoomAndExaminer = ({ match, history }) => {
+import { Checkbox, message, Radio, Table } from 'antd'
+import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
+import { useHistory, useParams } from 'react-router'
+import PageListCustom from 'src/components/PageListCustom'
+import api from 'src/utils/api'
+import { deepClone, getDateRow, getRow, tableOrder } from 'src/utils/common'
+
+import Header from './Header'
+
+const RoomAndExaminer = () => {
+  const { id: examId, roomId } = useParams()
+  const history = useHistory()
   const [search, setSearch] = useState('')
-  const { id: examId, roomId } = match.params
   const [roomAndExaminer, setRoomAndExaminer] = useState()
   const { allExaminers } = useSelector((state) => state.app)
 
@@ -62,7 +66,9 @@ const RoomAndExaminer = ({ match, history }) => {
     }
     await api.post(path)
     message.success(`绑定考官成功`)
-    history.push(`/exam/${examId}/room-examiner`)
+    history.push(
+      `/exam/${examId}/room-examiner?key=room-examiner&comp=RoomAndExaminerList`
+    )
   }
 
   const filterAllExaminers = () => {

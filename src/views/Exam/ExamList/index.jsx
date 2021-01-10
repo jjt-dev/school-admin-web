@@ -63,7 +63,8 @@ const getColumns = (setSelectedExam) => (deleteExam, updateExamStatus) => [
   getLinkRow('考官', '/exam/::/room-examiner', ['id']),
   getLinkRow('资源池', '/exam/::/resource-pool', ['id']),
   getActionRow(
-    (record) => `/exam/${record.id}/exam?isFormal=${record.isFormal}&key=exam`,
+    (record) =>
+      `/exam/${record.id}/exam?isFormal=${record.isFormal}&key=exam&comp=Exam`,
     deleteExam
   ),
 ]
