@@ -20,7 +20,7 @@ const StudentExamGroup = () => {
   const [form] = Form.useForm()
   const [examRoundInfo] = useFetch(pathExamRounds(examId))
   const [studExamGroup] = useFetch(pathGroupedStudDetail(examGroupId))
-  const backPath = `/exam/${examId}/group`
+  const backPath = `/exam/${examId}/group?key=group&comp=ExamGroup`
 
   useEffect(() => {
     if (examRoundInfo && studExamGroup) {
@@ -34,7 +34,7 @@ const StudentExamGroup = () => {
   const onFinish = async ({ toRoundNum }) => {
     await api.post(pathChangeStudGroup(examGroupId, toRoundNum))
     message.success(`修改场次成功`)
-    history.push(`/exam/${examId}/group`)
+    history.push(backPath)
   }
 
   if (!studExamGroup || !examRoundInfo) return null
