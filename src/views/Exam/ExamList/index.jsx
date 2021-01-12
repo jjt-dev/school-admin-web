@@ -80,7 +80,7 @@ const getColumns = (setSelectedExam) => (deleteExam, updateExamStatus) => [
       查看
     </Link>
   )),
-  getLinkRow('资源池', '/exam/::/resource-pool', ['id']),
+  getLinkRow('待考列表', '/exam/::/resource-pool', ['id']),
   getActionRow(
     (record) =>
       `/exam/${record.id}/exam?isFormal=${record.isFormal}&key=exam&comp=Exam`,
