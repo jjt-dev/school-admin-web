@@ -11,7 +11,7 @@ import useLoading from 'src/hooks/useLoading'
 
 const { Option } = Select
 
-const Header = ({ fetchTable, exam, defaultSearch }) => {
+const Header = ({ fetchTable, exam, defaultSearch, fetchUngroup }) => {
   const [callWithLoading] = useLoading()
   const examId = exam.id
   const [groupNum, setGroupNum] = useState(exam.groupNum)
@@ -29,6 +29,7 @@ const Header = ({ fetchTable, exam, defaultSearch }) => {
       )
       message.success('考试分组更新成功')
       fetchTable()
+      fetchUngroup()
     })
   }
 

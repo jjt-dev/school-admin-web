@@ -8,10 +8,14 @@ import useTableFetch from 'src/hooks/useTableFetch'
 import { getActionRow, getRow, tableOrder } from 'src/utils/common'
 
 import Header from './Header'
+import { Alert } from 'antd'
 
 const ExamGroup = () => {
   const { id: examinationId } = useParams()
   const [exam] = useFetch(`/examination/item?id=${examinationId}`)
+  const [ungroupNum, fetchUngroup] = useFetch(
+    `/examination/ungrounpedStudentCount?examinationId=${examinationId}`
+  )
   const groupStdList = useTableFetch(`/examination/examinationStudentGrouped`, {
     examinationId,
   })
@@ -29,6 +33,14 @@ const ExamGroup = () => {
           fetchTable={groupStdList.fetchTable}
           exam={exam}
           defaultSearch={groupStdList.search}
+          fetchUngroup={fetchUngroup}
+        />
+      )}
+      {ungroupNum > 0 && (
+        <Alert
+          message="有考生未分组，请确认分组"
+          type="warning"
+          style={{ marginBottom: 10 }}
         />
       )}
     </PageList>
