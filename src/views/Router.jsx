@@ -107,7 +107,7 @@ export const routes = [
     back: {
       path: '/exam/:id/resource-pool',
       params: ['id'],
-      breadcrumbs: ['考试管理', '待考列表列表', '编辑报名'],
+      breadcrumbs: ['考试管理', '待考列表', '编辑报名'],
     },
   },
   {
@@ -125,7 +125,7 @@ export const routes = [
     back: {
       path: '/exam/:id/resource-pool',
       params: ['id'],
-      breadcrumbs: ['考试管理', '待考列表列表', '报名详情'],
+      breadcrumbs: ['考试管理', '待考列表', '报名详情'],
     },
   },
   {
@@ -261,7 +261,7 @@ export const routes = [
     title: '待考列表',
     back: {
       path: '/exams',
-      breadcrumbs: ['考试管理', '待考列表列表'],
+      breadcrumbs: ['考试管理', '待考列表'],
     },
   },
   {

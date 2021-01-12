@@ -23,7 +23,7 @@ const ResourcePool = ({ match }) => {
     <PageList
       showAdd={false}
       columns={getColumns(examId)}
-      title={`${exam.title}待考列表`}
+      title={`${exam.title}待考`}
       defaultSearch={{ examId }}
       path="/exam/sign/examMakeUpPage"
       size="small"
