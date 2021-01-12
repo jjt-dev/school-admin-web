@@ -38,7 +38,7 @@ const ExamGroup = () => {
       )}
       {ungroupNum > 0 && (
         <Alert
-          message="有考生未分组，请确认分组"
+          message={`有${ungroupNum}个考生未分组，请确认分组`}
           type="warning"
           style={{ marginBottom: 10 }}
         />
