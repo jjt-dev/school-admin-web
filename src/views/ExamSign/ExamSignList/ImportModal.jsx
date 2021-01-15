@@ -1,13 +1,13 @@
 import './index.less'
 
 import { LoadingOutlined, UploadOutlined } from '@ant-design/icons'
-import { Alert, Button, message, Modal, Upload, Table } from 'antd'
+import { Alert, Button, message, Modal, Table, Upload } from 'antd'
 import { debounce } from 'lodash'
 import React, { useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import api from 'src/utils/api'
 import { getSignTemplate } from 'src/utils/common'
-import { getRow, tableOrder } from 'src/utils/tableUtil'
+import { getCustomRow, getRow } from 'src/utils/tableUtil'
 
 const ImportModal = ({ hideModal, fetchTable }) => {
   const { id } = useParams()
@@ -152,7 +152,7 @@ const ImportModal = ({ hideModal, fetchTable }) => {
 export default ImportModal
 
 const columns = [
-  tableOrder,
+  getCustomRow('错误行数', (record) => <span>第{record.index}行</span>),
   getRow('身份证号', 'cardId'),
   getRow('姓名', 'studentName', 80),
   getRow('电话', 'phone'),
