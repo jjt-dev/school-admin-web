@@ -25,7 +25,7 @@ const PrintExamCertif = () => {
     const fetchData = async () => {
       const temp = await api.get(buildPath(examId, signId, location))
       const result = []
-      temp.forEach((item) => {
+      temp.data.forEach((item) => {
         item.signLevels.forEach((signLevel) => {
           result.push({ ...item, signLevel })
         })
