@@ -2684,6 +2684,11 @@ brorand@^1.0.1:
   resolved "https://registry.npm.taobao.org/brorand/download/brorand-1.1.0.tgz#12c25efe40a45e3c323eb8675a0a0ce57b22371f"
   integrity sha1-EsJe/kCkXjwyPrhnWgoM5XsiNx8=
 
+browser-image-compression@^1.0.13:
+  version "1.0.13"
+  resolved "https://registry.npm.taobao.org/browser-image-compression/download/browser-image-compression-1.0.13.tgz#5c741a89b3ad447129481d724743aa6fcafb8836"
+  integrity sha1-XHQaibOtRHEpSB1yR0Oqb8r7iDY=
+
 browser-process-hrtime@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npm.taobao.org/browser-process-hrtime/download/browser-process-hrtime-1.0.0.tgz#3c9b4b7d782c8121e56f10106d84c0d0ffc94626"

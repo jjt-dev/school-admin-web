@@ -2,6 +2,7 @@ import './index.less'
 
 import { LoadingOutlined, UploadOutlined } from '@ant-design/icons'
 import { Alert, Button, message, Modal, Table, Upload } from 'antd'
+import imageCompression from 'browser-image-compression'
 import { debounce } from 'lodash'
 import React, { useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
@@ -23,19 +24,15 @@ const ImportModal = ({ hideModal, fetchTable }) => {
       let params = new FormData()
       params.append('examId', id)
 
-      const hasImgOverSize = filesRef.current.some((file) => {
+      for (let i = 0; i < filesRef.current.length; i++) {
+        const imageFile = filesRef.current[i]
         const isMoreThan200k =
-          file.type.startsWith('image') && file.size / 1024 > imgMaxSize
-        return isMoreThan200k
-      })
-
-      if (hasImgOverSize) {
-        const errorMsg = `图片大小不能超过${imgMaxSize}k`
-        setErrorMsg(errorMsg)
-        message.error(errorMsg)
-        filesRef.current = []
-        setLoading(false)
-        return
+          imageFile.type.startsWith('image') &&
+          imageFile.size / 1024 > imgMaxSize
+        if (isMoreThan200k) {
+          const compressedImage = await compressImage(filesRef.current[i])
+          filesRef.current[i] = compressedImage
+        }
       }
 
       filesRef.current.forEach((file) => {
@@ -59,7 +56,7 @@ const ImportModal = ({ hideModal, fetchTable }) => {
       }
     } catch (e) {
       setErrorMsg(e.msg)
-      if (e.includes('413 Request Entity Too Large')) {
+      if (e.includes && e.includes('413 Request Entity Too Large')) {
         setErrorMsg('上传文件大小超过限制或者网络错误，请联系管理员')
       }
     } finally {
@@ -158,3 +155,16 @@ const columns = [
   getRow('电话', 'phone'),
   getRow('错误信息', 'errInfo'),
 ]
+
+async function compressImage(imageFile) {
+  const options = {
+    maxSizeMB: 0.2,
+    useWebWorker: true,
+  }
+  try {
+    const compressedFile = await imageCompression(imageFile, options)
+    return compressedFile
+  } catch (error) {
+    console.log(error)
+  }
+}
