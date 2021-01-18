@@ -102,7 +102,13 @@ const ExamSign = () => {
       />
       <FormInput label="考生姓名" name="name" />
       <FormInput label="家长电话" name="phone" />
-      <FormImage form={form} label="照片" name="faceUrl" message="请上传头像" />
+      <FormImage
+        form={form}
+        label="照片"
+        name="faceUrl"
+        message="请上传头像"
+        limit={0.2}
+      />
       <FormInput label="住址" name="address" type="textarea" />
       <FormSelect
         label="当前考生等级"

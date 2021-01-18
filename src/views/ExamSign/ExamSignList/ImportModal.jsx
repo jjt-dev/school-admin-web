@@ -2,12 +2,11 @@ import './index.less'
 
 import { LoadingOutlined, UploadOutlined } from '@ant-design/icons'
 import { Alert, Button, message, Modal, Table, Upload } from 'antd'
-import imageCompression from 'browser-image-compression'
 import { debounce } from 'lodash'
 import React, { useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import api from 'src/utils/api'
-import { getSignTemplate } from 'src/utils/common'
+import { compressImage, getSignTemplate } from 'src/utils/common'
 import { getCustomRow, getRow } from 'src/utils/tableUtil'
 
 const ImportModal = ({ hideModal, fetchTable }) => {
@@ -155,16 +154,3 @@ const columns = [
   getRow('电话', 'phone'),
   getRow('错误信息', 'errInfo'),
 ]
-
-async function compressImage(imageFile) {
-  const options = {
-    maxSizeMB: 0.2,
-    useWebWorker: true,
-  }
-  try {
-    const compressedFile = await imageCompression(imageFile, options)
-    return compressedFile
-  } catch (error) {
-    console.log(error)
-  }
-}

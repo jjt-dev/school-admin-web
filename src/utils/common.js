@@ -1,19 +1,21 @@
-import React from 'react'
-import * as queryString from 'query-string'
-import moment from 'moment'
 import { Divider, message, Switch } from 'antd'
+import Button from 'antd/es/button'
+import confirm from 'antd/lib/modal/confirm'
+import imageCompression from 'browser-image-compression'
+import domtoimage from 'dom-to-image'
+import moment from 'moment'
+import * as queryString from 'query-string'
+import React from 'react'
+import { Link } from 'react-router-dom'
+
+import api from './api'
 import {
   EntityStatus,
   ExamStatus,
-  SignStatus,
-  ResourcePoolStatus,
   ResourcePoolSource,
+  ResourcePoolStatus,
+  SignStatus,
 } from './const'
-import domtoimage from 'dom-to-image'
-import confirm from 'antd/lib/modal/confirm'
-import api from './api'
-import { Link } from 'react-router-dom'
-import Button from 'antd/es/button'
 
 export const parseSearches = (location) => {
   return queryString.parse(location.search)
@@ -379,3 +381,17 @@ export const checkIsExaming = (examStatus) =>
   examStatus === ExamStatus.examing.id
 
 export const isProdEnv = process.env.REACT_APP_IS_PRODUCTION === 'true'
+
+// 默认最大200k
+export async function compressImage(imageFile, maxSizeMB = 0.2) {
+  const options = {
+    maxSizeMB,
+    useWebWorker: true,
+  }
+  try {
+    const compressedFile = await imageCompression(imageFile, options)
+    return compressedFile
+  } catch (error) {
+    console.log(error)
+  }
+}

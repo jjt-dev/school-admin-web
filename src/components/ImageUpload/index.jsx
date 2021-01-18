@@ -1,6 +1,6 @@
 import React from 'react'
 import { Upload } from 'antd'
-import { getApiRootImg, getDomain } from 'src/utils/common'
+import { getApiRootImg, getDomain, compressImage } from 'src/utils/common'
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons'
 import ImgCrop from 'antd-img-crop'
 import 'antd/es/modal/style'
@@ -12,16 +12,16 @@ function getBase64(img, callback) {
   reader.readAsDataURL(img)
 }
 
-function beforeUpload(file, callback) {
+function beforeUpload(file, callback, limit = 2) {
   const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png'
   if (!isJpgOrPng) {
     callback({ valid: false, message: '请上传JPG或PNG格式的照片' })
+    return false
   }
-  const isLt2M = file.size / 1024 / 1024 < 2
-  if (!isLt2M) {
-    callback({ valid: false, message: '照片大小不能超过2M' })
+  if (file.size / 1024 / 1024 > limit) {
+    return compressImage(file, limit)
   }
-  return isJpgOrPng && isLt2M
+  return true
 }
 
 const buildUrl = (props) => {
@@ -72,7 +72,9 @@ class ImageUpload extends React.Component {
           className="avatar-uploader"
           showUploadList={false}
           action={getApiRootImg()}
-          beforeUpload={(file) => beforeUpload(file, this.props.callback)}
+          beforeUpload={(file) =>
+            beforeUpload(file, this.props.callback, this.props.limit)
+          }
           onChange={this.handleChange}
         >
           {imageUrl ? (
