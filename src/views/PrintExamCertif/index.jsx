@@ -23,14 +23,15 @@ const PrintExamCertif = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const temp = await api.get(buildPath(examId, signId, location))
-      const result = []
-      temp.data.forEach((item) => {
+      const result = await api.get(buildPath(examId, signId, location))
+      const finalResult = []
+      const certifInfos = Array.isArray(result) ? result : result.data
+      certifInfos.forEach((item) => {
         item.signLevels.forEach((signLevel) => {
-          result.push({ ...item, signLevel })
+          finalResult.push({ ...item, signLevel })
         })
       })
-      setExamCertifInfos(result)
+      setExamCertifInfos(finalResult)
     }
     fetchData()
   }, [dispatch, examId, location, signId])
