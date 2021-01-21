@@ -124,9 +124,9 @@ const UploadTaekwondo = ({ exam, fetchExam }) => {
   const canUpload = exam.uploadState === 0
   const isUploading = exam.uploadState === 1
   const titles = {
-    0: '申请上传台协',
-    1: '上传台协中',
-    2: '上传台协完成',
+    0: '申请上传资料',
+    1: '上传资料中',
+    2: '上传资料完成',
   }
 
   const uploadToTaekwondo = async () => {
