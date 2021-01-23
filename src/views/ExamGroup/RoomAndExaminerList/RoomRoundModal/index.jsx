@@ -1,17 +1,18 @@
-import React, { useEffect, useState } from 'react'
 import { Button, Modal, Table, Tag } from 'antd'
+import update from 'immutability-helper'
+import React, { useEffect, useState } from 'react'
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
+import useFetch from 'src/hooks/useFetch'
+import useMutation from 'src/hooks/useMutation'
 import {
   addNumPrefix,
   addRoundNumPrefix,
   getCustomRow,
   tableOrder,
 } from 'src/utils/common'
-import useFetch from 'src/hooks/useFetch'
-import { DndProvider } from 'react-dnd'
-import { HTML5Backend } from 'react-dnd-html5-backend'
-import update from 'immutability-helper'
-import useMutation from 'src/hooks/useMutation'
 import { dragBodyRowComponents } from 'src/utils/dragBodyRow'
+
 import RoundExamineeList from './RoundExamineeList'
 
 const RoomRoundModal = ({
@@ -82,6 +83,7 @@ const RoomRoundModal = ({
       {!selectedRound && (
         <DndProvider backend={HTML5Backend}>
           <Table
+            size="small"
             columns={getColumns(setSelectedRound)}
             dataSource={state.rounds}
             components={dragBodyRowComponents}
@@ -90,8 +92,8 @@ const RoomRoundModal = ({
               moveRow,
             })}
             rowKey="id"
-            size="middle"
             bordered={true}
+            pagination={false}
           />
         </DndProvider>
       )}
