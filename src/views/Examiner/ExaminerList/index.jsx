@@ -1,4 +1,5 @@
 import React from 'react'
+import { useDispatch } from 'react-redux'
 import PageList from 'src/components/PageList'
 import {
   getActionRow,
@@ -7,9 +8,13 @@ import {
   tableOrder,
   getSwitchRow,
 } from 'src/utils/common'
+import * as appAction from 'src/actions/app'
 
 const ExaminerList = () => {
-  return <PageList columns={getColumns} />
+  const dispatch = useDispatch()
+  const getAllExaminers = () => dispatch(appAction.getAllExaminers())
+
+  return <PageList columns={getColumns} updateCallback={getAllExaminers} />
 }
 
 export default ExaminerList
