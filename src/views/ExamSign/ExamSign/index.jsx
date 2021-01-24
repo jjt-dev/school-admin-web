@@ -71,8 +71,10 @@ const ExamSign = () => {
   }
 
   const onLevelChange = (levels) => {
-    form.setFieldsValue({ levels })
-    setSelectedLevelIds(levels)
+    //最多报考3个等级
+    const result = levels.slice(0, 3)
+    form.setFieldsValue({ levels: result })
+    setSelectedLevelIds(result)
   }
 
   const titlePrefix = isEdit ? '编辑报名' : '人工报名'
