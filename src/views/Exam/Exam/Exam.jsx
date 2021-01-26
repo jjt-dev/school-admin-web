@@ -3,7 +3,6 @@ import './index.less'
 import { Button, DatePicker, Form } from 'antd'
 import moment from 'moment'
 import React, { useEffect, useState } from 'react'
-import { useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router'
 import * as examAction from 'src/actions/exam'
@@ -69,13 +68,6 @@ const Exam = () => {
       setExamStartTime(examInEdit.examTime[0])
     }
   }, [examInEdit, form])
-
-  const updateItemRatio = useCallback(
-    (levelId, itemId, ratio) => {
-      dispatch(examAction.updateItemRatio({ levelId, itemId, ratio }))
-    },
-    [dispatch]
-  )
 
   const selectItems = (levelId, selectedItems) => {
     dispatch(examAction.selectItems({ levelId, selectedItems }))
@@ -153,7 +145,6 @@ const Exam = () => {
           level={level}
           examItemList={examItemList}
           selectItems={selectItems}
-          updateItemRatio={updateItemRatio}
         />
       ))}
       <FormEnableRadio />
