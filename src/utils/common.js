@@ -390,7 +390,7 @@ export async function compressImage(imageFile, maxSizeMB = 0.2) {
   }
   try {
     const compressedFile = await imageCompression(imageFile, options)
-    return compressedFile
+    return new File([compressedFile], imageFile.name)
   } catch (error) {
     console.log(error)
   }
