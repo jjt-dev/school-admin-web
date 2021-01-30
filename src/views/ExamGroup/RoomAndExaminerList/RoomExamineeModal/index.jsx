@@ -54,7 +54,7 @@ const columns = [
   getRow('姓名', 'studentName'),
   getCustomRow('性别', (record) => Genders[record.gender]),
   getRow('申请等级', 'levelName'),
-  getCustomRow('场次', (record) => addRoundNumPrefix(record.roundNum)),
+  getCustomRow('对应的组号', (record) => addRoundNumPrefix(record.roundNum)),
   getRow('电话', 'phone'),
   getRow('单位', 'schoolName'),
 ]
