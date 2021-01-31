@@ -42,15 +42,27 @@ export const updateExam = async (
   const signStartTime = signTime[0].format(timeFormat)
   const signEndTime = signTime[1].format(timeFormat)
 
+  // 一个等级最多15个考项
+  const itemMoreThan15 = checkedLevels.some(
+    (level) => Object.keys(level.items).length > 15
+  )
+  if (itemMoreThan15) {
+    message.error('等级的考项数量最多15个')
+    return
+  }
+
   const levelItems = {}
   checkedLevels.forEach((level) => {
     const { id: levelId, items } = level
     const itemNumber = Object.keys(items).length
-    const ratio = Number((100 / itemNumber / 100).toFixed(2))
-    const temp = Object.keys(items).map((itemId, index) => ({
-      examItemId: itemId,
-      ratio: index === 0 ? ratio + (1 - itemNumber * ratio) : ratio,
-    }))
+    const ratio = Number((1 / itemNumber).toFixed(4))
+    const temp = Object.keys(items).map((itemId, index) => {
+      const firstRatio = ratio + (1 - itemNumber * ratio)
+      return {
+        examItemId: itemId,
+        ratio: index === 0 ? firstRatio.toFixed(4) : ratio,
+      }
+    })
     levelItems[levelId] = temp
   })
 

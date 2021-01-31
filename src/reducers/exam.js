@@ -6,9 +6,10 @@ import {
   GET_EXAM_ITEM_LIST,
   GET_EXAM_LEVEL_LIST,
   EXAM_UPDATE_ITEM_RATIO,
-  EXAM_UPDATE_LEVEL_CEHCK,
+  EXAM_UPDATE_LEVEL_CHECK,
   EXAM_SELECT_LEVEL_ITEM,
   EXAM_RESET_STORE,
+  EXAM_SELECT_ALL_LEVEL_ITEMS,
 } from 'src/actions/exam'
 
 const initState = {
@@ -54,7 +55,22 @@ const exam = handleActions(
       })
       return set(`examLevelList[${index}].items`, newItems, state)
     },
-    [EXAM_UPDATE_LEVEL_CEHCK]: (state, { payload }) => {
+    [EXAM_SELECT_ALL_LEVEL_ITEMS]: (state, { payload }) => {
+      const { levelId, checked } = payload
+      const { examLevelList } = state
+      const index = findIndexById(examLevelList, levelId)
+      let newItems = null
+      if (checked) {
+        newItems = {}
+        const allExamItems = examLevelList[index].examItems
+        allExamItems.forEach((item) => {
+          // 更新考试的时候会统一计算ratio
+          newItems[item.id] = 0
+        })
+      }
+      return set(`examLevelList[${index}].items`, newItems, state)
+    },
+    [EXAM_UPDATE_LEVEL_CHECK]: (state, { payload }) => {
       const { levelId, checked } = payload
       const index = findIndexById(state.examLevelList, levelId)
       return set(`examLevelList[${index}].items`, checked ? {} : null, state)

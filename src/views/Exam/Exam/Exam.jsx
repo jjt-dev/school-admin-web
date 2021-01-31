@@ -32,9 +32,7 @@ const Exam = () => {
   const [showImportExamModal, setShowImportExamModal] = useState(false)
   const examType = isFormal === 'true' ? '正式' : '模拟'
   const [examId, isEdit, status] = usePageForm()
-  const { examItemList, examLevelList, examInEdit } = useSelector(
-    (state) => state.exam
-  )
+  const { examLevelList, examInEdit } = useSelector((state) => state.exam)
   const checkedLevels = examLevelList.filter((level) => level.items)
 
   useEffect(() => {
@@ -74,9 +72,9 @@ const Exam = () => {
   }
 
   const handleLevelCheckChange = (levelId, e) => {
-    dispatch(
-      examAction.updateLevelCheck({ levelId, checked: e.target.checked })
-    )
+    const checked = e.target.checked
+    dispatch(examAction.updateLevelCheck({ levelId, checked }))
+    dispatch(examAction.selectALLLevelItems({ levelId, checked }))
   }
 
   const onFinish = (values) => {
@@ -143,7 +141,6 @@ const Exam = () => {
         <LevelExamItems
           key={level.id}
           level={level}
-          examItemList={examItemList}
           selectItems={selectItems}
         />
       ))}

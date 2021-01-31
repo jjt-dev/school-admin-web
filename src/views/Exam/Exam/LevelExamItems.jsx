@@ -3,7 +3,7 @@ import React from 'react'
 
 const { Option } = Select
 
-const LevelExamItems = ({ level, examItemList, selectItems }) => {
+const LevelExamItems = ({ level, selectItems }) => {
   const itemIds = Object.keys(level.items).map((i) => Number(i))
 
   return (
@@ -16,7 +16,7 @@ const LevelExamItems = ({ level, examItemList, selectItems }) => {
           defaultValue={itemIds}
           onChange={(value) => selectItems(level.id, value)}
         >
-          {examItemList.map((item) => {
+          {level.examItems.map((item) => {
             return (
               <Option key={`all-items-${level.id}-${item.id}`} value={item.id}>
                 {item.name}

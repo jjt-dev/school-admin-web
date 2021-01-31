@@ -6,7 +6,8 @@ export const GET_EXAM_LEVEL_LIST = 'GET_EXAM_LEVEL_LIST'
 
 export const EXAM_UPDATE_ITEM_RATIO = 'EXAM_UPDATE_ITEM_RATIO'
 export const EXAM_SELECT_LEVEL_ITEM = 'EXAM_SELECT_LEVEL_ITEM'
-export const EXAM_UPDATE_LEVEL_CEHCK = 'EXAM_UPDATE_LEVEL_CEHCK'
+export const EXAM_UPDATE_LEVEL_CHECK = 'EXAM_UPDATE_LEVEL_CHECK'
+export const EXAM_SELECT_ALL_LEVEL_ITEMS = 'EXAM_SELECT_ALL_LEVEL_ITEMS'
 
 export const EXAM_RESET_STORE = 'EXAM_RESET_STORE'
 
@@ -32,8 +33,13 @@ export const selectItems = createAction(
   (params) => params
 )
 
+export const selectALLLevelItems = createAction(
+  EXAM_SELECT_ALL_LEVEL_ITEMS,
+  (params) => params
+)
+
 export const updateLevelCheck = createAction(
-  EXAM_UPDATE_LEVEL_CEHCK,
+  EXAM_UPDATE_LEVEL_CHECK,
   (params) => params
 )
 
