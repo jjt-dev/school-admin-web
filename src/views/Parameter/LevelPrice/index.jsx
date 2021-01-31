@@ -4,13 +4,14 @@ import { Table, Input, Divider, message } from 'antd'
 import api from 'src/utils/api'
 import useFetch from 'src/hooks/useFetch'
 import { getRow } from 'src/utils/common'
-
-const columnWidth = '100px'
+import { getCustomRow, tableOrder } from 'src/utils/tableUtil'
+import CustomExamItems from './CustomExamItems'
 
 const LevelPrice = () => {
   const [levelPrices = [], refetchPrices] = useFetch(`/config/level/price/list`)
   const [levelInEditing, setLevelInEditing] = useState(null)
   const [newPrice, setNewPrice] = useState(null)
+  const [selectedLevel, setSelectedLevel] = useState()
 
   const changeLevelPrice = async () => {
     if (newPrice) {
@@ -29,11 +30,16 @@ const LevelPrice = () => {
   }
 
   const columns = [
-    getRow('级别', 'id', columnWidth),
-    getRow('级别名称', 'name', columnWidth),
-    getRow('带色', 'alias', columnWidth),
+    tableOrder,
+    getRow('级别名称', 'name'),
+    getRow('带色', 'alias'),
+    getCustomRow('自定义考项', (record) => (
+      <span className="table-action" onClick={() => setSelectedLevel(record)}>
+        查看
+      </span>
+    )),
     {
-      ...getRow('价格', 'price', columnWidth),
+      ...getRow('价格', 'price'),
       render: (text, record) => {
         if (levelInEditing?.id === record.id) {
           return (
@@ -52,7 +58,6 @@ const LevelPrice = () => {
     {
       title: '操作',
       key: 'action',
-      width: columnWidth,
       render: (text, record) => {
         if (levelInEditing?.id === record.id) {
           return (
@@ -80,17 +85,25 @@ const LevelPrice = () => {
   ]
 
   return (
-    <div className="levels">
-      <div className="levels__edit-title">考评等级编辑</div>
-      <Table
-        className="levels__table"
-        columns={columns}
-        dataSource={levelPrices}
-        rowKey="id"
-        size="middle"
-        bordered={true}
-      />
-    </div>
+    <>
+      {!selectedLevel && (
+        <div className="page page-list level-list">
+          <div className="page-list-title">考评等级列表</div>
+          <Table
+            columns={columns}
+            dataSource={levelPrices}
+            rowKey="id"
+            bordered
+          />
+        </div>
+      )}
+      {selectedLevel && (
+        <CustomExamItems
+          level={selectedLevel}
+          hide={() => setSelectedLevel(null)}
+        />
+      )}
+    </>
   )
 }
 

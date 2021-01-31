@@ -9,7 +9,7 @@ const { TabPane } = Tabs
 const Parameter = () => {
   return (
     <div className="page parameter">
-      <Tabs defaultActiveKey="1" onChange={() => {}}>
+      <Tabs defaultActiveKey="2" onChange={() => {}}>
         <TabPane tab="学校信息设置" key="1">
           <School />
         </TabPane>
