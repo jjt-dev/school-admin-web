@@ -33,7 +33,7 @@ const Rounds = ({
       const { data = [] } = await api.get(
         `${pathRoundAndRoom}?page=1&rows=10000&examinationId=${examId}`
       )
-      setAllRounds(data.filter((round) => round.excuteId < 0))
+      setAllRounds(data)
       setToggleCellTable((pre) => !pre)
     }
     fetchData()
