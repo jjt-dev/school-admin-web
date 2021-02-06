@@ -111,3 +111,4 @@ export const ExamResultMode = {
 }
 
 export const OneInchAspect = 0.714
+export const TwoInchAspect = 0.66

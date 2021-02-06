@@ -25,7 +25,7 @@ import {
   payedOptions,
   validateIdCardForm,
 } from './helper'
-import { OneInchAspect } from 'src/utils/const'
+import { TwoInchAspect } from 'src/utils/const'
 
 const ExamSign = () => {
   const history = useHistory()
@@ -111,7 +111,7 @@ const ExamSign = () => {
         name="faceUrl"
         message="请上传头像"
         limit={0.2}
-        aspect={OneInchAspect}
+        aspect={TwoInchAspect}
       />
       <FormInput label="住址" name="address" type="textarea" />
       <FormSelect
