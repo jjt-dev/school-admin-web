@@ -7,8 +7,7 @@ import api from 'src/utils/api'
 import { addRoundNumPrefix } from 'src/utils/common'
 import { pathRoundAndRoom } from 'src/utils/httpUtil'
 import { EditOutlined } from '@ant-design/icons'
-
-const rowNum = 9
+import useDimensions from 'src/hooks/useDimensions'
 
 const Rounds = ({
   examId,
@@ -17,16 +16,24 @@ const Rounds = ({
   updateRoundsRoom,
   setSelectedRound,
 }) => {
+  const [ref, dimensions] = useDimensions()
   const [cells, setCells] = useState([])
   const [allRounds, setAllRounds] = useState([])
   const [contextMenuVisible, setContextMenuVisible] = useState(false)
+  const [rowNum, setRowNum] = useState(8)
+
+  useEffect(() => {
+    if (dimensions.width) {
+      setRowNum(Math.ceil(dimensions.width / 145))
+    }
+  }, [dimensions.width])
 
   const getAllRounds = useCallback(() => {
     const fetchData = async () => {
-      const result = await api.get(
+      const { data = [] } = await api.get(
         `${pathRoundAndRoom}?page=1&rows=10000&examinationId=${examId}`
       )
-      setAllRounds(result.data.filter((round) => round.excuteId < 0))
+      setAllRounds(data.filter((round) => round.excuteId < 0))
       setToggleCellTable((pre) => !pre)
     }
     fetchData()
@@ -46,7 +53,7 @@ const Rounds = ({
     })
     setCells(cells)
     return [roundCells]
-  }, [allRounds])
+  }, [allRounds, rowNum])
 
   const updateSelectedRoundsRoom = async (newRoomId) => {
     const roundIds = []
@@ -64,9 +71,11 @@ const Rounds = ({
     }
   }
 
+  if (!rowNum) return null
+
   return (
     <div className="multi-select">
-      <div className="rooms">
+      <div className="rooms" ref={ref}>
         {allRooms.map((room, index) => (
           <div
             className="room-item"
