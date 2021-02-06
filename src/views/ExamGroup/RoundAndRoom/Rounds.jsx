@@ -1,21 +1,21 @@
 import './index.less'
 
+import { Dropdown, Menu } from 'antd'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import TableDragSelect from 'react-table-drag-select'
-import { addRoundNumPrefix } from 'src/utils/common'
-import { Button, Dropdown, Menu, Modal } from 'antd'
-import { pathRoundAndRoom } from 'src/utils/httpUtil'
 import api from 'src/utils/api'
+import { addRoundNumPrefix } from 'src/utils/common'
+import { pathRoundAndRoom } from 'src/utils/httpUtil'
+import { EditOutlined } from '@ant-design/icons'
 
-const rowNum = 12
+const rowNum = 9
 
 const Rounds = ({
   examId,
   allRooms,
   setToggleCellTable,
-  hideModal,
   updateRoundsRoom,
-  title,
+  setSelectedRound,
 }) => {
   const [cells, setCells] = useState([])
   const [allRounds, setAllRounds] = useState([])
@@ -36,16 +36,16 @@ const Rounds = ({
     getAllRounds()
   }, [getAllRounds])
 
-  const [originCells, roundCells] = useMemo(() => {
+  const [roundCells] = useMemo(() => {
     const totalRows = Math.ceil(allRounds.length / rowNum)
     const rows = Array(totalRows).fill(0)
     const cells = rows.map(() => Array(rowNum).fill(false))
     const roundCells = []
-    rows.forEach((row, index) => {
+    rows.forEach((_, index) => {
       roundCells.push(allRounds.slice(index * rowNum, index * rowNum + rowNum))
     })
     setCells(cells)
-    return [cells, roundCells]
+    return [roundCells]
   }, [allRounds])
 
   const updateSelectedRoundsRoom = async (newRoomId) => {
@@ -65,21 +65,7 @@ const Rounds = ({
   }
 
   return (
-    <Modal
-      width={1300}
-      title={title}
-      visible={true}
-      onCancel={hideModal}
-      footer={[
-        <Button onClick={() => setCells(originCells)} className="clear-select">
-          清空选择
-        </Button>,
-        <Button key="back" onClick={hideModal}>
-          取消
-        </Button>,
-      ]}
-      className="multi-select"
-    >
+    <div className="multi-select">
       <div className="rooms">
         {allRooms.map((room, index) => (
           <div
@@ -101,31 +87,56 @@ const Rounds = ({
         visible={contextMenuVisible}
       >
         <a className="ant-dropdown-link" onClick={(e) => e.preventDefault()}>
-          <TableDragSelect value={cells} onChange={(cells) => setCells(cells)}>
-            {roundCells.map((rowRounds, index) => (
-              <tr key={index}>
-                {rowRounds.map((round) => {
-                  const roomIndex = allRooms.findIndex(
-                    (room) => room.id === round.roomId
-                  )
-                  return (
-                    <td
-                      key={round.id}
-                      disabled={round.excuteId > 0}
-                      style={{ backgroundColor: colors[roomIndex] }}
-                    >
-                      <div className="round-content">
-                        <div> {addRoundNumPrefix(round.round_num)}组</div>
-                      </div>
-                    </td>
-                  )
-                })}
-              </tr>
-            ))}
-          </TableDragSelect>
+          {allRooms.length > 0 && (
+            <TableDragSelect
+              value={cells}
+              onChange={(cells) => setCells(cells)}
+            >
+              {roundCells.map((rowRounds, index) => (
+                <tr key={index}>
+                  {rowRounds.map((round) => {
+                    const roomIndex = allRooms.findIndex(
+                      (room) => room.id === round.roomId
+                    )
+                    return (
+                      <td
+                        key={round.id}
+                        disabled={round.excuteId > 0}
+                        style={{ backgroundColor: colors[roomIndex] }}
+                      >
+                        <div className="round-content">
+                          <div style={{ fontWeight: 'bold' }}>
+                            {addRoundNumPrefix(round.round_num)}组
+                          </div>
+                          <div>
+                            {round.levels.map((level) => level.name).join(',')}
+                          </div>
+                          <div>
+                            {round.coachs
+                              .map((coach) => coach.nickname)
+                              .join(',')}
+                          </div>
+                          <div>
+                            人数: {round.studentCount}
+                            <span
+                              className="round-content-edit"
+                              onMouseDown={(e) => e.stopPropagation()}
+                              onClick={() => setSelectedRound(round)}
+                            >
+                              <EditOutlined />
+                            </span>
+                          </div>
+                        </div>
+                      </td>
+                    )
+                  })}
+                </tr>
+              ))}
+            </TableDragSelect>
+          )}
         </a>
       </Dropdown>
-    </Modal>
+    </div>
   )
 }
 
