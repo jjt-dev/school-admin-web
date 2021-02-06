@@ -64,7 +64,7 @@ class ImageUpload extends React.Component {
     )
     const { imageUrl } = this.state
     return (
-      <ImgCrop rotate>
+      <ImgCrop rotate aspect={this.props.aspect ?? 1}>
         <Upload
           disabled={this.props.disabled}
           name="file"

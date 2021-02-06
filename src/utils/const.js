@@ -109,3 +109,5 @@ export const ExamResultMode = {
   score: 0,
   grade: 1,
 }
+
+export const OneInchAspect = 0.714

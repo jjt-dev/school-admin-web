@@ -12,6 +12,7 @@ const FormImage = ({
   imageUrl,
   required = true,
   limit,
+  aspect,
 }) => {
   const [url, setUrl] = useState()
 
@@ -34,7 +35,12 @@ const FormImage = ({
         setUrl(form.getFieldValue(name))
       }}
     >
-      <ImageUpload callback={handleLogoChange} imageUrl={url} limit={limit} />
+      <ImageUpload
+        callback={handleLogoChange}
+        imageUrl={url}
+        limit={limit}
+        aspect={aspect}
+      />
     </Form.Item>
   )
 }
