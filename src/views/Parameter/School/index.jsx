@@ -18,6 +18,7 @@ const formItems = [
     name: 'logoUrl',
     comp: 'FormImage',
     message: '请上传logo',
+    noImageCrop: true,
   },
   {
     label: '地址',

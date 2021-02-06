@@ -13,6 +13,7 @@ const FormImage = ({
   required = true,
   limit,
   aspect,
+  noImageCrop = false,
 }) => {
   const [url, setUrl] = useState()
 
@@ -40,6 +41,7 @@ const FormImage = ({
         imageUrl={url}
         limit={limit}
         aspect={aspect}
+        noImageCrop={noImageCrop}
       />
     </Form.Item>
   )
