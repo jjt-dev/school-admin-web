@@ -6,7 +6,7 @@ import TableDragSelect from 'react-table-drag-select'
 import api from 'src/utils/api'
 import { addRoundNumPrefix } from 'src/utils/common'
 import { pathRoundAndRoom } from 'src/utils/httpUtil'
-import { EditOutlined } from '@ant-design/icons'
+import { CheckOutlined, EditOutlined } from '@ant-design/icons'
 import useDimensions from 'src/hooks/useDimensions'
 
 const Rounds = ({
@@ -107,15 +107,22 @@ const Rounds = ({
                     const roomIndex = allRooms.findIndex(
                       (room) => room.id === round.roomId
                     )
+                    const disabled = round.excuteId > 0
                     return (
                       <td
                         key={round.id}
-                        disabled={round.excuteId > 0}
+                        disabled={disabled}
                         style={{ backgroundColor: colors[roomIndex] }}
                       >
                         <div className="round-content">
                           <div style={{ fontWeight: 'bold' }}>
                             {addRoundNumPrefix(round.round_num)}组
+                            {disabled && (
+                              <span>
+                                {' '}
+                                (<CheckOutlined />)
+                              </span>
+                            )}
                           </div>
                           <div>
                             {round.levels.map((level) => level.name).join(',')}
