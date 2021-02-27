@@ -1,13 +1,16 @@
 import React from 'react'
 import PageForm from 'src/components/PageForm'
+import useFetch from 'src/hooks/useFetch'
 
 const School = () => {
-  return <PageForm formItems={formItems} />
+  const [associations = []] = useFetch(`/school/organizationList`)
+
+  return <PageForm formItems={getFormItems(associations)} />
 }
 
 export default School
 
-const formItems = [
+const getFormItems = (associations) => [
   {
     label: '名称',
     name: 'name',
@@ -34,6 +37,13 @@ const formItems = [
     label: '联系人',
     name: 'linkMan',
     comp: 'FormInput',
+  },
+  {
+    label: '学科协会',
+    name: 'organizationId',
+    titleKey: 'name',
+    comp: 'FormSelect',
+    options: associations,
   },
   {
     label: '付款码',
