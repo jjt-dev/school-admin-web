@@ -71,7 +71,7 @@ const ReportVertical = ({
         </Button>
       </div>
       <div
-        className="report-vertical__content"
+        className="report-vertical__content report-vertical-template-content"
         style={{
           backgroundImage: `url(${getDomain()}${
             imgUrl ?? DefaultImgs.reportVertical

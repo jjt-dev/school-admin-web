@@ -1,5 +1,6 @@
+import { CloudUploadOutlined } from '@ant-design/icons'
+import { Button, message, Upload } from 'antd'
 import React from 'react'
-import { Upload, message, Button, Icon } from 'antd'
 import { getApiRootImg } from 'src/utils/common'
 
 const UploadBgImage = ({ callback }) => {
@@ -22,7 +23,7 @@ const UploadBgImage = ({ callback }) => {
   return (
     <Upload {...props}>
       <Button>
-        <Icon type="upload" /> 上传背景图片
+        <CloudUploadOutlined /> 上传背景图片
       </Button>
     </Upload>
   )
