@@ -7,7 +7,7 @@ import { getDomain, chineseDate } from 'src/utils/common'
 import api from 'src/utils/api'
 import ResultItems from '../ResultItems'
 import ReactToPrint from 'react-to-print'
-import UplaodImg from 'src/components/UploadImg'
+import UploadImg from 'src/components/UploadImg'
 import { mapReportValue, reorderBasicInfos } from '../helper'
 import { BasicInfoPositions } from 'src/views/Certificate/helper'
 import { ExamResultMode } from 'src/utils/const'
@@ -58,7 +58,7 @@ class ReportVerticalWithRight extends React.Component {
     return (
       <div className="report-vertical-right">
         <div className="report-header">
-          <UplaodImg callback={this.setRightImg} btnSize="small" />
+          <UploadImg callback={this.setRightImg} btnSize="small" />
           <ReactToPrint
             trigger={() => <Button size="small">打印</Button>}
             content={() => this.myRef.current}
@@ -71,6 +71,12 @@ class ReportVerticalWithRight extends React.Component {
           />
         </div>
         <div className="report-vertical-right__content" ref={this.myRef}>
+          <div
+            className="report-vertical-right__content-logo"
+            style={{
+              backgroundImage: `url(${getDomain()}${this.props.assoLogo})`,
+            }}
+          ></div>
           {examResults.map((examResult, index) => {
             const { studentFaceUrl, schoolName } = studentInfo
             const mappedValue = mapReportValue(studentInfo, examResult)

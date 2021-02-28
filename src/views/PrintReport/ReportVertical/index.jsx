@@ -87,6 +87,12 @@ class ReportVertical extends React.Component {
           </div>
         )}
         <div className="report-vertical__content" ref={this.myRef}>
+          <div
+            className="report-vertical__content-logo"
+            style={{
+              backgroundImage: `url(${getDomain()}${this.props.assoLogo})`,
+            }}
+          ></div>
           {examResults.map((examResult, index) => {
             const { studentFaceUrl, schoolName } = studentInfo
             const mappedValue = mapReportValue(studentInfo, examResult)
@@ -176,9 +182,7 @@ class ReportVertical extends React.Component {
                         <div>
                           3.考试不合格的学员凭补考单进行补考 (限补考一次)
                         </div>
-                        <div>
-                          4.{this.props.gradeInfo}
-                        </div>
+                        <div>4.{this.props.gradeInfo}</div>
                       </div>
                     </div>
                   </div>

@@ -62,6 +62,12 @@ class ReportHoriz extends React.Component {
           />
         </div>
         <div className="report-horiz__content" ref={this.myRef}>
+          <div
+            className="report-horiz__content-logo"
+            style={{
+              backgroundImage: `url(${getDomain()}${this.props.assoLogo})`,
+            }}
+          ></div>
           {examResults.map((examResult, index) => {
             const { studentFaceUrl, schoolName } = studentInfo
             const mappedValue = mapReportValue(studentInfo, examResult)

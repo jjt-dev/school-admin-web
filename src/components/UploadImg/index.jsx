@@ -1,8 +1,9 @@
+import { CloudUploadOutlined } from '@ant-design/icons'
+import { Button, message, Upload } from 'antd'
 import React from 'react'
-import { Upload, message, Button, Icon } from 'antd'
 import { getApiRootImg } from 'src/utils/common'
 
-const UplaodImg = ({ callback, showUploadList, btnSize }) => {
+const UploadImg = ({ callback, showUploadList, btnSize }) => {
   const props = {
     name: 'file',
     action: getApiRootImg(),
@@ -25,10 +26,10 @@ const UplaodImg = ({ callback, showUploadList, btnSize }) => {
       className="upload-img"
     >
       <Button size={btnSize ? btnSize : 'default'}>
-        <Icon type="upload" /> 上传图片
+        <CloudUploadOutlined /> 上传图片
       </Button>
     </Upload>
   )
 }
 
-export default UplaodImg
+export default UploadImg

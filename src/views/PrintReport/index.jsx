@@ -13,23 +13,36 @@ const { TabPane } = Tabs
 
 const PrintReport = () => {
   const { signId } = useParams()
-  const [gradeInfo='']=useFetch(`/examination/gradeInfo`)
+  const [gradeInfo = ''] = useFetch(`/examination/gradeInfo`)
   const [examResult] = useFetch(
     `/exam/sign/getStudentExamResult?signId=${signId}`
   )
+  const [association = {}] = useFetch(`/school/organizationDetail`)
 
   return (
     <div className="page print-report">
       {examResult ? (
         <Tabs defaultActiveKey="0">
           <TabPane tab="竖版" key="0">
-            <ReportVertical examResultContainer={examResult} gradeInfo={gradeInfo} />
+            <ReportVertical
+              examResultContainer={examResult}
+              gradeInfo={gradeInfo}
+              assoLogo={association.logUrl}
+            />
           </TabPane>
           <TabPane tab="竖版(自定义右半边)" key="1">
-            <ReportVerticalWithRight examResultContainer={examResult} gradeInfo={gradeInfo}/>
+            <ReportVerticalWithRight
+              examResultContainer={examResult}
+              gradeInfo={gradeInfo}
+              assoLogo={association.logUrl}
+            />
           </TabPane>
           <TabPane tab="横板" key="2">
-            <ReportHoriz examResultContainer={examResult} gradeInfo={gradeInfo}/>
+            <ReportHoriz
+              examResultContainer={examResult}
+              gradeInfo={gradeInfo}
+              assoLogo={association.logUrl}
+            />
           </TabPane>
         </Tabs>
       ) : (
