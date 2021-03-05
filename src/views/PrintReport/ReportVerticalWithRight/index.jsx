@@ -71,12 +71,6 @@ class ReportVerticalWithRight extends React.Component {
           />
         </div>
         <div className="report-vertical-right__content" ref={this.myRef}>
-          <div
-            className="report-vertical-right__content-logo"
-            style={{
-              backgroundImage: `url(${getDomain()}${this.props.assoLogo})`,
-            }}
-          ></div>
           {examResults.map((examResult, index) => {
             const { studentFaceUrl, schoolName } = studentInfo
             const mappedValue = mapReportValue(studentInfo, examResult)
@@ -86,6 +80,14 @@ class ReportVerticalWithRight extends React.Component {
                   className="report-vertical-right__content-item-report"
                   style={{ backgroundImage: bgImageLink }}
                 >
+                  <div
+                    className="report-vertical-right__content-item-report-logo"
+                    style={{
+                      backgroundImage: `url(${getDomain()}${
+                        this.props.assoLogo
+                      })`,
+                    }}
+                  ></div>
                   <div className="report-vertical-right__content-item-report-edit">
                     <div className="basic-info">
                       <div

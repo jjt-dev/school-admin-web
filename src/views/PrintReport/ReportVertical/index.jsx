@@ -87,12 +87,6 @@ class ReportVertical extends React.Component {
           </div>
         )}
         <div className="report-vertical__content" ref={this.myRef}>
-          <div
-            className="report-vertical__content-logo"
-            style={{
-              backgroundImage: `url(${getDomain()}${this.props.assoLogo})`,
-            }}
-          ></div>
           {examResults.map((examResult, index) => {
             const { studentFaceUrl, schoolName } = studentInfo
             const mappedValue = mapReportValue(studentInfo, examResult)
@@ -105,6 +99,14 @@ class ReportVertical extends React.Component {
                   height: `${printMap[examResults.length]}px`,
                 }}
               >
+                <div
+                  className="report-vertical__content-report-logo"
+                  style={{
+                    backgroundImage: `url(${getDomain()}${
+                      this.props.assoLogo
+                    })`,
+                  }}
+                ></div>
                 <div className="report-vertical__content-report-edit">
                   <div className="basic-info">
                     <div
