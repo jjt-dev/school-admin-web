@@ -1,4 +1,5 @@
-import { Button, message, Select } from 'antd'
+import { LoadingOutlined } from '@ant-design/icons'
+import { Button, message, Select, Spin } from 'antd'
 import React from 'react'
 import { useState } from 'react'
 import ListHeaderCustom from 'src/components/ListHeaderCustom'
@@ -137,14 +138,14 @@ const UploadTaekwondo = ({ exam, fetchExam }) => {
     }
   }
 
+  const antIcon = <LoadingOutlined style={{ fontSize: 13 }} spin />
+
   return (
-    <Button
-      size="small"
-      loading={isUploading}
-      disabled={!canUpload}
-      onClick={uploadToTaekwondo}
-    >
-      {titles[uploadState]}
+    <Button size="small" disabled={!canUpload} onClick={uploadToTaekwondo}>
+      <>
+        {isUploading && <Spin indicator={antIcon} />}
+        {titles[uploadState]}
+      </>
     </Button>
   )
 }
